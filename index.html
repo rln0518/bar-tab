@@ -339,7 +339,7 @@ button{ -webkit-tap-highlight-color:transparent }
   .keyboard-open .phone-quick{display:none}
 }
 @media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}.guy *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
 }
 </style>
 
@@ -749,10 +749,8 @@ function reactTo(k){
         smoothed[k]+=(o[k]-smoothed[k])*(1-Math.exp(-dt*follow));
       });
       o={...smoothed};
-      if(reducedMotion.matches)o={...Z(),aL:o.aL*.25,aR:o.aR*.25,eL:o.eL*.25,eR:o.eR*.25};
       let lift=0;
       if(L>=3){const h=(t%3.4)/3.4;if(h>.88&&h<.95)lift=6*S((h-.88)/.07*PI)}
-      if(reducedMotion.matches)lift=0;
       let sx=o.sx;if(A(sx)<.06)sx=sx<0?-.06:.06;
       T(E.fig,`translate(${160+o.x} 0) scale(${sx} 1) translate(-160 0)`);
       const seated=L<2&&!window.CHAIR_GONE;
