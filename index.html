@@ -42,6 +42,7 @@ h1{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:.0
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .grid button{font:inherit;text-align:left;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;display:grid;gap:2px;transition:transform .08s}
 .grid button:active{transform:scale(.97)}
+.grid .joint-tile{border-color:#3f8f4a;background:color-mix(in srgb,#3f8f4a 10%,var(--card))} .grid .joint-tile .n{color:#3f8f4a}
 .grid button:last-child:nth-child(odd){grid-column:span 2}
 .strength{margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .strength label{font-weight:700;font-size:.9rem}
@@ -1263,6 +1264,9 @@ DRINKS.forEach(d=>{
   d.btn=b;
   grid.appendChild(b);
 });
+{const jb=document.createElement("button");jb.id="add-joint-tile";jb.className="joint-tile";
+ jb.innerHTML=`<span class="n" id="jointCount">0</span><b>Joint</b><small>Lasts ~90 min · not a drink</small>`;
+ jb.onclick=()=>$("joint").click();grid.appendChild(jb);}
 const beer=DRINKS.find(d=>d.id==="beer"),abvIn=$("abv");
 function setAbv(v){
   beer.abv=v/100;
@@ -1404,6 +1408,7 @@ function render(){
     ol.appendChild(li);
   });
   $("empty").hidden=log.length>0;
+  $("jointCount").textContent=log.filter(e=>e.id==="joint").length;
   {const qd=$("quickDrink"),lastD=DRINKS.find(d=>d.id===(drinks.length?drinks[drinks.length-1].id:"beer"))||DRINKS[0];
    qd.dataset.id=lastD.id;qd.textContent="+ "+({espresso:"Espresso"}[lastD.id]||lastD.name);qd.setAttribute("aria-label","Add another "+lastD.name);}
 }
