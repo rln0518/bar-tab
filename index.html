@@ -244,7 +244,14 @@ ol li span:last-child{color:var(--muted)}
 .guy.l2 .legs-stand,.guy.l3 .legs-stand,.guy.l4 .legs-stand,.guy.l5 .legs-stand,.guy.l6 .legs-stand{display:inline}
 .guy.l2 .sheet,.guy.l3 .sheet,.guy.l4 .sheet,.guy.l5 .sheet,.guy.l6 .sheet{display:none}
 .guy.l2 .eq,.guy.l3 .eq,.guy.l4 .eq,.guy.l5 .eq,.guy.l2 .notes,.guy.l3 .notes,.guy.l4 .notes,.guy.l5 .notes{display:inline}
-.guy.l2 .disco,.guy.l3 .disco,.guy.l4 .disco,.guy.l5 .disco,.guy.l6 .disco{transform:none}
+.guy.l2 .disco,.guy.l3 .disco,.guy.l4 .disco,.guy.l5 .disco,.guy.l6 .disco,.guy.game-ball .disco{transform:none}
+.guy .trashcan,.guy #hud{pointer-events:none}
+.guy .tc-body{fill:#5b6472;stroke:#3a414d;stroke-width:1} .guy .tc-rib{stroke:#47505d;stroke-width:1.4} .guy .tc-rim{fill:#6f7a8a;stroke:#3a414d;stroke-width:1}
+.guy .tc-junk{fill:none;stroke:#e9e4dc;stroke-width:1.6;stroke-linecap:round}
+.guy #hud rect{fill:#15161a;opacity:.82} .guy #hudT{font:800 8px var(--display);fill:#ffd23f;letter-spacing:.08em} .guy #hudS{font:700 8.5px var(--body);fill:#fff;font-variant-numeric:tabular-nums}
+.guy .fx-spill{fill:#e0a043} .guy .fx-pts{font:800 12px var(--display);fill:#ffd23f;stroke:#24170e;stroke-width:.6;paint-order:stroke;text-anchor:middle}
+.playbar{display:flex;flex-wrap:wrap;gap:8px} .playbar .btn{flex:1 1 auto}
+#tiltBtn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .guy.l2 .blush{opacity:.45}
 .guy.l2 .m-smile,.guy.l3 .m-smile,.guy.l4 .m-smile,.guy.l5 .m-smile,.guy.l6 .m-smile{display:none}
 .guy.l2 .m-grin,.guy.l3 .m-grin,.guy.l4 .m-grin{display:inline}
@@ -495,15 +502,29 @@ button{ -webkit-tap-highlight-color:transparent }
           </g></g></g>
         </g>
         <g id="rag" style="display:none"></g>
+        <g class="trashcan" id="trash" style="display:none" transform="translate(70 200)">
+          <path class="tc-body" d="M-15 0 L-13 -26 H13 L15 0Z"/>
+          <path class="tc-rib" d="M-8 -3 V-23 M0 -3 V-23 M8 -3 V-23"/>
+          <rect class="tc-rim" x="-16.5" y="-29" width="33" height="4.5" rx="2"/>
+          <path class="tc-junk" d="M-9 -29 q3 -5 7 -1 M3 -29 q4 -4 7 0"/>
+        </g>
         <g id="fx"></g>
         <g class="notes"><text x="250" y="114">♪</text><text x="262" y="106">♫</text><text x="276" y="114">♪</text></g>
         <g class="bubbles"><circle cx="182" cy="66" r="3"/><circle cx="188" cy="54" r="4"/><circle cx="182" cy="42" r="2.5"/></g>
         <g class="confetti"><rect x="20" y="0" width="4" height="7"/><rect x="48" y="0" width="4" height="7"/><rect x="80" y="0" width="4" height="7"/><rect x="110" y="0" width="4" height="7"/><rect x="140" y="0" width="4" height="7"/><rect x="172" y="0" width="4" height="7"/><rect x="200" y="0" width="4" height="7"/><rect x="228" y="0" width="4" height="7"/><rect x="258" y="0" width="4" height="7"/><rect x="290" y="0" width="4" height="7"/></g>
         <g class="speech" id="speech"><path id="spTail" d="M8 -11 L5 0 L16 -11Z"/><rect id="spRect" rx="6" x="4" y="-28" width="80" height="18"/><path id="spCover" d="M8.8 -11 L15.2 -11"/><text id="spText"></text></g>
         <text class="plus" x="186" y="44">+1</text>
+        <g id="hud" style="display:none"><rect x="8" y="8" width="118" height="28" rx="6"/><text id="hudT" x="15" y="19.5">TRASH TOSS</text><text id="hudS" x="15" y="30.5">Score 0 · 45s</text></g>
         <text class="zzz" x="88" y="166">z z Z</text>
       </g>
     </svg>
+    <div class="playbar" id="playbar">
+      <button type="button" class="btn" id="gameTrash">Trash Toss</button>
+      <button type="button" class="btn" id="gameBall">Wrecking Ball</button>
+      <button type="button" class="btn danger" id="gameStop" hidden>Stop game</button>
+      <button type="button" class="btn" id="tiltBtn" aria-pressed="false">Tilt mode</button>
+    </div>
+    <p class="hint" id="playHint" hidden></p>
     <div class="lvl" id="lvl">Stone sober</div>
     <div class="bar" role="meter" aria-labelledby="lvl" id="barwrap"><div class="fill" id="fill"></div></div>
     <div class="ticks"><span>Sober</span><span>Buzzed</span><span>Drunk</span><span>Too far</span></div>
@@ -753,6 +774,8 @@ function reactTo(k){
         smoothed[k]+=(o[k]-smoothed[k])*(1-Math.exp(-dt*follow));
       });
       o={...smoothed};
+      {const TL=window.TILT_S||0,sitting=L<2&&!window.CHAIR_GONE;
+       o.sway+=TL*(sitting?7:13);o.nod+=TL*8;if(!sitting){o.x+=TL*28;o.lL+=TL*10;o.lR+=TL*10}}
       let lift=0;
       if(L>=3){const h=(t%3.4)/3.4;if(h>.88&&h<.95)lift=6*S((h-.88)/.07*PI)}
       let sx=o.sx;if(A(sx)<.06)sx=sx<0?-.06:.06;
@@ -785,6 +808,9 @@ function reactTo(k){
   [["head","neck"],["sL","eL"],["eL","aL"],["sR","eR"],["eR","aR"],["hL","kL"],["kL","fL"],["hR","kR"],["kR","fR"]].forEach(([a,b])=>sticks.push([a,b,dist(a,b)]));
   [["head","sL",.85],["head","sR",.85],["head","hL",.8],["head","hR",.8],["sL","aL",.45],["sR","aR",.45],["hL","fL",.55],["hR","fR",.55]].forEach(([a,b,k])=>mins.push([a,b,dist(a,b)*k]));
   const RAG=window.RAG={active:false,head:null};
+  const GM={mode:null,score:0,end:0,trashX:70,lock:false,best:{},finalUntil:0,finalText:""};
+  try{GM.best=JSON.parse(localStorage.getItem("bartab-best")||"{}")||{}}catch(e){}
+  let tiltS=0,GX=0,tiltHold=0,lastTopple=0;
   let P={},grab=null,gt=null,gtPrev=null,released=0,still=0,getup=null,hitSaid=true,V={};
   const pick=a=>a[Math.floor(Math.random()*a.length)],rnd=(a,b)=>a+Math.random()*(b-a);
   const lvl=()=>typeof curIdx==="number"?curIdx:0,nowS=()=>performance.now()/1000;
@@ -942,7 +968,7 @@ function reactTo(k){
       const w=(s+1)/SUB,f=held.prev||held.gt;
       p.px=p.x;p.py=p.y;p.x=f.x+(held.gt.x-f.x)*w-held.off.x;p.y=f.y+(held.gt.y-f.y)*w-held.off.y;p.va*=.9;p.a+=p.va;return;
     }
-    const vx=(p.x-p.px)*.992,vy=(p.y-p.py)*.992;p.px=p.x;p.py=p.y;p.x+=vx;p.y+=vy+G*DT*DT;p.a+=p.va;p.va*=.99;
+    const vx=(p.x-p.px)*.992,vy=(p.y-p.py)*.992;p.px=p.x;p.py=p.y;p.x+=vx+GX*DT*DT;p.y+=vy+G*DT*DT;p.a+=p.va;p.va*=.99;
     const c=Math.abs(Math.cos(p.a*DEG)),sn=Math.abs(Math.sin(p.a*DEG)),ex=p.hx*c+p.hy*sn,ey=p.hx*sn+p.hy*c;
     const fl=surface(p.x,p.py+ey);
     if(p.y+ey>fl){const v=p.y-p.py;p.y=fl-ey;p.py=p.y+v*.3;p.px=p.x-(p.x-p.px)*.7;p.va*=.7;const t=Math.round(p.a/90)*90;p.va+=(t-p.a)*.06;if(v>4.5)propFx(p,p.x,fl,"floor",v)}
@@ -977,10 +1003,86 @@ function reactTo(k){
       }
     }
   }
+  function floatText(x,y,txt){
+    const t=mk("text",{class:"fx-pts",x:x.toFixed(1),y:y.toFixed(1)},fxL);t.textContent=txt;
+    anim(t,[{transform:"translateY(0)",opacity:1},{transform:"translateY(-22px)",opacity:0}],{duration:1100,easing:"ease-out",rm:1});
+  }
+  function spill(dir){
+    const h=RAG.active?P.aR:{x:190,y:100};
+    for(let k=0;k<10;k++){
+      const c=mk("circle",{class:"fx-spill",cx:h.x,cy:h.y,r:rnd(1,2.2)},fxL);
+      const dx=dir*rnd(8,34),dy=rnd(-14,-2);
+      anim(c,[{transform:"translate(0,0)",opacity:1},{transform:`translate(${dx*.6}px,${dy}px)`,opacity:1,offset:.35},{transform:`translate(${dx}px,${rnd(30,70)}px)`,opacity:0}],{duration:rnd(600,950),easing:"ease-in",rm:1});
+    }
+  }
+  function knockOver(dir){
+    if(RAG.active)return;
+    start();
+    names.forEach(n=>{const q=P[n],k=(200-q.y)/100;q.px=q.x-dir*(1.2+2.4*k);q.py=q.y+.6});
+    spill(dir);
+    if(lvl()<6)say(pick(["Whoa whoa whoa—","My drink!","Earthquake?!","Who tilted the office?!"]));
+  }
+  function tiltFrame(now){
+    const raw=window.TILT||0;tiltS+=(raw-tiltS)*.12;if(Math.abs(tiltS)<.01)tiltS=0;
+    window.TILT_S=tiltS;GX=G*tiltS*.8;
+    if(Math.abs(tiltS)>.68&&!RAG.active&&!getup){tiltHold+=1/60}else tiltHold=0;
+    if(tiltHold>.55&&now-lastTopple>2.5){lastTopple=now;tiltHold=0;knockOver(Math.sign(tiltS))}
+    if(Math.abs(tiltS)>.85)PROPS.forEach(p=>{if(!p.dyn&&p!==held.obj&&p.cy<152&&Math.random()<.02)knock(p,Math.sign(tiltS)*1.2,-.4)});
+  }
+  function placeTrash(){
+    const spots=[40,62,84,106,124,196,204].filter(x=>Math.abs(x-GM.trashX)>14);
+    GM.trashX=spots[Math.floor(Math.random()*spots.length)];
+    const t=g.querySelector("#trash");t.setAttribute("transform",`translate(${GM.trashX} 200)`);
+    anim(t,[{opacity:0},{opacity:1}],{duration:350});
+  }
+  const hud=g.querySelector("#hud"),hudT=g.querySelector("#hudT"),hudS=g.querySelector("#hudS");
+  function gameFrame(now){
+    if(GM.mode){
+      const rem=Math.max(0,GM.end-now);
+      hud.style.display="";hudT.textContent=GM.mode==="trash"?"TRASH TOSS":"WRECKING BALL";
+      hudS.textContent=`Score ${GM.score} · ${Math.ceil(rem)}s`;
+      if(GM.mode==="trash"&&RAG.active&&!grab&&!GM.lock){
+        const hx=(P.hL.x+P.hR.x)/2,hy=(P.hL.y+P.hR.y)/2,kx=(P.kL.x+P.kR.x)/2,ky=(P.kL.y+P.kR.y)/2;
+        const inCan=(x,y)=>Math.abs(x-GM.trashX)<18&&y>164&&y<202;
+        if(inCan(hx,hy)||inCan(kx,ky)||inCan(P.head.x,P.head.y)){
+          GM.lock=true;GM.score++;
+          effects({x:GM.trashX,y:176,side:"floor",s:7,words:["SWISH!","DUNK!","TRASHED!"],noCrack:true,noHurt:true});
+          floatText(GM.trashX,150,"+1");
+          if(lvl()<6)say(pick(["I live here now.","Rate my landing.","Smells like Monday.","Nothing but trash!"]));
+          setTimeout(()=>{if(GM.mode==="trash")placeTrash()},1300);
+        }
+      }
+      if(rem<=0)stopGame(true);
+    }else if(now<GM.finalUntil){hud.style.display="";hudT.textContent="GAME OVER";hudS.textContent=GM.finalText}
+    else hud.style.display="none";
+  }
+  function enableDrag(){const pt=document.getElementById("playToggle");if(pt&&getComputedStyle(pt).display!=="none"&&pt.getAttribute("aria-pressed")!=="true")pt.click()}
+  function startGame(mode){
+    if(GM.mode)stopGame(false);
+    GM.mode=mode;GM.score=0;GM.lock=true;GM.end=nowS()+(mode==="trash"?45:30);
+    g.classList.add("game-"+mode);enableDrag();
+    if(mode==="trash"){const t=g.querySelector("#trash");t.style.display="";placeTrash()}
+    say(mode==="trash"?"Throw me in the trash.\nI dare you.":"Wait... why is the\ndisco ball moving?");
+    window.onGameChange&&window.onGameChange(mode);
+  }
+  function stopGame(finished){
+    const mode=GM.mode;if(!mode)return;
+    GM.mode=null;g.classList.remove("game-"+mode);g.querySelector("#trash").style.display="none";
+    if(finished){
+      const best=Math.max(GM.best[mode]||0,GM.score),isNew=GM.score>(GM.best[mode]||0)&&GM.score>0;
+      GM.best[mode]=best;try{localStorage.setItem("bartab-best",JSON.stringify(GM.best))}catch(e){}
+      GM.finalText=`Score ${GM.score} · Best ${best}${isNew?" NEW!":""}`;GM.finalUntil=nowS()+5;
+      say(isNew?"New high score!\nI need a raise.":GM.score?"Again! Again!":"...is it over?");
+    }
+    if(mode==="ball"&&lvl()<2){B.x=B.px=118;B.y=B.py=30;B.len=30}
+    window.onGameChange&&window.onGameChange(null);
+  }
+  window.GAMES={start:startGame,stop:()=>stopGame(false)};
   function smack(x,y,vx,vy,s,name){
     const now=nowS();if(now-lastFx<.18)return;
     getup=null;still=0;released=now;
     effects({x,y,side:sideOf(vx,vy),s:Math.max(s*1.4,6),words:WORDS[name]||WORDS.piece,noCrack:true});
+    if(GM.mode==="ball"&&name==="ball"){const pts=Math.max(5,Math.round(s*12));GM.score+=pts;floatText(x,y-26,"+"+pts)}
     if(s>5&&lvl()<6)say(name==="ball"?pick(["Disco ball to the face!","Who threw that?!","My head!"]):pick(["Hey!","Ow! Watch it!","Was that my laptop?!"]));
   }
   function deskHit(q,r){
@@ -1015,7 +1117,7 @@ function reactTo(k){
   // ---------------- disco ball on a rope ----------------
   const discoBody=g.querySelector(".discoBody"),rope=g.querySelector(".rope");
   const B={x:118,y:30,px:118,py:30,len:30,spin:0,r:12,lastHit:0};
-  const ballOn=()=>lvl()>=2;
+  const ballOn=()=>lvl()>=2||GM.mode==="ball";
   function ballStep(s){
     if(!ballOn()){B.x=B.px=118;B.y=B.py=30;B.len=30;return}
     if(held.obj===B){
@@ -1023,7 +1125,7 @@ function reactTo(k){
       B.px=B.x;B.py=B.y;B.x=f.x+(held.gt.x-f.x)*w-held.off.x;B.y=f.y+(held.gt.y-f.y)*w-held.off.y;
       B.len=Math.max(30,Math.min(190,Math.hypot(B.x-118,B.y)));
     }else{
-      const vx=(B.x-B.px)*.997,vy=(B.y-B.py)*.997;B.px=B.x;B.py=B.y;B.x+=vx;B.y+=vy+G*DT*DT;
+      const vx=(B.x-B.px)*.997,vy=(B.y-B.py)*.997;B.px=B.x;B.py=B.y;B.x+=vx+GX*DT*DT;B.y+=vy+G*DT*DT;
       B.len+=(30-B.len)*.0025;
       const dx=B.x-118,dy=B.y,d=Math.hypot(dx,dy);if(d>B.len){B.x=118+dx/d*B.len;B.y=dy/d*B.len}
     }
@@ -1095,7 +1197,7 @@ function reactTo(k){
     names.forEach(n=>{
       const q=P[n];if(n===grab)return;
       const vx=(q.x-q.px)*.99,vy=(q.y-q.py)*.99;
-      q.px=q.x;q.py=q.y;q.x+=vx;q.y+=vy+G*DT*DT;
+      q.px=q.x;q.py=q.y;q.x+=vx+GX*DT*DT;q.y+=vy+G*DT*DT;
     });
     if(grab){
       const q=P[grab],w=(s+1)/SUB,from=gtPrev||gt;
@@ -1152,6 +1254,7 @@ function reactTo(k){
     thrownVsFig();
     PROPS.forEach(drawProp);drawBall();dizzy(now);
     if(mess&&!held.obj&&now-lastMess>40)resetProps();
+    tiltFrame(now);gameFrame(now);
     gtPrev=gt?{x:gt.x,y:gt.y}:null;
     if(held.gt)held.prev={x:held.gt.x,y:held.gt.y};
     requestAnimationFrame(loop);
@@ -1184,7 +1287,7 @@ function reactTo(k){
         if(!RAG.active)start();
         getup=null;names.forEach(n=>{P[n].px=P[n].x;P[n].py=P[n].y});
         let best=null,bd=1e9;names.forEach(n=>{const d=Math.hypot(P[n].x-down.x,P[n].y-down.y)-(n==="head"?8:0);if(d<bd){bd=d;best=n}});
-        grab=best;gt={x:pt.x,y:pt.y,cx:P[best].x,cy:P[best].y};gtPrev={x:P[best].x,y:P[best].y};
+        grab=best;gt={x:pt.x,y:pt.y,cx:P[best].x,cy:P[best].y};gtPrev={x:P[best].x,y:P[best].y};GM.lock=false;
         say(lvl()===6?"...wha...?":pick(["Hey! Put me down!","Whoa whoa whoa!","Not the suit!","Easy, easy!"]));
       }
     }
@@ -1414,6 +1517,41 @@ function render(){
 }
 render();
 setInterval(render,30000);
+(function(){
+  const $=id=>document.getElementById(id),hint=$("playHint");
+  const show=(msg)=>{hint.textContent=msg;hint.hidden=!msg};
+  window.onGameChange=mode=>{
+    $("gameTrash").hidden=!!mode;$("gameBall").hidden=!!mode;$("gameStop").hidden=!mode;
+    show(mode==="trash"?"Drag him and throw him into the trash can. 45 seconds.":mode==="ball"?"Grab the disco ball and swing it into him. Harder hits score more. 30 seconds.":"");
+  };
+  $("gameTrash").onclick=()=>GAMES.start("trash");
+  $("gameBall").onclick=()=>GAMES.start("ball");
+  $("gameStop").onclick=()=>GAMES.stop();
+  // Tilt: phone sensor where the browser allows it, arrow keys everywhere
+  const btn=$("tiltBtn");let on=false,got=false,keyTilt=0;
+  function onOrient(e){
+    if(e.gamma==null)return;got=true;
+    const ang=(screen.orientation&&screen.orientation.angle)||window.orientation||0;
+    let x=ang===90?e.beta:(ang===-90||ang===270)?-e.beta:ang===180?-e.gamma:e.gamma;
+    x=Math.max(-1,Math.min(1,(x||0)/38));if(Math.abs(x)<.08)x=0;
+    window.TILT=on?x:keyTilt;
+  }
+  async function enable(){
+    try{if(typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function"){
+      const r=await DeviceOrientationEvent.requestPermission();if(r!=="granted"){show("Motion access was turned off, so tilt can't work. Use the arrow keys on a computer instead.");return}
+    }}catch(e){show("This browser won't share the phone's tilt here. Open your Bar Tab website in Safari to use it.");return}
+    window.addEventListener("deviceorientation",onOrient);on=true;btn.setAttribute("aria-pressed","true");btn.textContent="Tilt on";
+    show("Tilt your phone left or right. Tip it too far and he falls over.");
+    setTimeout(()=>{if(on&&!got)show("No tilt signal here. Open your Bar Tab website in Safari to use tilt, or use the arrow keys on a computer.")},1500);
+  }
+  function disable(){window.removeEventListener("deviceorientation",onOrient);on=false;window.TILT=keyTilt;btn.setAttribute("aria-pressed","false");btn.textContent="Tilt mode";show("")}
+  btn.onclick=()=>on?disable():enable();
+  const keys={ArrowLeft:-1,ArrowRight:1};const held=new Set();
+  function keyUpdate(){keyTilt=held.has("ArrowLeft")&&!held.has("ArrowRight")?-.95:held.has("ArrowRight")&&!held.has("ArrowLeft")?.95:0;if(!on)window.TILT=keyTilt}
+  addEventListener("keydown",e=>{if(!(e.key in keys)||e.target.closest("input,select,textarea"))return;held.add(e.key);keyUpdate();e.preventDefault()});
+  addEventListener("keyup",e=>{if(!(e.key in keys))return;held.delete(e.key);keyUpdate()});
+  addEventListener("blur",()=>{held.clear();keyUpdate()});
+})();
 (function(){
   const g=document.getElementById("guy"),fx=g.querySelector("#fx"),fig=g.querySelector(".fig"),NS="http://www.w3.org/2000/svg",rnd=(a,b)=>a+Math.random()*(b-a);
   function pt(el,x,y){const a=g.getScreenCTM(),b=el&&el.getScreenCTM();if(!a||!b)return null;return new DOMPoint(x,y).matrixTransform(a.inverse().multiply(b))}
