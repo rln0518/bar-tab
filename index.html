@@ -306,7 +306,8 @@ button{ -webkit-tap-highlight-color:transparent }
   .play-toggle{display:block;justify-self:start;font-size:.8rem}
   .phone-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:fixed;z-index:10;bottom:var(--keyboard-inset,0px);left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
   .phone-nav button{min-width:44px;min-height:48px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:700 .9375rem var(--body);line-height:1.25}
-  .phone-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;grid-column:1/-1}
+  .phone-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;grid-column:1/-1}
+  .phone-nav .quick-joint{background:color-mix(in srgb,#3f8f4a 18%,var(--bg));border-color:#3f8f4a}
   .phone-nav .quick-primary{background:var(--accent);color:var(--accent-ink)}
   .phone-nav button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
   .prices{gap:14px;grid-template-columns:1fr}.prices input{width:100px!important;max-width:45%}
@@ -327,7 +328,7 @@ button{ -webkit-tap-highlight-color:transparent }
 }
 @media(max-width:1000px) and (pointer:coarse) and (orientation:landscape){
   .wrap{max-width:760px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .phone-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+  .phone-nav{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
   .phone-quick{display:contents}.phone-nav button{font-size:.875rem;min-height:44px}
   .meter .guy{max-width:min(420px,calc((100dvh - var(--dock-height,60px) - 150px) * 1.4545));width:100%}.summary{position:static}
   body[data-phone-view="guy"] .summary{display:none}
@@ -560,6 +561,7 @@ button{ -webkit-tap-highlight-color:transparent }
 <nav class="phone-nav" aria-label="Main navigation">
   <div class="phone-quick" role="group" aria-label="Quick actions">
     <button type="button" class="quick-primary" id="quickDrink">+ Beer</button>
+    <button type="button" class="quick-joint" id="quickJoint">+ Joint</button>
     <button type="button" id="quickWater">+ Water</button>
     <button type="button" id="quickUndo">Undo last</button>
   </div>
@@ -589,6 +591,7 @@ phoneGuy.addEventListener("pointerdown",event=>{
 },true);
 document.getElementById("quickWater").onclick=()=>document.getElementById("water").click();
 document.getElementById("quickUndo").onclick=()=>document.getElementById("undo").click();
+document.getElementById("quickJoint").onclick=()=>document.getElementById("joint").click();
 document.getElementById("quickDrink").onclick=e=>document.getElementById("add-"+(e.currentTarget.dataset.id||"beer")).click();
 document.getElementById("keyboardDone").onclick=()=>document.activeElement?.blur();
 const phoneDock=document.querySelector(".phone-nav");
@@ -1402,7 +1405,7 @@ function render(){
   });
   $("empty").hidden=log.length>0;
   {const qd=$("quickDrink"),lastD=DRINKS.find(d=>d.id===(drinks.length?drinks[drinks.length-1].id:"beer"))||DRINKS[0];
-   qd.dataset.id=lastD.id;qd.textContent="+ "+lastD.name;qd.setAttribute("aria-label","Add another "+lastD.name);}
+   qd.dataset.id=lastD.id;qd.textContent="+ "+({espresso:"Espresso"}[lastD.id]||lastD.name);qd.setAttribute("aria-label","Add another "+lastD.name);}
 }
 render();
 setInterval(render,30000);
