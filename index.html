@@ -77,6 +77,43 @@ ol{list-style:none;margin:0;padding:0;display:grid}
 ol li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
 ol li span:last-child{color:var(--muted)}
 .empty{color:var(--muted);font-size:.9rem}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0;margin:-1px}
+.notice{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:10px 12px;font-size:.92rem}
+.notice span{flex:1 1 200px;min-width:0}
+.money{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 12px;align-items:center;margin-bottom:6px}
+.money label{font-weight:600}
+.money select,.money input,.thresholds input,.bk-paste textarea{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);min-width:0}
+.budgetrow{display:flex;align-items:center;gap:8px;min-width:0}.budgetrow input{flex:1;min-width:0;font-variant-numeric:tabular-nums}
+.thresholds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.thresholds label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}
+.thresholds input{width:100%;font-variant-numeric:tabular-nums}
+#budgetStat.warn strong{color:var(--accent)} #budgetStat.over strong{color:var(--warn)}
+.bk-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.bk-actions .btn{display:inline-flex;align-items:center;justify-content:center}
+.bk-paste{margin:6px 0}.bk-paste summary{cursor:pointer;font-weight:600;padding:6px 0}
+.bk-paste textarea{display:block;width:100%;margin:6px 0;font:12px ui-monospace,Menlo,monospace}
+.bk-confirm{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px}
+.bk-msg:empty{display:none}
+.history{display:grid;gap:10px;align-content:start}
+.hist-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.hist-head .label{margin:0}
+.hist-count{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.hist-list{display:grid;gap:10px}
+.night{background:var(--card);border:1px solid var(--line);border-radius:12px}
+.night>summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;gap:4px;min-height:44px}
+.night>summary::-webkit-details-marker{display:none}
+.night[open]>summary{border-bottom:1px solid var(--line)}
+.n-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.n-date{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:.02em;text-transform:uppercase}
+.n-cost{font-weight:700;font-variant-numeric:tabular-nums}
+.n-sub{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.n-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.chip{font-size:.72rem;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:var(--line);color:var(--fg)}
+.chip.good{background:color-mix(in srgb,#3f8f4a 22%,var(--card))} .chip.bad{background:var(--warn);color:var(--bg)}
+.n-body{padding:10px 14px 14px;display:grid;gap:10px}
+.n-break{display:flex;flex-wrap:wrap;gap:6px}
+.n-body ol{margin:0}.n-body ol li{padding:7px 0;font-size:.9rem}
+.n-del{justify-self:start}
+.night .confirm{background:var(--bg);border-radius:10px;padding:8px 10px}
 .note{color:var(--muted);font-size:.8rem;line-height:1.5}
 .lvl{font-family:var(--display);font-weight:800;font-size:2.4rem;text-transform:uppercase;letter-spacing:.03em;line-height:1}
 .bar{height:14px;border-radius:999px;background:linear-gradient(90deg,#5aa469 0%,#d9b23a 40%,var(--accent) 65%,var(--warn) 100%);position:relative;overflow:hidden}
@@ -301,7 +338,7 @@ button{ -webkit-tap-highlight-color:transparent }
   .summary .stats{gap:4px 10px;font-size:.875rem;justify-content:flex-end}
   .summary .stats>div:first-child,.summary .tally,.summary .pace{display:none}
   .wrap>[data-phone-panel]{display:none}
-  body[data-phone-view="guy"] [data-phone-panel="guy"],body[data-phone-view="drinks"] [data-phone-panel="drinks"],body[data-phone-view="more"] [data-phone-panel="more"]{display:grid}
+  body[data-phone-view="guy"] [data-phone-panel="guy"],body[data-phone-view="drinks"] [data-phone-panel="drinks"],body[data-phone-view="more"] [data-phone-panel="more"],body[data-phone-view="history"] [data-phone-panel="history"]{display:grid}
   body[data-phone-view="more"] .actions{display:flex}
   .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .grid button{padding:12px;min-height:110px;min-width:44px;gap:4px}
@@ -312,11 +349,12 @@ button{ -webkit-tap-highlight-color:transparent }
   .label,.ticks{font-size:.8rem}.msg,.sober{font-size:1rem}
   .guy[data-drag-enabled="true"]{touch-action:none;outline:2px solid var(--accent);outline-offset:2px;border-radius:14px}
   .play-toggle{display:block;justify-self:start;font-size:.8rem}
-  .phone-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:fixed;z-index:10;bottom:var(--keyboard-inset,0px);left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .phone-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;position:fixed;z-index:10;bottom:var(--keyboard-inset,0px);left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
   .phone-nav button{min-width:44px;min-height:48px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:700 .9375rem var(--body);line-height:1.25}
   .phone-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;grid-column:1/-1}
   .phone-nav .quick-joint{background:color-mix(in srgb,#3f8f4a 18%,var(--bg));border-color:#3f8f4a}
   .phone-nav .quick-primary{background:var(--accent);color:var(--accent-ink)}
+  .phone-nav [data-phone-tab]{overflow-wrap:normal;word-break:keep-all;font-size:.875rem;padding-inline:2px}
   .phone-nav button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
   .prices{gap:14px;grid-template-columns:1fr}.prices input{width:100px!important;max-width:45%}
   .actions{gap:12px}.actions .btn{flex:1 1 42%}.strength{padding:12px;gap:12px}
@@ -336,7 +374,7 @@ button{ -webkit-tap-highlight-color:transparent }
 }
 @media(max-width:1000px) and (pointer:coarse) and (orientation:landscape){
   .wrap{max-width:760px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .phone-nav{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+  .phone-nav{grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
   .phone-quick{display:contents}.phone-nav button{font-size:.875rem;min-height:44px}
   .meter .guy{max-width:min(420px,calc((100dvh - var(--dock-height,60px) - 150px) * 1.4545));width:100%}.summary{position:static}
   body[data-phone-view="guy"] .summary{display:none}
@@ -361,6 +399,7 @@ button{ -webkit-tap-highlight-color:transparent }
     <div class="stats">
       <div><strong id="std">0.0</strong> standard drinks</div>
       <div><strong id="cost">BZ$0.00</strong> on the tab</div>
+      <div id="budgetStat" hidden><strong id="budgetPct">0%</strong> of <span id="budgetAmt">budget</span></div>
       <div><strong id="rate">0.0</strong> per hour</div>
     </div>
     <div class="pace" id="pace">Steady pace</div>
@@ -536,6 +575,11 @@ button{ -webkit-tap-highlight-color:transparent }
     <div class="note">About <strong id="inbody">0.0</strong> standard drinks still in your system (your body clears ~1 per hour). Adjusted for your weight and whether you ate. Still a rough guess; sleep, medication and how you feel change it a lot.</div>
   </section>
 
+  <div class="notice" id="notice" role="status" hidden>
+    <span id="noticeText"></span>
+    <button type="button" class="btn" id="noticeView">View history</button>
+    <button type="button" class="btn" id="noticeClose" aria-label="Dismiss">OK</button>
+  </div>
   <section data-phone-panel="drinks">
     <p class="label">Tap to add</p>
     <div class="grid" id="grid"></div>
@@ -553,7 +597,19 @@ button{ -webkit-tap-highlight-color:transparent }
       <div class="setrow"><label for="weight">Body weight</label><input id="weight" type="number" min="80" max="450" step="1" value="170" inputmode="numeric"><span>lbs</span></div>
       <p class="label">Your businessman</p>
       <div class="look" id="look"></div>
-      <p class="label">Price per drink (BZ$)</p>
+      <p class="label">Money</p>
+      <div class="money">
+        <label for="curSel">Currency</label>
+        <select id="curSel"><option value="BZD">BZ$ (Belize dollar)</option><option value="USD">US$ (US dollar)</option><option value="custom">Custom symbol</option></select>
+        <label for="curCustom" id="curCustomLab" hidden>Symbol</label>
+        <input id="curCustom" type="text" maxlength="4" autocomplete="off" placeholder="e.g. €" hidden>
+        <label for="budget">Nightly budget</label>
+        <div class="budgetrow"><span id="budgetSym">BZ$</span><input id="budget" type="number" min="0" step="1" inputmode="decimal" placeholder="No budget"></div>
+      </div>
+      <p class="hint">Changing the currency only changes the symbol. It doesn't convert your prices. Leave the budget empty for no budget.</p>
+      <p class="label">Budget warning points (% of budget)</p>
+      <div class="thresholds" id="thresholds"></div>
+      <p class="label">Price per drink (<span id="priceSym">BZ$</span>)</p>
       <div class="prices" id="prices"></div>
       <p class="hint">Prices only apply to drinks you add after changing them.</p>
     </details>
@@ -566,15 +622,47 @@ button{ -webkit-tap-highlight-color:transparent }
     <button class="btn danger" id="reset">New night</button>
   </section>
   <div class="confirm" id="confirm" hidden>
-    Clear tonight's tally?
-    <button class="btn danger" id="yes">Clear</button>
-    <button class="btn" id="no">Keep</button>
+    <span id="confirmText">End tonight and save it to History?</span>
+    <button class="btn primary" id="yes">Save &amp; start new night</button>
+    <button class="btn" id="no">Keep going</button>
   </div>
+
+  <section data-phone-panel="more">
+    <details class="settings" id="bkdet">
+      <summary>Back up or restore your data</summary>
+      <p class="hint">One file with tonight, every saved night and your settings. Keep a copy somewhere safe: Safari can clear data from websites you haven't opened in a while.</p>
+      <div class="bk-actions">
+        <button type="button" class="btn primary" id="bkSave">Save backup file</button>
+        <button type="button" class="btn" id="bkCopy">Copy backup text</button>
+        <label class="btn" for="bkFile" id="bkFileLab">Restore from file</label>
+        <input type="file" id="bkFile" class="vh" accept="application/json,.json,text/plain,.txt">
+      </div>
+      <details class="bk-paste">
+        <summary>Restore from pasted text</summary>
+        <label for="bkText" class="vh">Backup text</label>
+        <textarea id="bkText" rows="4" placeholder="Paste backup text here"></textarea>
+        <button type="button" class="btn" id="bkCheck">Check pasted backup</button>
+      </details>
+      <div class="confirm bk-confirm" id="bkConfirm" hidden>
+        <span id="bkInfo"></span>
+        <button type="button" class="btn danger" id="bkYes">Replace my data</button>
+        <button type="button" class="btn" id="bkNo">Cancel</button>
+      </div>
+      <p class="hint bk-msg" id="bkMsg" role="status"></p>
+      <button type="button" class="btn" id="bkUndo" hidden>Undo last restore</button>
+    </details>
+  </section>
 
   <section data-phone-panel="more">
     <p class="label">Tonight</p>
     <ol id="log"></ol>
     <p class="empty" id="empty">Nothing logged. Tap a drink above when you order.</p>
+  </section>
+
+  <section data-phone-panel="history" class="history" id="history">
+    <div class="hist-head"><p class="label">Past nights</p><span class="hist-count" id="histCount"></span></div>
+    <div class="hist-list" id="histList"></div>
+    <p class="empty" id="histEmpty">No saved nights yet. A night is saved here when you tap New night, or after 8 hours with nothing logged.</p>
   </section>
 
   <p class="note">A standard drink is about 14 g of alcohol (a 12 oz 5% beer, a 1.5 oz shot of 40% rum, or 5 oz of 12% wine). The body clears roughly one per hour. This is a counter, not a breathalyzer — never use it to decide if you're okay to drive.</p>
@@ -590,6 +678,7 @@ button{ -webkit-tap-highlight-color:transparent }
   <button type="button" data-phone-tab="drinks" aria-pressed="true">+ Drinks</button>
   <button type="button" data-phone-tab="guy" aria-pressed="false">Character</button>
   <button type="button" data-phone-tab="more" aria-pressed="false">More / Log</button>
+  <button type="button" data-phone-tab="history" aria-pressed="false">History</button>
   <button type="button" class="keyboard-done" id="keyboardDone">Done editing</button>
 </nav>
 <script>
@@ -1339,8 +1428,13 @@ const EMPTY={
   espresso:'<path '+GL+' d="M-5 -14 L5 -14 L0 -8z"/><path class="e-coffee" d="M-2.6 -11.2 L2.6 -11.2 L0 -8.3z"/><circle class="e-bean" cx="-1" cy="-14.6" r=".9"/><circle class="e-bean" cx="1.2" cy="-14.6" r=".9"/><path class="e-stem" d="M0 -8 V-.5 M-2.8 0 H2.8"/>'
 };
 const SET={weight:170,food:false,prices:{beer:6,light:6,stout:7,rum:8,shot:7,wine:12,double:14,espresso:18,whisky:12},look:{skin:"Medium",hair:"Black",beard:"Yes",suit:"Charcoal",tie:"Red"}};
-try{const s=JSON.parse(localStorage.getItem("bartab-set")||"{}");if(s.weight)SET.weight=s.weight;SET.food=!!s.food;Object.assign(SET.prices,s.prices||{});Object.assign(SET.look,s.look||{})}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("bartab-set")||"{}");if(s.weight)SET.weight=s.weight;SET.food=!!s.food;Object.assign(SET.prices,s.prices||{});Object.assign(SET.look,s.look||{});if(s.currency&&typeof s.currency==="object")SET.currency={code:["BZD","USD","custom"].includes(s.currency.code)?s.currency.code:"BZD",custom:String(s.currency.custom||"").slice(0,4)};if(s.budget>0)SET.budget=+s.budget;if(Array.isArray(s.thresholds)&&s.thresholds.length===4&&s.thresholds.every(n=>n>=1&&n<=300))SET.thresholds=s.thresholds.map(Number)}catch(e){}
+if(!SET.currency||typeof SET.currency!=="object")SET.currency={code:"BZD",custom:""};
+if(!(SET.budget>0))SET.budget=null;
+if(!Array.isArray(SET.thresholds)||SET.thresholds.length!==4)SET.thresholds=[25,50,75,100];
 const saveSet=()=>{try{localStorage.setItem("bartab-set",JSON.stringify(SET))}catch(e){}};
+function curSym(){const c=SET.currency;return c.code==="USD"?"US$":c.code==="custom"?((c.custom||"").trim()||"$"):"BZ$"}
+function fmtMoney(v,sym){sym=sym||curSym();return sym+(/^[A-Za-z]{2,}$/.test(sym)?" ":"")+(Math.round((v||0)*100)/100).toFixed(2)}
 const HELD={
   coffee:'<rect class="e-mug" x="-3.2" y="-8" width="6.4" height="8" rx="1"/><path class="e-mughandle" d="M3.2 -6.5 q3 0 3 2.5 q0 2.5 -3 2.5"/><rect class="e-coffee" x="-2.6" y="-7.4" width="5.2" height="1.4"/>',
   beer:EMPTY.beer, light:EMPTY.light, stout:EMPTY.stout,
@@ -1354,7 +1448,37 @@ const HELD={
 let heldNow="";
 let log=[];
 try{log=JSON.parse(localStorage.getItem("bartab")||"[]")}catch(e){log=[]}
+if(!Array.isArray(log))log=[];
+log=log.filter(e=>e&&typeof e==="object"&&typeof e.id==="string"&&typeof e.t==="number");
 const save=()=>{try{localStorage.setItem("bartab",JSON.stringify(log))}catch(e){}};
+// ---- Saved nights (history). Nights are only ever removed when the person deletes them. ----
+const SESS_KEY="bartab-sessions",AUTO_CLOSE_MS=8*36e5;
+let sessions=[];
+try{const v=JSON.parse(localStorage.getItem(SESS_KEY)||"[]");if(Array.isArray(v))sessions=v.filter(s=>s&&Array.isArray(s.entries))}catch(e){sessions=[]}
+function saveSessions(){try{localStorage.setItem(SESS_KEY,JSON.stringify(sessions));return true}catch(e){return false}}
+function priceOf(e){return e.p!=null?e.p:(SET.prices[e.id]||0)}
+function archiveNight(reason,now){
+  if(!log.length)return null;
+  const entries=log.map(e=>{const c={...e};const d=DRINKS.find(x=>x.id===e.id);if(d){if(c.p==null)c.p=SET.prices[e.id]||0;if(c.s==null)c.s=std(d)}return c});
+  const s={id:"n"+entries[0].t+"-"+Math.random().toString(36).slice(2,7),start:entries[0].t,end:entries[entries.length-1].t,
+    savedAt:now||Date.now(),closed:reason,currency:curSym(),budget:SET.budget,weight:SET.weight,food:!!SET.food,entries};
+  sessions.push(s);
+  if(!saveSessions()){sessions.pop();showNotice("Couldn't save this night to History because your phone's storage for this site is full. Tonight was kept. Back up your data, then delete some old nights.",false);return false}
+  log=[];save();
+  return s;
+}
+function checkAutoClose(now){
+  now=now||Date.now();
+  if(!log.length)return null;
+  const last=log[log.length-1].t;
+  if(now-last<AUTO_CLOSE_MS)return null;
+  const s=archiveNight("auto",now);
+  if(s){showNotice(`Your night from ${nightLabel(s)} was saved to History automatically after 8 hours with nothing logged.`,true);renderHistory()}
+  return s;
+}
+function logPush(e){checkAutoClose(e.t);log[log.length]=e}
+function nightLabel(s){return new Date(s.start).toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})}
+function showNotice(text,withView){const n=document.getElementById("notice");if(!n)return;document.getElementById("noticeText").textContent=text;document.getElementById("noticeView").hidden=!withView;n.hidden=false}
 const $=id=>document.getElementById(id);
 const fmtTime=t=>new Date(t).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 
@@ -1363,7 +1487,7 @@ DRINKS.forEach(d=>{
   const b=document.createElement("button");
   b.id="add-"+d.id;
   b.innerHTML=`<span class="n" data-n="${d.id}">0</span><b>${d.name}</b><small>${d.desc} · ${std(d).toFixed(1)} std</small>`;
-  b.onclick=()=>{log.push({id:d.id,t:Date.now(),s:std(d),p:SET.prices[d.id]});save();render();reactTo("drink")};
+  b.onclick=()=>{logPush({id:d.id,t:Date.now(),s:std(d),p:SET.prices[d.id]});save();render();reactTo("drink")};
   d.btn=b;
   grid.appendChild(b);
 });
@@ -1415,13 +1539,46 @@ $("weight").value=SET.weight;
 $("weight").oninput=ev=>{const v=parseFloat(ev.target.value);if(v>=80&&v<=450){SET.weight=v;saveSet();render()}};
 $("food").checked=SET.food;
 $("food").onchange=ev=>{SET.food=ev.target.checked;saveSet();render()};
-$("wbBtn").onclick=()=>{log.push({id:"water",t:Date.now()});save();render();reactTo("water")};
-$("joint").onclick=()=>{log.push({id:"joint",t:Date.now()});save();render();say(["Ohhh yeah...","Puff puff pass.","Now THIS is a party."][Math.floor(Math.random()*3)])};
-$("water").onclick=()=>{log.push({id:"water",t:Date.now()});save();render();reactTo("water")};
+$("wbBtn").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water")};
+$("joint").onclick=()=>{logPush({id:"joint",t:Date.now()});save();render();say(["Ohhh yeah...","Puff puff pass.","Now THIS is a party."][Math.floor(Math.random()*3)])};
+$("water").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water")};
 $("undo").onclick=()=>{log.pop();save();render()};
-$("reset").onclick=()=>{$("confirm").hidden=false};
+$("reset").onclick=()=>{
+  if(!log.length){$("confirmText").textContent="Nothing logged tonight, so there's nothing to save.";$("yes").hidden=true;$("no").textContent="OK"}
+  else{$("confirmText").textContent=`End tonight and save it to History? (${log.length} ${log.length===1?"entry":"entries"})`;$("yes").hidden=false;$("no").textContent="Keep going"}
+  $("confirm").hidden=false};
 $("no").onclick=()=>{$("confirm").hidden=true};
-$("yes").onclick=()=>{log=[];save();$("confirm").hidden=true;render();if(window.resetProps)resetProps()};
+$("yes").onclick=()=>{
+  const s=archiveNight("manual");$("confirm").hidden=true;
+  if(s){render();renderHistory();if(window.resetProps)resetProps();showNotice(`Saved ${nightLabel(s)} to History. New night started.`,true)}
+};
+$("noticeClose").onclick=()=>{$("notice").hidden=true};
+$("noticeView").onclick=()=>{$("notice").hidden=true;openHistory()};
+function openHistory(){
+  const tab=document.querySelector('[data-phone-tab="history"]');
+  if(tab&&getComputedStyle(tab).display!=="none")tab.click();else $("history").scrollIntoView({behavior:"smooth",block:"start"});
+}
+// ---- money settings ----
+const curSel=$("curSel"),curCustom=$("curCustom");
+function syncMoneyUI(){
+  curSel.value=SET.currency.code;const custom=SET.currency.code==="custom";
+  curCustom.hidden=!custom;$("curCustomLab").hidden=!custom;curCustom.value=SET.currency.custom||"";
+  const sym=curSym();$("budgetSym").textContent=sym;$("priceSym").textContent=sym;
+  $("budget").value=SET.budget!=null?SET.budget:"";
+}
+curSel.onchange=()=>{SET.currency.code=curSel.value;saveSet();syncMoneyUI();render();renderHistory()};
+curCustom.oninput=()=>{SET.currency.custom=curCustom.value.slice(0,4);saveSet();$("budgetSym").textContent=curSym();$("priceSym").textContent=curSym();render()};
+$("budget").oninput=ev=>{const v=parseFloat(ev.target.value);SET.budget=v>0?Math.round(v*100)/100:null;saveSet();render()};
+(function(){
+  const box=$("thresholds");
+  SET.thresholds.forEach((v,i)=>{
+    const lab=document.createElement("label");lab.htmlFor="th"+i;lab.textContent=["First","Second","Third","Limit"][i];
+    const inp=document.createElement("input");inp.type="number";inp.id="th"+i;inp.min=1;inp.max=300;inp.step=1;inp.inputMode="numeric";inp.value=v;
+    inp.onchange=()=>{const n=Math.round(parseFloat(inp.value));if(n>=1&&n<=300){SET.thresholds[i]=n;SET.thresholds.sort((a,b)=>a-b);saveSet();box.querySelectorAll("input").forEach((x,j)=>x.value=SET.thresholds[j]);render()}else inp.value=SET.thresholds[i]};
+    lab.appendChild(inp);box.appendChild(lab);
+  });
+})();
+syncMoneyUI();
 
 function tally(n){
   let s="";for(let i=0;i<Math.floor(n/5);i++)s+="卌 ";
@@ -1431,8 +1588,14 @@ function render(){
   const drinks=log.filter(e=>e.id!=="water"&&e.id!=="joint");
   const total=drinks.length;
   let since=0;for(let i=log.length-1;i>=0&&log[i].id!=="water";i--)if(log[i].id!=="joint")since++;
-  const cost=drinks.reduce((a,e)=>a+(e.p!=null?e.p:(SET.prices[e.id]||0)),0);
-  $("cost").textContent="BZ$"+cost.toFixed(2);
+  const cost=drinks.reduce((a,e)=>a+priceOf(e),0);
+  $("cost").textContent=fmtMoney(cost);
+  {const bs=$("budgetStat");
+   if(SET.budget>0){const pct=cost/SET.budget*100,th=SET.thresholds;
+     bs.hidden=false;$("budgetPct").textContent=Math.round(pct)+"%";$("budgetAmt").textContent=fmtMoney(SET.budget);
+     bs.classList.toggle("warn",pct>=th[1]&&pct<th[3]);bs.classList.toggle("over",pct>=th[3]);
+     window.BUDGET_PCT=pct}
+   else{bs.hidden=true;window.BUDGET_PCT=null}}
   const s=drinks.reduce((a,e)=>a+(e.s!=null?e.s:std(DRINKS.find(d=>d.id===e.id))),0);
   $("total").textContent=total;
   $("tally").textContent=tally(total);
@@ -1515,8 +1678,108 @@ function render(){
   {const qd=$("quickDrink"),lastD=DRINKS.find(d=>d.id===(drinks.length?drinks[drinks.length-1].id:"beer"))||DRINKS[0];
    qd.dataset.id=lastD.id;qd.textContent="+ "+({espresso:"Espresso"}[lastD.id]||lastD.name);qd.setAttribute("aria-label","Add another "+lastD.name);}
 }
+checkAutoClose();
 render();
-setInterval(render,30000);
+setInterval(()=>{checkAutoClose();render()},30000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){checkAutoClose();render()}});
+// ---- History screen ----
+function renderHistory(){
+  const list=$("histList");list.textContent="";
+  const n=sessions.length;$("histEmpty").hidden=n>0;
+  $("histCount").textContent=n?`${n} ${n===1?"night":"nights"} saved`:"";
+  [...sessions].sort((a,b)=>b.start-a.start).forEach(s=>list.appendChild(nightCard(s)));
+}
+function dur(ms){const m=Math.max(0,Math.round(ms/6e4));return m<60?`${m}m`:`${Math.floor(m/60)}h ${m%60}m`}
+function nightCard(s){
+  const drinks=s.entries.filter(e=>e.id!=="water"&&e.id!=="joint"),water=s.entries.filter(e=>e.id==="water").length,joints=s.entries.filter(e=>e.id==="joint").length;
+  const cost=drinks.reduce((a,e)=>a+(e.p||0),0),sym=s.currency||"BZ$";
+  const d=document.createElement("details");d.className="night";
+  const sm=document.createElement("summary");
+  const startDay=new Date(s.start).toDateString(),endDay=new Date(s.end).toDateString();
+  sm.innerHTML=`<div class="n-top"><span class="n-date"></span><span class="n-cost"></span></div><div class="n-sub"></div><div class="n-chips"></div>`;
+  sm.querySelector(".n-date").textContent=nightLabel(s);
+  sm.querySelector(".n-cost").textContent=fmtMoney(cost,sym);
+  sm.querySelector(".n-sub").textContent=`${fmtTime(s.start)} – ${fmtTime(s.end)}${startDay!==endDay?" next day":""} · ${dur(s.end-s.start)} · ${drinks.length} ${drinks.length===1?"drink":"drinks"}${water?` · ${water} water`:""}${joints?` · ${joints} ${joints===1?"joint":"joints"}`:""}`;
+  const chips=sm.querySelector(".n-chips");
+  const chip=(t,c)=>{const x=document.createElement("span");x.className="chip"+(c?" "+c:"");x.textContent=t;chips.appendChild(x)};
+  if(s.budget>0){if(cost<=s.budget)chip(`Under budget by ${fmtMoney(s.budget-cost,sym)}`,"good");else chip(`Over budget by ${fmtMoney(cost-s.budget,sym)}`,"bad")}
+  if(!drinks.length)chip("No alcohol","good");
+  if(s.closed==="auto")chip("Saved automatically");
+  d.appendChild(sm);
+  const body=document.createElement("div");body.className="n-body";
+  const counts={};drinks.forEach(e=>{counts[e.id]=(counts[e.id]||0)+1});
+  const br=document.createElement("div");br.className="n-break";
+  Object.entries(counts).sort((a,b)=>b[1]-a[1]).forEach(([id,c])=>{const x=document.createElement("span");x.className="chip";x.textContent=`${c}× ${(DRINKS.find(q=>q.id===id)||{name:id}).name}`;br.appendChild(x)});
+  if(br.childNodes.length)body.appendChild(br);
+  const ol=document.createElement("ol");
+  s.entries.forEach(e=>{const li=document.createElement("li");const a=document.createElement("span"),b=document.createElement("span");
+    const dd=DRINKS.find(q=>q.id===e.id);a.textContent=dd?`${dd.name}${e.p?` · ${fmtMoney(e.p,sym)}`:""}`:e.id==="joint"?"Joint":"Water";b.textContent=fmtTime(e.t);li.append(a,b);ol.appendChild(li)});
+  body.appendChild(ol);
+  const del=document.createElement("button");del.type="button";del.className="btn danger n-del";del.textContent="Delete this night";
+  const cf=document.createElement("div");cf.className="confirm";cf.hidden=true;
+  const cfT=document.createElement("span");cfT.textContent="Delete this night for good? Make a backup first if you might want it later.";
+  const yes=document.createElement("button");yes.type="button";yes.className="btn danger";yes.textContent="Delete";
+  const no=document.createElement("button");no.type="button";no.className="btn";no.textContent="Keep";
+  cf.append(cfT,yes,no);
+  del.onclick=()=>{cf.hidden=false;del.hidden=true};no.onclick=()=>{cf.hidden=true;del.hidden=false};
+  yes.onclick=()=>{const i=sessions.findIndex(x=>x.id===s.id);if(i>=0){const removed=sessions.splice(i,1);if(!saveSessions()){sessions.splice(i,0,...removed)}}renderHistory()};
+  body.append(del,cf);d.appendChild(body);
+  return d;
+}
+renderHistory();
+// ---- Backup & restore ----
+const BK_KEYS=["bartab","bartab-set","bartab-abv","bartab-best","bartab-sessions"];
+function backupObject(){
+  const data={};
+  BK_KEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!=null)data[k]=JSON.parse(v)}catch(e){}});
+  data["bartab"]=log;data["bartab-sessions"]=sessions;data["bartab-set"]=SET;
+  return {app:"bar-tab",format:1,exportedAt:new Date().toISOString(),data};
+}
+const bkMsg=t=>{$("bkMsg").textContent=t};
+const bkName=()=>`bar-tab-backup-${new Date().toISOString().slice(0,10)}.json`;
+$("bkSave").onclick=async()=>{
+  const text=JSON.stringify(backupObject(),null,1);
+  try{
+    const dl=window.claude&&typeof claude.use==="function"?await claude.use("downloads"):null;
+    if(dl){await dl.save({filename:bkName(),data:text});bkMsg("Backup saved.");return}
+  }catch(e){if(e&&e.code==="declined"){bkMsg("Backup not saved.");return}}
+  try{
+    const url=URL.createObjectURL(new Blob([text],{type:"application/json"}));
+    const a=document.createElement("a");a.href=url;a.download=bkName();document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    bkMsg("Backup file created. If nothing downloaded, use Copy backup text instead and paste it into Notes.");
+  }catch(e){bkMsg("This browser blocked the file. Use Copy backup text instead.")}
+};
+$("bkCopy").onclick=()=>{
+  const text=JSON.stringify(backupObject());
+  const fallback=()=>{const t=$("bkText");t.value=text;t.closest("details").open=true;t.focus();t.select();bkMsg("Copying was blocked, so the backup text is in the box below. Select it all and copy it.")};
+  try{navigator.clipboard.writeText(text).then(()=>bkMsg("Backup text copied. Paste it into Notes or send it to yourself."),fallback)}catch(e){fallback()}
+};
+let pendingRestore=null;
+function checkBackup(text){
+  let o;try{o=JSON.parse(text)}catch(e){bkMsg("That isn't a Bar Tab backup. The text couldn't be read.");return}
+  const d=o&&o.data;
+  if(!o||o.app!=="bar-tab"||!d||typeof d!=="object"){bkMsg("That isn't a Bar Tab backup.");return}
+  if(d["bartab"]!=null&&!Array.isArray(d["bartab"])||d["bartab-sessions"]!=null&&!Array.isArray(d["bartab-sessions"])){bkMsg("That backup looks damaged, so nothing was changed.");return}
+  pendingRestore=d;
+  const nights=(d["bartab-sessions"]||[]).length,tonight=(d["bartab"]||[]).length;
+  const when=o.exportedAt?new Date(o.exportedAt).toLocaleString([],{dateStyle:"medium",timeStyle:"short"}):"an unknown date";
+  $("bkInfo").textContent=`Backup from ${when}: ${nights} saved ${nights===1?"night":"nights"} and ${tonight} ${tonight===1?"entry":"entries"} tonight. This replaces what's on this phone now. Your current data is kept as a safety copy you can undo.`;
+  $("bkConfirm").hidden=false;bkMsg("");
+}
+$("bkFile").onchange=ev=>{const file=ev.target.files&&ev.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>checkBackup(String(r.result));r.onerror=()=>bkMsg("That file couldn't be opened.");r.readAsText(file);ev.target.value=""};
+$("bkCheck").onclick=()=>checkBackup($("bkText").value.trim());
+$("bkNo").onclick=()=>{pendingRestore=null;$("bkConfirm").hidden=true;bkMsg("Restore cancelled. Nothing changed.")};
+function applyData(d){
+  BK_KEYS.forEach(k=>{try{if(d[k]!=null)localStorage.setItem(k,JSON.stringify(d[k]));else localStorage.removeItem(k)}catch(e){}});
+}
+$("bkYes").onclick=()=>{
+  if(!pendingRestore)return;
+  try{localStorage.setItem("bartab-before-restore",JSON.stringify({savedAt:Date.now(),data:backupObject().data}))}catch(e){bkMsg("Couldn't make a safety copy first, so nothing was restored. Free up space and try again.");return}
+  applyData(pendingRestore);location.reload();
+};
+$("bkUndo").onclick=()=>{try{const s=JSON.parse(localStorage.getItem("bartab-before-restore")||"null");if(s&&s.data){applyData(s.data);localStorage.removeItem("bartab-before-restore");location.reload()}}catch(e){bkMsg("Couldn't undo the restore.")}};
+try{const s=JSON.parse(localStorage.getItem("bartab-before-restore")||"null");if(s&&s.savedAt){$("bkUndo").hidden=false;$("bkUndo").textContent=`Undo last restore (${new Date(s.savedAt).toLocaleDateString()})`}}catch(e){}
 (function(){
   const $=id=>document.getElementById(id),hint=$("playHint");
   const show=(msg)=>{hint.textContent=msg;hint.hidden=!msg};
