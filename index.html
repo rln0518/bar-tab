@@ -589,7 +589,7 @@ phoneGuy.addEventListener("pointerdown",event=>{
 },true);
 document.getElementById("quickWater").onclick=()=>document.getElementById("water").click();
 document.getElementById("quickUndo").onclick=()=>document.getElementById("undo").click();
-document.getElementById("quickDrink").onclick=()=>document.getElementById("add-beer").click();
+document.getElementById("quickDrink").onclick=e=>document.getElementById("add-"+(e.currentTarget.dataset.id||"beer")).click();
 document.getElementById("keyboardDone").onclick=()=>document.activeElement?.blur();
 const phoneDock=document.querySelector(".phone-nav");
 function syncPhoneViewport(){
@@ -1401,6 +1401,8 @@ function render(){
     ol.appendChild(li);
   });
   $("empty").hidden=log.length>0;
+  {const qd=$("quickDrink"),lastD=DRINKS.find(d=>d.id===(drinks.length?drinks[drinks.length-1].id:"beer"))||DRINKS[0];
+   qd.dataset.id=lastD.id;qd.textContent="+ "+lastD.name;qd.setAttribute("aria-label","Add another "+lastD.name);}
 }
 render();
 setInterval(render,30000);
