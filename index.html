@@ -1,0 +1,1437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f2ea">
+<title>Bar Tab Counter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Manrope:wght@400;600;700&display=swap">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: one-column phone tally — big count, tap-to-add drink grid, session log */
+:root{
+  --bg:#f6f2ea; --card:#fffdf8; --fg:#2a2118; --muted:#7a6a58; --line:#e3d9c8;
+  --accent:#b8661c; --accent-ink:#fff; --warn:#b3261e;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17120d; --card:#211a13; --fg:#f2e8da; --muted:#a8957d; --line:#3a2f23;
+  --accent:#e08a3c; --accent-ink:#1a120a; --warn:#ff8a80; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17120d; --card:#211a13; --fg:#f2e8da; --muted:#a8957d; --line:#3a2f23;
+  --accent:#e08a3c; --accent-ink:#1a120a; --warn:#ff8a80; color-scheme:dark}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);padding-inline:16px;padding-block:20px 40px}
+.wrap{max-width:480px;margin:0 auto;display:grid;gap:20px}
+header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+h1{font-family:var(--display);font-weight:800;font-size:1.6rem;letter-spacing:.04em;text-transform:uppercase;margin:0}
+.since{color:var(--muted);font-size:.85rem;font-variant-numeric:tabular-nums}
+.hero{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:10px}
+.big{display:flex;align-items:baseline;gap:10px}
+.big b{font-family:var(--display);font-weight:800;font-size:5.5rem;line-height:.85;font-variant-numeric:tabular-nums}
+.big span{color:var(--muted);font-weight:600}
+.tally{font-family:var(--display);font-size:1.6rem;letter-spacing:.08em;color:var(--accent);min-height:1.6rem;word-break:break-all}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.9rem;color:var(--muted)}
+.stats strong{color:var(--fg);font-variant-numeric:tabular-nums}
+.pace{font-size:.85rem;font-weight:600;padding:6px 10px;border-radius:999px;justify-self:start;background:var(--line)}
+.pace.high{background:var(--warn);color:var(--bg)}
+.label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid button{font:inherit;text-align:left;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;display:grid;gap:2px;transition:transform .08s}
+.grid button:active{transform:scale(.97)}
+.grid button:last-child:nth-child(odd){grid-column:span 2}
+.strength{margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.strength label{font-weight:700;font-size:.9rem}
+.strength input{flex:1;min-width:140px;accent-color:var(--accent)}
+.strength output{font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--accent);font-variant-numeric:tabular-nums;min-width:3.2em;text-align:right}
+.hint{color:var(--muted);font-size:.8rem;margin:6px 0 0}
+.waterbanner{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:color-mix(in srgb,#4a90c8 16%,var(--card));border:1px solid #4a90c8;border-radius:10px;padding:10px 12px;font-size:.9rem}
+.waterbanner[hidden]{display:none}
+.food{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;cursor:pointer}
+.food input{width:18px;height:18px;accent-color:var(--accent)}
+.settings{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.settings summary{font-weight:700;cursor:pointer}
+.settings[open] summary{margin-bottom:12px}
+.setrow{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.setrow label{font-weight:600;flex:1}
+.settings input[type=number]{font:inherit;width:84px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-variant-numeric:tabular-nums}
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.prices div{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:.9rem;min-width:0}
+.prices input{width:72px!important}
+.guy.needwater .cup{display:none} .guy.needwater .water{display:inline}
+.grid button:hover{border-color:var(--accent)}
+.grid button b{font-size:1.05rem}
+.grid button small{color:var(--muted)}
+.grid button .n{font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--accent);font-variant-numeric:tabular-nums}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:700;border-radius:10px;padding:10px 16px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.danger{color:var(--warn)}
+.confirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem}
+ol{list-style:none;margin:0;padding:0;display:grid}
+ol li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+ol li span:last-child{color:var(--muted)}
+.empty{color:var(--muted);font-size:.9rem}
+.note{color:var(--muted);font-size:.8rem;line-height:1.5}
+.lvl{font-family:var(--display);font-weight:800;font-size:2.4rem;text-transform:uppercase;letter-spacing:.03em;line-height:1}
+.bar{height:14px;border-radius:999px;background:linear-gradient(90deg,#5aa469 0%,#d9b23a 40%,var(--accent) 65%,var(--warn) 100%);position:relative;overflow:hidden}
+.fill{position:absolute;top:0;right:0;bottom:0;background:var(--line);transition:left .4s ease}
+.ticks{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted)}
+.msg{font-weight:600}
+.sober{font-size:.9rem;font-variant-numeric:tabular-nums;color:var(--muted)} .sober strong{color:var(--fg)}
+.meter.danger .lvl,.meter.danger .msg{color:var(--warn)}
+/* scene palette: an illustration with its own fixed office colors in both themes */
+:root{--skin:#c68a5c;--hair:#24170e;--ink:#24170e;--suit:#2e3440;--pants:#2a2f3a;--shirtc:#f4f5f8;--tie:#c8323a;
+  --wallc:#d9dde4;--floorc:#7b6a5a;--deskc:#8a5f3c;--water:#4a90c8}
+.guy{width:100%;max-width:440px;justify-self:center;display:block;--beat:1.6s;--sw:1.5;--bob:0px;--leg:0deg;--aL1:8deg;--aL2:4deg;--aR1:0deg;--aR2:-30deg;--nod:2deg;--lid:0;--sunY:0px;--dim:0;--s1:#8fd0ec;--s2:#d9eef6;--sleeve:var(--suit)}
+.guy .s1{stop-color:var(--s1)} .guy .s2{stop-color:var(--s2)}
+.guy .wall{fill:var(--wallc)} .guy .floor{fill:var(--floorc)} .guy .trim{fill:#5e5044}
+.guy .sun circle{fill:#f6c445} .guy .sun{transform:translateY(var(--sunY));transition:transform 1.2s ease}
+.guy .city rect{fill:#4a5468} .guy .winlights rect{fill:#ffd66b;opacity:0;transition:opacity .8s}
+.guy .winframe{fill:none;stroke:#f4f5f8;stroke-width:3}
+.guy .ck-case{fill:#2b2f38;stroke:#1a1d23;stroke-width:1} .guy .ck-face{fill:#0e1410}
+.guy .ck-time,.guy .ck-ghost{font:700 12.5px "Courier New",ui-monospace,monospace;text-anchor:middle;letter-spacing:.5px}
+.guy .ck-time{fill:#ff4a3d;filter:drop-shadow(0 0 1.5px rgba(255,74,61,.8))} .guy .ck-ghost{fill:#ff4a3d;opacity:.08}
+.guy .ck-ampm{font:700 4.2px var(--body);fill:#ff4a3d;text-anchor:middle;opacity:.15} .guy .ck-ampm.on{opacity:1;filter:drop-shadow(0 0 1px rgba(255,74,61,.8))} .guy .ck-sep{stroke:#ff4a3d;stroke-width:.4;opacity:.25} .guy .ck-dot{fill:#3fd07a;animation:twinkle 1s steps(2) infinite}
+.guy .board rect{fill:#fff;stroke:#9aa1ad;stroke-width:2} .guy .board text{font:700 6px var(--body);fill:#3a3f4b;letter-spacing:.06em}
+.guy .chart{fill:none;stroke:#2f8f5a;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.guy .desk .top,.guy .desk .leg{fill:var(--deskc)} .guy .papers{fill:#fff} .guy .mug{fill:#fff;stroke:#9aa1ad}
+.guy .lapframe{fill:#3a3f4b} .guy .screen{fill:#bfe0f5} .guy .sheet{stroke:#6b8fb0;stroke-width:1}
+.guy .eq rect{fill:#ff5fa2;transform-box:fill-box;transform-origin:bottom;animation:eq .4s ease-in-out infinite alternate}
+.guy .eq rect:nth-child(2){animation-delay:-.1s;fill:#3fd0e0}.guy .eq rect:nth-child(3){animation-delay:-.25s;fill:#ffd23f}.guy .eq rect:nth-child(4){animation-delay:-.33s;fill:#8b6bff}
+.guy .bottle-body{fill:#6b8f3a} .guy .bottle-body.brown{fill:#7a4a22}
+.guy .more{font:800 11px var(--display);fill:#fff}
+.guy .dim{fill:#120c24;opacity:var(--dim);transition:opacity 1s}
+.guy .beams polygon{opacity:.22} .guy .bm1{fill:#ff5fa2} .guy .bm2{fill:#3fd0e0} .guy .bm3{fill:#ffd23f}
+.guy .beams{transform-origin:118px 30px;animation:beam 3s ease-in-out infinite alternate}
+.guy .disco{transform:translateY(-70px);transition:transform 1s cubic-bezier(.3,1.4,.5,1)}
+.guy .string{stroke:#9aa1ad;stroke-width:1.5} .guy .grid{fill:none;stroke:#5c6275;stroke-width:.8}
+.guy .spark path{fill:#fff;animation:twinkle 1.2s ease-in-out infinite alternate} .guy .spark path:nth-child(2){animation-delay:-.6s}
+.guy .chair .back,.guy .chair .seat{fill:#1f232b} .guy .stem,.guy .wheel{fill:#1f232b} .guy .base{fill:none;stroke:#1f232b;stroke-width:3;stroke-linecap:round}
+.guy .pants{fill:none;stroke:var(--pants);stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.guy .shoe{fill:#111}
+.guy .shirt{fill:var(--shirtc)} .guy .belt{fill:#3b2a1d}
+.guy .jacket path{fill:var(--suit)} .guy .btn{fill:#11141a}
+.guy .collar{fill:#fff;stroke:#c9ccd3;stroke-width:.6}
+.guy .tie polygon,.guy .band path{fill:var(--tie)}
+.guy .tie{transform-box:fill-box;transform-origin:50% 0;transition:transform .5s}
+.guy .sleeve{fill:none;stroke:var(--sleeve);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.guy .skinf{fill:var(--skin)} .guy .hair{fill:var(--hair)}
+.guy .brow,.guy .nose,.guy .mouth{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.guy .white{fill:#fff} .guy .pupils circle{fill:var(--ink)} .guy .swirl path{fill:none;stroke:var(--ink);stroke-width:1.4}
+.guy .lid{transform-box:fill-box;transform-origin:top;transform:scaleY(var(--lid));transition:transform .6s}
+.guy .eyes{transform-origin:160px 61px;animation:blink 4.5s infinite}
+.guy .m-grin,.guy .m-snore{fill:#7a2a22}
+.guy .blush{fill:#e0585a;opacity:0;transition:opacity .6s}
+.guy .liquid{fill:#d9902f} .guy .glass{fill:#fff;fill-opacity:.25;stroke:#e9edf2;stroke-width:1.6} .guy .ice{fill:#eaf7ff;opacity:.8}
+.guy .water rect{fill:var(--water)}
+.guy .notes text{font:700 14px var(--body);fill:#3a3f4b;animation:rise 2.4s ease-in infinite}
+.guy .notes text:nth-child(2){animation-delay:.8s}.guy .notes text:nth-child(3){animation-delay:1.6s}
+.guy .bubbles circle{fill:none;stroke:#fff;stroke-width:1.5;animation:rise 2.2s ease-in infinite}
+.guy .bubbles circle:nth-child(2){animation-delay:.7s}.guy .bubbles circle:nth-child(3){animation-delay:1.4s}
+.guy .confetti rect{animation:fall 2.6s linear infinite}
+.guy .confetti rect:nth-child(3n){fill:#ff5fa2;animation-duration:2.1s;animation-delay:-.7s}
+.guy .confetti rect:nth-child(3n+1){fill:#3fd0e0;animation-duration:2.9s;animation-delay:-1.6s}
+.guy .confetti rect:nth-child(3n+2){fill:#ffd23f;animation-duration:2.4s;animation-delay:-.3s}
+.guy .zzz{font:800 16px var(--display);fill:#fff;animation:rise 3s ease-in-out infinite}
+.guy .swirl,.guy .m-grin,.guy .m-wobble,.guy .m-snore,.guy .bubbles,.guy .zzz,.guy .water,.guy .band,.guy .eq,.guy .notes,.guy .beams,.guy .confetti,.guy .legs-stand{display:none}
+/* motion */
+.guy .tails{transform-origin:176px 54px;animation:flap .3s ease-in-out infinite alternate}
+.guy .swirl{transform-box:fill-box;transform-origin:center}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(calc(var(--bob)*-1))}}
+@keyframes sway{from{transform:rotate(calc(var(--sw)*-1deg))}to{transform:rotate(calc(var(--sw)*1deg))}}
+@keyframes nod{from{transform:rotate(calc(var(--nod)*-1))}to{transform:rotate(var(--nod))}}
+@keyframes armL{from{transform:rotate(var(--aL1))}to{transform:rotate(var(--aL2))}}
+@keyframes armR{from{transform:rotate(var(--aR1))}to{transform:rotate(var(--aR2))}}
+@keyframes leg{from{transform:rotate(var(--leg))}to{transform:rotate(calc(var(--leg)*-1))}}
+@keyframes tap{from{transform:rotate(0)}to{transform:rotate(-8deg)}}
+@keyframes flap{from{transform:rotate(-12deg)}to{transform:rotate(14deg)}}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes rise{0%{transform:translateY(8px);opacity:0}40%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes eq{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+@keyframes beam{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+@keyframes twinkle{from{opacity:.2}to{opacity:1}}
+@keyframes fall{from{transform:translateY(-10px) rotate(0)}to{transform:translateY(230px) rotate(540deg)}}
+@keyframes hic{0%,86%,100%{transform:translateY(0)}90%{transform:translateY(-6px)}94%{transform:translateY(0)}}
+.guy .beard{fill:var(--beardc);fill-rule:evenodd;stroke:rgba(0,0,0,.35);stroke-width:.6} .guy .beardtex{fill:none;stroke:#1c120a;stroke-width:.7;opacity:.6} .guy .stache{fill:var(--beardc);filter:brightness(.8)}
+.guy .earin{fill:none;stroke:#a26a45;stroke-width:1} .guy .hairhl{fill:none;stroke:#5a4030;stroke-width:1.4;stroke-linecap:round}
+.guy .lapel{fill:none;stroke:#4a5262;stroke-width:1.2} .guy .psq{fill:#fff}
+.guy .buckle{fill:#c9a34a} .guy .pocket{fill:none;stroke:#c3c7cf;stroke-width:.8}
+.guy .stain{fill:#c58a3a;opacity:0;transition:opacity .6s} .guy.l5 .stain,.guy.l6 .stain{opacity:.75}
+.guy .tiestripe{stroke:rgba(0,0,0,.3);stroke-width:1.4}
+.guy .badge path{stroke:#2f6fd6;stroke-width:1.2;fill:none} .guy .badge rect{fill:#fff;stroke:#2f6fd6;stroke-width:.8} .guy .badge text{font:800 3.6px var(--body);fill:#2f6fd6;text-anchor:middle}
+.guy .watch{fill:#c9a34a;stroke:#6b5420;stroke-width:.5}
+.guy .shoe{stroke:#3a3a3a;stroke-width:.8}
+.guy .sweat path{fill:#9fd8f5} .guy .sweat{display:none}
+.guy.l4 .sweat,.guy.l5 .sweat{display:inline;animation:drip 1.4s ease-in infinite}
+@keyframes drip{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(12px);opacity:0}}
+.guy .eglass{fill:#ffffff;fill-opacity:.35;stroke:#e9edf2;stroke-width:.8}
+.guy .e-brown{fill:#7a4a22} .guy .e-dark{fill:#1e1410} .guy .e-label{fill:#f1e4c4} .guy .e-gold{fill:#c9a34a}
+.guy .e-can{fill:#d9dee6} .guy .e-canstripe{fill:#3a6fd8} .guy .e-cantop{fill:#9aa1ad}
+.guy .e-amber{fill:#d9902f} .guy .e-whisky{fill:#b8661c} .guy .e-ice{fill:#eaf7ff;opacity:.85}
+.guy .e-lime{fill:#8cc63f;stroke:#5d9128;stroke-width:.6} .guy .e-red{fill:#8e1f3a}
+.guy .e-coffee{fill:#4a2c1a} .guy .e-bean{fill:#2a1a0f} .guy .e-stem{fill:none;stroke:#e9edf2;stroke-width:1}
+.guy .plus{font:800 16px var(--display);fill:#ffd23f;stroke:#24170e;stroke-width:.6;opacity:0}
+.guy .plus.pop{animation:pop 1.2s ease-out}
+@keyframes pop{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-22px)}}
+.guy .pelvis{fill:var(--pants)}
+.guy .e-cola{fill:#5a2e14} .guy .e-mug{fill:#fff;stroke:#9aa1ad;stroke-width:.6} .guy .e-mughandle{fill:none;stroke:#fff;stroke-width:1.2}
+.guy .e-straw{stroke:#d9573f;stroke-width:.9;stroke-linecap:round} .guy .e-foam{fill:#d8b58c}
+.guy{cursor:pointer;--beardc:#3a2618;touch-action:none;user-select:none;-webkit-user-select:none}
+.guy .fig,.guy #rag{cursor:grab}
+.guy #fx,.guy .haze,.guy .dim,.guy .beams,.guy .notes,.guy .bubbles,.guy .confetti,.guy .plus,.guy .zzz,.guy .speech{pointer-events:none}
+.guy .pPlant.moved .plant{transform:none!important;transition:none}
+.guy.nochair .legs-sit{display:none} .guy.nochair .legs-stand{display:inline}
+.guy.l0 .chair,.guy.l1 .chair{cursor:grab}
+.guy .joint{display:none} .guy.high .joint{display:inline} .guy.high.l6 .joint{display:none}
+.guy .jt-paper{fill:#f4efe6;stroke:#cfc6b5;stroke-width:.4} .guy .jt-ash{fill:#8d8a86}
+.guy .jt-ember{fill:#ff7a2a;animation:ember 1.4s ease-in-out infinite alternate}
+@keyframes ember{from{fill:#c7461a}to{fill:#ffc34a}}
+.guy.high .white{fill:#f6cdc8;stroke:#e06a5a;stroke-width:.45}
+.guy .haze{fill:#7bd88f;opacity:0;transition:opacity 2s} .guy.high .haze{opacity:var(--haze,.08);animation:hazewob 7s ease-in-out infinite alternate}
+@keyframes hazewob{from{fill:#7bd88f}to{fill:#b08cf0}}
+.guy .fx-smoke{fill:#ecebef;transform-box:fill-box;transform-origin:center}
+.highline{font-size:.9rem;color:var(--muted);line-height:1.45} .highline strong{color:#3f8f4a}
+.guy .deskWhole,.guy .discoBody,.guy .pPlant,.guy .pLaptop,.guy .pMug,.guy .pPhone,.guy .dpiece{cursor:grab}
+.guy .bsod{display:none} .guy .pLaptop.broken .bsod{display:inline}
+.guy .bsod rect{fill:#1f5fd6} .guy .bsod text{font:800 8px var(--body);fill:#fff} .guy .bsod path{stroke:#e9f2ff;stroke-width:.7;fill:none}
+.guy .mughandle{fill:none;stroke:#9aa1ad;stroke-width:1.4}
+.guy .fx-wood{fill:#8a5f3c}
+.guy .fx-star{fill:#ffd23f;stroke:#24170e;stroke-width:1.2;stroke-linejoin:round}
+.guy .fx-word{font:800 11px var(--display);fill:#c8323a;text-anchor:middle;letter-spacing:.03em;stroke:#fff;stroke-width:.4;paint-order:stroke}
+.guy .fx-crack{fill:none;stroke:#2a2f3a;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.guy .fx-dust{fill:#efe9df}
+.guy .fx-dizzy path{fill:#ffd23f;stroke:#24170e;stroke-width:.5}
+.guy .fx-chip{fill:#c9ced8}
+.guy .bandaid,.guy .bruise{display:none} .guy.hurt .bandaid,.guy.hurt .bruise{display:inline}
+.guy .bandaid rect{fill:#e8c39e;stroke:#b8916a;stroke-width:.5} .guy .bandaid .pad{fill:#f6e6d2} .guy .bandaid path{stroke:#b8916a;stroke-width:.5}
+.guy .bruise ellipse{fill:#7a4a8a;opacity:.45}
+.guy .board,.guy .clock{transform-box:view-box;transition:transform .6s cubic-bezier(.3,1.7,.5,1)} .guy:active .fig,.guy:active #rag{cursor:grabbing}
+.guy.nobeard .beard,.guy.nobeard .stache{display:none} .guy.bald .hair,.guy.bald .hairhl{display:none}
+.guy .speech{opacity:0;transition:opacity .25s;pointer-events:none} .guy .speech.show{opacity:1}
+.guy #spRect,.guy #spTail{fill:#fff;stroke:#24170e;stroke-width:.8} .guy #spCover{stroke:#fff;stroke-width:1.8}
+.guy #spText{font:700 8px var(--body);fill:#24170e}
+.guy .taxi{transform:translateX(90px);transition:transform 2.6s cubic-bezier(.2,.8,.3,1)}
+.guy.l5 .taxi,.guy.l6 .taxi{transform:none}
+.guy .tx-body{fill:#f2c230} .guy .tx-win{fill:#bfe0f5} .guy .tx-sign{fill:#fff8d6;stroke:#24170e;stroke-width:.4}
+.guy .tx-check{stroke:#24170e;stroke-width:1;stroke-dasharray:2 2} .guy .tx-wheel{fill:#111} .guy .tx-light{fill:#fff6a8}
+.guy .ph-base,.guy .ph-hand{fill:#2b2f38} .guy .ring path{fill:none;stroke:#c8323a;stroke-width:1.2;stroke-linecap:round;opacity:0}
+.guy .phone{transform-origin:230px 146px}
+.guy.l4 .phone,.guy.l5 .phone{animation:phoneshake 2.2s infinite} .guy.l4 .ring path,.guy.l5 .ring path{animation:ringfade 2.2s infinite}
+@keyframes phoneshake{0%{transform:rotate(0)}5%{transform:rotate(-10deg)}10%{transform:rotate(10deg)}15%{transform:rotate(-10deg)}20%{transform:rotate(10deg)}25%{transform:rotate(-10deg)}30%,100%{transform:rotate(0)}}
+@keyframes ringfade{0%,30%{opacity:1}35%,100%{opacity:0}}
+.guy .pot{fill:#b5653a} .guy .leaf{fill:#3f8f4a} .guy .dirt{fill:#5b3a1e;opacity:0;transition:opacity .4s .7s}
+.guy .plant{transform-origin:304px 190px;transition:transform .9s cubic-bezier(.5,0,.75,0)}
+.guy.l5 .plant,.guy.l6 .plant,.guy.hangover .plant{transform:rotate(-82deg)} .guy.l5 .dirt,.guy.l6 .dirt,.guy.hangover .dirt{opacity:1}
+.guy .hshades,.guy .icepack{display:none} .guy.hangover .hshades,.guy.hangover .icepack{display:inline}
+.guy .hshades rect{fill:#15161a} .guy .hshades path{stroke:#15161a;stroke-width:1.5}
+.guy .icepack rect{fill:#7fc4ef;stroke:#3f86b8;stroke-width:.8} .guy .icepack path{fill:none;stroke:#fff;stroke-width:.8}
+.guy.hangover .jacket{display:none} .guy.hangover{--sleeve:var(--shirtc)} .guy.hangover .tie{transform:rotate(14deg) translateX(2px)}
+.guy.hangover .stain{opacity:.75} .guy.hangover .m-smile{display:none} .guy.hangover .m-wobble{display:inline}
+.look{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;margin-bottom:14px}
+.look label{font-weight:600;font-size:.9rem}
+.look select{font:inherit;padding:7px 8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);min-width:0}
+/* levels: 0-1 sitting, 2-5 up and partying, 6 passed out */
+.guy.l1 .blush{opacity:.25} .guy.l1 .sheet{display:none} .guy.l1 .eq,.guy.l1 .notes{display:inline}
+.guy.l2 .chair,.guy.l3 .chair,.guy.l4 .chair,.guy.l5 .chair,.guy.l6 .chair{display:none}
+.guy.l2 .legs-sit,.guy.l3 .legs-sit,.guy.l4 .legs-sit,.guy.l5 .legs-sit,.guy.l6 .legs-sit{display:none}
+.guy.l2 .legs-stand,.guy.l3 .legs-stand,.guy.l4 .legs-stand,.guy.l5 .legs-stand,.guy.l6 .legs-stand{display:inline}
+.guy.l2 .sheet,.guy.l3 .sheet,.guy.l4 .sheet,.guy.l5 .sheet,.guy.l6 .sheet{display:none}
+.guy.l2 .eq,.guy.l3 .eq,.guy.l4 .eq,.guy.l5 .eq,.guy.l2 .notes,.guy.l3 .notes,.guy.l4 .notes,.guy.l5 .notes{display:inline}
+.guy.l2 .disco,.guy.l3 .disco,.guy.l4 .disco,.guy.l5 .disco,.guy.l6 .disco{transform:none}
+.guy.l2 .blush{opacity:.45}
+.guy.l2 .m-smile,.guy.l3 .m-smile,.guy.l4 .m-smile,.guy.l5 .m-smile,.guy.l6 .m-smile{display:none}
+.guy.l2 .m-grin,.guy.l3 .m-grin,.guy.l4 .m-grin{display:inline}
+.guy.l3 .jacket,.guy.l4 .jacket,.guy.l5 .jacket,.guy.l6 .jacket{display:none}
+.guy.l3,.guy.l4,.guy.l5,.guy.l6{--sleeve:var(--shirtc)}
+.guy.l3 .tie{transform:rotate(14deg) translateX(2px)}
+.guy.l3 .blush,.guy.l4 .blush{opacity:.7}
+.guy.l3 .beams,.guy.l4 .beams,.guy.l5 .beams{display:inline}
+.guy.l3 .winlights rect,.guy.l4 .winlights rect,.guy.l5 .winlights rect,.guy.l6 .winlights rect{opacity:1}
+.guy.l3 .bubbles,.guy.l4 .bubbles,.guy.l5 .bubbles{display:inline}
+.guy.l4 .tie,.guy.l5 .tie,.guy.l6 .tie{display:none}
+.guy.l4 .band,.guy.l5 .band,.guy.l6 .band{display:inline}
+.guy.l4 .confetti,.guy.l5 .confetti{display:inline}
+.guy.l5 .m-wobble{display:inline}
+.guy.l5 .blush,.guy.l6 .blush{opacity:.9}
+.guy.l5 .pupils{display:none} .guy.l5 .swirl{display:inline;animation:spin 1.4s linear infinite}
+.guy.l5 .beams{animation-duration:1.2s}
+.guy.l6 .fig *{animation:none!important}
+.guy.l6 .m-snore,.guy.l6 .zzz{display:inline}
+.guy.l6 .cup{display:none} .guy.l6 .water{display:inline}
+@media (prefers-reduced-motion:reduce){.grid button,.fill{transition:none}}
+/* Fine details inherit the character palette and move with the existing rig. */
+.guy .detail-shadow{fill:#24170e;opacity:.13;pointer-events:none}
+.guy .detail-light{fill:#fff;opacity:.19;pointer-events:none}
+.guy .detail-seam{fill:none;stroke:#101725;stroke-opacity:.32;stroke-width:.65;stroke-linecap:round;pointer-events:none}
+.guy .detail-fold{fill:none;stroke:#8791a0;stroke-opacity:.48;stroke-width:.65;stroke-linecap:round;pointer-events:none}
+.guy .detail-hair{fill:none;stroke:#bba18b;stroke-opacity:.35;stroke-width:.55;stroke-linecap:round}
+.guy .detail-beard{fill:none;stroke:#bba18b;stroke-opacity:.38;stroke-width:.5;stroke-linecap:round}
+.guy.nobeard .detail-beard,.guy.bald .detail-hair{display:none}
+.guy .detail-eye{fill:#fff;pointer-events:none}
+.phone-nav,.play-toggle,.phone-quick,.keyboard-done{display:none}
+*{box-sizing:border-box}
+html{scroll-padding-bottom:180px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,input,select,summary{touch-action:manipulation}
+button,.btn,select,input[type=number],summary{min-width:44px;min-height:44px}
+button{ -webkit-tap-highlight-color:transparent }
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:600px),(max-width:1000px) and (pointer:coarse){
+  body{margin:0;padding:12px max(16px,env(safe-area-inset-right)) calc(var(--dock-height,158px) + 16px) max(16px,env(safe-area-inset-left));overflow-wrap:break-word;font-size:16px;line-height:1.45}
+  html{scroll-padding-top:100px;scroll-padding-bottom:calc(var(--dock-height,158px) + 20px)}
+  .wrap>*{min-width:0;max-width:100%}
+  .wrap{gap:12px;min-width:0}
+  header{align-items:center}h1{font-size:1.35rem}.since{font-size:.875rem;text-align:right}
+  .hero{padding:12px;gap:8px}.big b{font-size:2.6rem}.big span{font-size:.8rem}
+  .summary{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;box-shadow:0 3px 12px #00000012;grid-template-columns:auto 1fr;align-items:center}
+  .summary .stats{gap:4px 10px;font-size:.875rem;justify-content:flex-end}
+  .summary .stats>div:first-child,.summary .tally,.summary .pace{display:none}
+  .wrap>[data-phone-panel]{display:none}
+  body[data-phone-view="guy"] [data-phone-panel="guy"],body[data-phone-view="drinks"] [data-phone-panel="drinks"],body[data-phone-view="more"] [data-phone-panel="more"]{display:grid}
+  body[data-phone-view="more"] .actions{display:flex}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .grid button{padding:12px;min-height:110px;min-width:44px;gap:4px}
+  .grid button:last-child:nth-child(odd){grid-column:auto}
+  .grid button b{font-size:1rem}.grid button small{font-size:.875rem}.grid button .n{font-size:1.3rem}
+  .btn,select,.settings summary{min-height:48px}input,select{font-size:16px!important}
+  .lvl{font-size:1.8rem}.meter .note,.hint,.note{font-size:.875rem}.guy{max-width:340px;touch-action:pan-y}
+  .label,.ticks{font-size:.8rem}.msg,.sober{font-size:1rem}
+  .guy[data-drag-enabled="true"]{touch-action:none;outline:2px solid var(--accent);outline-offset:2px;border-radius:14px}
+  .play-toggle{display:block;justify-self:start;font-size:.8rem}
+  .phone-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;position:fixed;z-index:10;bottom:var(--keyboard-inset,0px);left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+  .phone-nav button{min-width:44px;min-height:48px;padding:8px 4px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:700 .9375rem var(--body);line-height:1.25}
+  .phone-quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;grid-column:1/-1}
+  .phone-nav .quick-primary{background:var(--accent);color:var(--accent-ink)}
+  .phone-nav button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .prices{gap:14px;grid-template-columns:1fr}.prices input{width:100px!important;max-width:45%}
+  .actions{gap:12px}.actions .btn{flex:1 1 42%}.strength{padding:12px;gap:12px}
+  .strength input{width:100%;min-width:0;flex-basis:100%;min-height:44px}
+  .food{min-height:48px;padding:10px 0}.food input{width:26px;height:26px;flex-shrink:0}
+  .setrow{flex-wrap:wrap;gap:12px}.setrow label{min-width:90px}
+  .settings summary{padding:10px 0}.look{gap:12px}.look select{width:100%}
+  .settings input{scroll-margin-block:110px 180px}
+  .keyboard-open .summary{position:static}
+  .keyboard-open .phone-nav>[data-phone-tab],.keyboard-open .phone-quick{display:none}
+  .keyboard-open .keyboard-done{display:block;grid-column:1/-1;min-height:44px}
+  .keyboard-open .phone-nav{padding-bottom:10px}
+}
+@media(min-width:390px) and (max-width:600px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .grid button{padding:10px 8px}
+}
+@media(max-width:1000px) and (pointer:coarse) and (orientation:landscape){
+  .wrap{max-width:760px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .phone-nav{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+  .phone-quick{display:contents}.phone-nav button{font-size:.875rem;min-height:44px}
+  .meter .guy{max-width:min(420px,calc((100dvh - var(--dock-height,60px) - 150px) * 1.4545));width:100%}.summary{position:static}
+  body[data-phone-view="guy"] .summary{display:none}
+  body[data-phone-view="guy"] .meter{grid-template-columns:auto 1fr;align-items:center}
+  body[data-phone-view="guy"] .meter>*{grid-column:1/-1}
+  body[data-phone-view="guy"] .meter>.play-toggle{grid-column:1}
+  body[data-phone-view="guy"] .meter>.label{grid-column:2}
+  .prices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .keyboard-open .phone-quick{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}.guy *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+  <header><h1>Bar Tab</h1><div class="since" id="since">No drinks yet</div></header>
+
+  <section class="hero summary" aria-live="polite">
+    <div class="big"><b id="total">0</b><span>drinks</span></div>
+    <div class="tally" id="tally" aria-hidden="true"></div>
+    <div class="stats">
+      <div><strong id="std">0.0</strong> standard drinks</div>
+      <div><strong id="cost">BZ$0.00</strong> on the tab</div>
+      <div><strong id="rate">0.0</strong> per hour</div>
+    </div>
+    <div class="pace" id="pace">Steady pace</div>
+  </section>
+
+  <section class="hero meter" data-phone-panel="guy">
+    <button type="button" class="btn play-toggle" id="playToggle" aria-pressed="false">Enable dragging</button>
+    <p class="label" style="margin:0">How drunk you probably are · tap or drag him</p>
+    <svg class="guy l0" id="guy" viewBox="0 0 320 220" role="img" aria-label="A businessman relaxing at his desk">
+      <defs>
+        <clipPath id="frame"><rect width="320" height="220" rx="14"/></clipPath>
+        <clipPath id="win"><rect x="22" y="28" width="92" height="74" rx="3"/></clipPath>
+        <linearGradient id="skygrad" x1="0" y1="0" x2="0" y2="1"><stop class="s1" offset="0"/><stop class="s2" offset="1"/></linearGradient>
+        <radialGradient id="ballg" cx=".35" cy=".35" r=".75"><stop offset="0" style="stop-color:#ffffff"/><stop offset="1" style="stop-color:#7d8396"/></radialGradient>
+      </defs>
+      <g clip-path="url(#frame)">
+        <rect class="wall" width="320" height="220"/>
+        <g class="window">
+          <rect x="22" y="28" width="92" height="74" rx="3" fill="url(#skygrad)"/>
+          <g clip-path="url(#win)">
+            <g class="sun"><circle cx="94" cy="46" r="9"/></g>
+            <g class="city"><rect x="24" y="72" width="14" height="32"/><rect x="40" y="56" width="10" height="48"/><rect x="52" y="78" width="16" height="26"/><rect x="70" y="62" width="12" height="42"/><rect x="84" y="74" width="16" height="30"/><rect x="102" y="60" width="12" height="44"/></g>
+            <g class="winlights"><rect x="43" y="62" width="3" height="3"/><rect x="43" y="72" width="3" height="3"/><rect x="73" y="70" width="3" height="3"/><rect x="77" y="82" width="3" height="3"/><rect x="105" y="68" width="3" height="3"/><rect x="28" y="80" width="3" height="3"/><rect x="88" y="80" width="3" height="3"/><rect x="58" y="86" width="3" height="3"/></g>
+            <g class="taxi"><path class="tx-body" d="M45 90 l3 -6 h14 l3 6z"/><rect class="tx-body" x="38" y="90" width="34" height="8" rx="2"/><rect class="tx-win" x="48" y="85.5" width="5.5" height="4"/><rect class="tx-win" x="55" y="85.5" width="6" height="4"/><rect class="tx-sign" x="51" y="80.5" width="9" height="3.5" rx="1"/><path class="tx-check" d="M38 94 h34"/><circle class="tx-wheel" cx="45" cy="99" r="3"/><circle class="tx-wheel" cx="65" cy="99" r="3"/><circle class="tx-light" cx="39.5" cy="92" r="1.3"/></g>
+          </g>
+          <rect class="winframe" x="22" y="28" width="92" height="74" rx="3"/>
+          <path class="winframe" d="M68 28 V102 M22 64 H114"/>
+        </g>
+        <g class="clock"><rect class="ck-case" x="176" y="27" width="56" height="21" rx="3.5"/><rect class="ck-face" x="178.5" y="29.5" width="51" height="16" rx="2"/><text class="ck-ghost" x="199" y="42">88:88</text><text class="ck-time" id="ckTime" x="199" y="42">12:00</text><path class="ck-sep" d="M220.5 31.5 V43.5"/><text class="ck-ampm" id="ckAm" x="225.3" y="36">AM</text><text class="ck-ampm" id="ckPm" x="225.3" y="42.6">PM</text><circle class="ck-dot" cx="181" cy="32.3" r=".9"/></g>
+        <g class="board">
+          <rect x="232" y="58" width="66" height="44" rx="2"/>
+          <text x="237" y="68">Q4 TARGETS</text>
+          <path class="chart" d="M238 95 L252 88 L262 91 L276 80 L290 70"/>
+          <path class="chart arrow" d="M284 70 h6 v6"/>
+        </g>
+        <rect class="floor" y="190" width="320" height="30"/>
+        <rect class="trim" y="188" width="320" height="3"/>
+        <g class="desk">
+          <g class="deskWhole"><rect class="leg" x="226" y="156" width="5" height="34"/><rect class="leg" x="296" y="156" width="5" height="34"/>
+          <rect class="top" x="220" y="150" width="86" height="6" rx="2"/></g>
+          <g class="pPhone"><g class="phone"><rect class="ph-base" x="222" y="143" width="16" height="7" rx="2"/><path class="ph-hand" d="M221 142 q9 -6 18 0 v2 h-18z"/><g class="ring"><path d="M218 136 q-3 4 0 8 M242 136 q3 4 0 8 M215 134 q-4 6 0 12 M245 134 q4 6 0 12"/></g></g></g>
+          <g class="pLaptop"><rect class="lapframe" x="242" y="120" width="32" height="26" rx="2"/>
+          <rect class="screen" x="245" y="123" width="26" height="20"/>
+          <path class="sheet" d="M248 128 h20 M248 132 h20 M248 136 h14 M255 125 v16"/>
+          <g class="eq"><rect x="249" y="130" width="3" height="10"/><rect x="254" y="127" width="3" height="13"/><rect x="259" y="132" width="3" height="8"/><rect x="264" y="129" width="3" height="11"/></g>
+          <g class="bsod"><rect x="245" y="123" width="26" height="20"/><text x="248" y="133">:(</text><path d="M263 123 l-3 6 l4 3 l-5 5 l2 6 M260 129 l-7 2 l-3 4 M264 132 l7 2 M255 137 l-4 6"/></g>
+          <rect class="lapframe" x="238" y="146" width="40" height="4" rx="1"/></g>
+          <g class="pMug"><rect class="mug" x="288" y="139" width="9" height="11" rx="2"/><path class="mughandle" d="M297 141.5 q3.5 0 3.5 3 q0 3 -3.5 3"/></g>
+        </g>
+        <g class="pPlant"><g class="plant"><path class="leaf" d="M310 178 q-10 -10 -6 -24 q4 12 6 24z M311 178 q2 -16 10 -22 q-2 12 -10 22z M310 178 q-4 -8 -12 -10 q6 6 12 10z"/><path class="pot" d="M304 178 h13 l-2 12 h-9z"/></g></g><ellipse class="dirt" cx="294" cy="191" rx="10" ry="2.2"/>
+        <g id="empties"></g>
+        <rect class="dim" width="320" height="220"/>
+        <rect class="haze" width="320" height="220"/>
+        <g class="beams">
+          <polygon class="bm1" points="118,30 50,220 96,220"/>
+          <polygon class="bm2" points="118,30 150,220 196,220"/>
+          <polygon class="bm3" points="118,30 236,220 282,220"/>
+        </g>
+        <g class="disco">
+          <line class="string rope" x1="118" y1="0" x2="118" y2="18"/>
+          <g class="discoBody">
+          <circle cx="118" cy="30" r="12" fill="url(#ballg)"/>
+          <path class="grid" d="M106 30 h24 M108 24 h20 M108 36 h20 M118 18 v24 M112 19 q-4 11 0 22 M124 19 q4 11 0 22"/>
+          <g class="spark"><path d="M100 22 l2 -6 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2z"/><path d="M134 40 l1.5 -4 l1.5 4 l4 1.5 l-4 1.5 l-1.5 4 l-1.5 -4 l-4 -1.5z"/></g></g>
+        </g>
+        <g class="chair">
+          <rect class="back" x="138" y="100" width="44" height="58" rx="10"/>
+          <rect class="seat" x="134" y="162" width="52" height="10" rx="5"/>
+          <rect class="stem" x="158" y="172" width="4" height="18"/>
+          <path class="base" d="M140 197 L160 190 L180 197 M160 190 V198"/>
+          <circle class="wheel" cx="140" cy="199" r="2.5"/><circle class="wheel" cx="180" cy="199" r="2.5"/><circle class="wheel" cx="160" cy="200" r="2.5"/>
+        </g>
+        <g class="fig">
+          <g class="legs-stand">
+            <path class="pants" id="legLp" d="M153 140 L151.5 168 L150 195"/><ellipse class="shoe" id="shoeL" cx="147" cy="198" rx="8" ry="3.5"/>
+            <path class="pants" id="legRp" d="M167 140 L168.5 168 L170 195"/><ellipse class="shoe" id="shoeR" cx="173" cy="198" rx="8" ry="3.5"/>
+          </g>
+          <g class="legs-sit">
+            <path class="pants" d="M153 168 L145 182 L143 196"/><ellipse class="shoe" cx="140" cy="198" rx="8" ry="3.5"/>
+            <g class="tap"><path class="pants" d="M167 168 L175 182 L177 196"/><ellipse class="shoe" cx="180" cy="198" rx="8" ry="3.5"/></g>
+          </g>
+          <g class="uwrap"><g class="bob"><g class="upper">
+            <rect class="pelvis" x="145" y="134" width="30" height="12" rx="6"/>
+            <rect class="shirt" x="143" y="84" width="34" height="58" rx="9"/>
+            <path class="detail-shadow" d="M169 87 Q176 90 177 100 V136 Q172 142 166 141 L168 107Z"/>
+            <path class="detail-fold" d="M145 108 l6 3 M145 112 l4 1 M172 122 l-7 4 M172 129 l-5 2 M150 133 l4 1 M160 98 v35"/>
+            <g fill="#a7afbb"><circle cx="160" cy="107" r=".65"/><circle cx="160" cy="116" r=".65"/><circle cx="160" cy="125" r=".65"/></g>
+            <rect class="belt" x="143" y="136" width="34" height="6"/><rect class="buckle" x="157" y="136.5" width="6" height="5" rx="1"/><path class="pocket" d="M166 99 h8 v8 h-8z"/><ellipse class="stain" cx="151" cy="118" rx="5" ry="3.5"/><ellipse class="stain" cx="155" cy="124" rx="2" ry="1.5"/>
+            <g class="jacket">
+              <path d="M143 93 Q143 84 152 84 L160 104 L156 142 L146 142 Q143 142 143 136Z"/>
+              <path d="M177 93 Q177 84 168 84 L160 104 L164 142 L174 142 Q177 142 177 136Z"/>
+              <path class="lapel" d="M152 84 L157 100 M168 84 L163 100"/><polygon class="psq" points="145,101 152,101 148,96"/><circle class="btn" cx="159" cy="120" r="1.6"/><circle class="btn" cx="159" cy="130" r="1.6"/>
+              <path class="detail-light" d="M145 94 Q145 88 151 87 L157 102 L153 99 L150 91 L147 96 V130 L145 134Z"/>
+              <path class="detail-shadow" d="M174 92 L176 97 V137 Q173 141 165 140 L164 135 L172 135Z"/>
+              <path class="detail-seam" d="M151 88 L147 98 L154 104 L151 110 L156 138 M169 88 L173 98 L166 104 L169 110 L164 138 M146 124 h7 m-7 2 h7 M168 124 h6 m-6 2 h6"/>
+              <path class="detail-fold" d="M145 103 l3 2 M172 106 l3 -3 M147 133 l5 -1"/>
+              <circle cx="172" cy="94" r="1.2" fill="#c9a34a"/><circle cx="172" cy="94" r=".45" fill="#fff1c4"/>
+            </g>
+            <polygon class="collar" points="152,84 160,92 155,96"/><polygon class="collar" points="168,84 160,92 165,96"/>
+            <g class="tie"><polygon points="157,90 163,90 162,95 158,95"/><polygon points="158,95 162,95 165,124 160,131 155,124"/><path class="tiestripe" d="M157 104 l6 3 M156.5 112 l7 3 M156 120 l8 3"/></g><g class="badge"><path d="M156 88 L166 112 M164 88 L169 112"/><rect x="162" y="112" width="12" height="8" rx="1"/><text x="168" y="117.6">BOSS</text></g>
+            <g class="head">
+              <rect class="skinf" x="155" y="74" width="10" height="12"/>
+              <path class="detail-shadow" d="M155 77 Q160 82 165 77 V82 Q160 86 155 82Z"/>
+              <circle class="skinf" cx="143" cy="63" r="4"/><circle class="skinf" cx="177" cy="63" r="4"/><path class="earin" d="M144 61 q-2 2 0 4 M176 61 q2 2 0 4"/>
+              <circle class="skinf" cx="160" cy="62" r="17"/>
+              <path class="detail-shadow" d="M170 48 Q181 58 174 72 Q169 80 160 79 Q172 72 171 61Z"/>
+              <ellipse class="detail-light" cx="150" cy="57" rx="3" ry="5" transform="rotate(25 150 57)"/>
+              <path class="hair" d="M143 60 C141 42 156 40 166 42 C176 44 180 52 177 60 C172 52 163 50 155 52 C150 53 146 56 143 60Z"/>
+              <path class="hairhl" d="M150 49 q8 -6 18 -4"/><g class="bandaid" transform="rotate(-25 167 52)"><rect x="160" y="49.5" width="14" height="5" rx="2.5"/><rect class="pad" x="164.5" y="50" width="5" height="4" rx="1"/><path d="M161.5 51 v2 M172.5 51 v2"/></g><g class="bruise"><ellipse cx="151" cy="56" rx="3" ry="2.2"/></g><g class="sweat"><path d="M176 50 q2.5 4 0 6.5 q-2.5 -2.5 0 -6.5z"/></g><g class="band"><path d="M143 51 Q160 45 177 51 L177 57 Q160 51 143 57Z"/><g class="tails"><path d="M176 53 l15 -7 l-3 7z"/><path d="M176 55 l14 5 l-4 -7z"/></g></g>
+              <path class="detail-hair" d="M146 52 Q150 43 159 44 M150 51 Q156 44 165 45 M155 50 Q164 46 172 50 M169 48 l5 5 M146 56 l2 -4"/>
+              <path class="detail-seam" d="M153 51 q7 -2 13 0 M149 65 q3 2 6 1 M165 66 q4 1 6 -1"/>
+              <path class="brow" d="M150 55 q4 -3 8 0 M162 55 q4 -3 8 0"/>
+              <g class="eyes">
+                <ellipse class="white" cx="154" cy="61" rx="4" ry="4.5"/><ellipse class="white" cx="166" cy="61" rx="4" ry="4.5"/>
+                <g class="pupils"><circle cx="155" cy="62" r="2.2"/><circle cx="167" cy="62" r="2.2"/><circle class="detail-eye" cx="154.4" cy="61.2" r=".8"/><circle class="detail-eye" cx="166.4" cy="61.2" r=".8"/></g>
+                <g class="swirl"><path d="M154 61 m-3 0 a3 3 0 1 1 3 3 a1.6 1.6 0 1 1 -1.6 -1.6"/><path d="M166 61 m-3 0 a3 3 0 1 1 3 3 a1.6 1.6 0 1 1 -1.6 -1.6"/></g>
+                <rect class="lid skinf" x="149.5" y="56" width="9" height="10"/><rect class="lid skinf" x="161.5" y="56" width="9" height="10"/>
+              </g>
+              <path class="beard" d="M144.5 63 C145 74 151 81.5 160 82 C169 81.5 175 74 175.5 63 C174.5 68.5 172 70.5 168 70.5 L152 70.5 C148 70.5 145.5 68.5 144.5 63Z M166.5 75 a6.5 4 0 1 0 -13 0 a6.5 4 0 1 0 13 0Z"/><path class="stache" d="M153.5 71.8 Q156.5 69.8 160 71 Q163.5 69.8 166.5 71.8 Q163.5 72.6 160 72 Q156.5 72.6 153.5 71.8Z"/><path class="nose" d="M160 63 q-3 5 1 6"/>
+              <path class="detail-beard" d="M147 69 l1 3 M149 72 l1 3 M151 75 l1 3 M154 77 l1 2 M157 79 l.5 1 M163 79 l-.5 1 M166 77 l-1 2 M169 75 l-1 3 M172 71 l-1 3 M174 67 l-1 3 M155 71 l2 .5 M163 71 l2 -.2"/>
+              <path class="detail-light" d="M159 64 q-1 3 1 3 l1 -1Z"/>
+              <ellipse class="blush" cx="149" cy="69" rx="4" ry="2.3"/><ellipse class="blush" cx="171" cy="69" rx="4" ry="2.3"/>
+              <path class="mouth m-smile" d="M154 73 q6 5 12 0"/>
+              <path class="mouth m-grin" d="M153 72 q7 10 14 0z"/>
+              <path class="mouth m-wobble" d="M153 75 q2.5 -3 5 0 q2.5 3 5 0 q2.5 -3 4 0"/>
+              <ellipse class="mouth m-snore" cx="160" cy="75" rx="2.5" ry="3.5"/>
+              <g class="hshades"><rect x="148.5" y="57" width="11" height="8" rx="3"/><rect x="160.5" y="57" width="11" height="8" rx="3"/><path d="M159.5 60 h1"/></g>
+              <g class="icepack" transform="rotate(-8 160 42)"><rect x="148" y="37" width="24" height="10" rx="5"/><path d="M152 40 q4 2 8 0"/></g>
+            </g>
+            <g class="armL"><path class="sleeve" d="M146 92 L139 114"/><g class="foreL"><path class="sleeve" d="M139 114 L141 134"/><rect class="watch" x="137" y="127" width="8" height="4.5" rx="1" transform="rotate(8 141 129)"/><g class="joint"><path class="jt-paper" d="M137.2 131.2 L144.6 145.6 L142.4 146.4 L135.6 132.4Z"/><path class="jt-ash" d="M135.6 132.4 L137.2 131.2 L136.4 129.8 L134.8 130.9Z"/><circle class="jt-ember" cx="135.8" cy="130.4" r="1.3"/></g><circle class="skinf" cx="141" cy="136" r="4.5"/></g></g>
+            <g class="armR">
+              <path class="sleeve" d="M174 92 L184 112"/><g class="foreR"><path class="sleeve" d="M184 112 L192 100"/>
+              <g class="cup" id="held"></g>
+              <g class="water"><rect x="188" y="76" width="10" height="24" rx="3"/><rect x="190.5" y="72" width="5" height="5" rx="1"/></g>
+              <circle class="skinf" cx="193" cy="99" r="4.5"/>
+              <path class="detail-seam" d="M190 98 l3 1 M190 100 l3 1 M193 96 q3 0 3 3"/>
+              <path class="detail-light" d="M184 109 l5 -7 l1 2 l-5 7Z"/></g>
+            </g>
+          </g></g></g>
+        </g>
+        <g id="rag" style="display:none"></g>
+        <g id="fx"></g>
+        <g class="notes"><text x="250" y="114">♪</text><text x="262" y="106">♫</text><text x="276" y="114">♪</text></g>
+        <g class="bubbles"><circle cx="182" cy="66" r="3"/><circle cx="188" cy="54" r="4"/><circle cx="182" cy="42" r="2.5"/></g>
+        <g class="confetti"><rect x="20" y="0" width="4" height="7"/><rect x="48" y="0" width="4" height="7"/><rect x="80" y="0" width="4" height="7"/><rect x="110" y="0" width="4" height="7"/><rect x="140" y="0" width="4" height="7"/><rect x="172" y="0" width="4" height="7"/><rect x="200" y="0" width="4" height="7"/><rect x="228" y="0" width="4" height="7"/><rect x="258" y="0" width="4" height="7"/><rect x="290" y="0" width="4" height="7"/></g>
+        <g class="speech" id="speech"><path id="spTail" d="M8 -11 L5 0 L16 -11Z"/><rect id="spRect" rx="6" x="4" y="-28" width="80" height="18"/><path id="spCover" d="M8.8 -11 L15.2 -11"/><text id="spText"></text></g>
+        <text class="plus" x="186" y="44">+1</text>
+        <text class="zzz" x="88" y="166">z z Z</text>
+      </g>
+    </svg>
+    <div class="lvl" id="lvl">Stone sober</div>
+    <div class="bar" role="meter" aria-labelledby="lvl" id="barwrap"><div class="fill" id="fill"></div></div>
+    <div class="ticks"><span>Sober</span><span>Buzzed</span><span>Drunk</span><span>Too far</span></div>
+    <div class="msg" id="msg">Fresh as a morning coffee.</div>
+    <div class="sober" id="sober"></div>
+    <div class="highline" id="highline" hidden></div>
+    <div class="waterbanner" id="wb" hidden><span><strong>Water break.</strong> <span id="wbText">3 drinks since your last water.</span></span><button class="btn primary" id="wbBtn">Log a water</button></div>
+    <label class="food" for="food"><input type="checkbox" id="food"> Ate a proper meal tonight</label>
+    <div class="note">About <strong id="inbody">0.0</strong> standard drinks still in your system (your body clears ~1 per hour). Adjusted for your weight and whether you ate. Still a rough guess; sleep, medication and how you feel change it a lot.</div>
+  </section>
+
+  <section data-phone-panel="drinks">
+    <p class="label">Tap to add</p>
+    <div class="grid" id="grid"></div>
+    <div class="strength">
+      <label for="abv">Your beer's strength</label>
+      <input type="range" id="abv" min="3" max="10" step="0.1" value="5">
+      <output id="abvOut" for="abv">5.0%</output>
+    </div>
+    <p class="hint">Check the label. Changing this only affects beers you add from now on.</p>
+  </section>
+
+  <section data-phone-panel="more">
+    <details class="settings" id="setdet">
+      <summary>Your weight, prices and businessman</summary>
+      <div class="setrow"><label for="weight">Body weight</label><input id="weight" type="number" min="80" max="450" step="1" value="170" inputmode="numeric"><span>lbs</span></div>
+      <p class="label">Your businessman</p>
+      <div class="look" id="look"></div>
+      <p class="label">Price per drink (BZ$)</p>
+      <div class="prices" id="prices"></div>
+      <p class="hint">Prices only apply to drinks you add after changing them.</p>
+    </details>
+  </section>
+
+  <section class="actions" data-phone-panel="more">
+    <button class="btn" id="water">+ Water</button>
+    <button class="btn" id="joint">+ Joint</button>
+    <button class="btn" id="undo">Undo last</button>
+    <button class="btn danger" id="reset">New night</button>
+  </section>
+  <div class="confirm" id="confirm" hidden>
+    Clear tonight's tally?
+    <button class="btn danger" id="yes">Clear</button>
+    <button class="btn" id="no">Keep</button>
+  </div>
+
+  <section data-phone-panel="more">
+    <p class="label">Tonight</p>
+    <ol id="log"></ol>
+    <p class="empty" id="empty">Nothing logged. Tap a drink above when you order.</p>
+  </section>
+
+  <p class="note">A standard drink is about 14 g of alcohol (a 12 oz 5% beer, a 1.5 oz shot of 40% rum, or 5 oz of 12% wine). The body clears roughly one per hour. This is a counter, not a breathalyzer — never use it to decide if you're okay to drive.</p>
+</div>
+
+<nav class="phone-nav" aria-label="Main navigation">
+  <div class="phone-quick" role="group" aria-label="Quick actions">
+    <button type="button" class="quick-primary" id="quickDrink">+ Beer</button>
+    <button type="button" id="quickWater">+ Water</button>
+    <button type="button" id="quickUndo">Undo last</button>
+  </div>
+  <button type="button" data-phone-tab="drinks" aria-pressed="true">+ Drinks</button>
+  <button type="button" data-phone-tab="guy" aria-pressed="false">Character</button>
+  <button type="button" data-phone-tab="more" aria-pressed="false">More / Log</button>
+  <button type="button" class="keyboard-done" id="keyboardDone">Done editing</button>
+</nav>
+<script>
+document.body.dataset.phoneView="drinks";
+document.querySelectorAll("[data-phone-tab]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.body.dataset.phoneView=button.dataset.phoneTab;
+    document.querySelectorAll("[data-phone-tab]").forEach(tab=>tab.setAttribute("aria-pressed",String(tab===button)));
+    window.scrollTo({top:0,behavior:"instant"});
+  });
+});
+const phoneGuy=document.getElementById("guy"),phonePlay=document.getElementById("playToggle");
+phonePlay.addEventListener("click",()=>{
+  const enabled=phonePlay.getAttribute("aria-pressed")!=="true";
+  phonePlay.setAttribute("aria-pressed",String(enabled));
+  phoneGuy.dataset.dragEnabled=String(enabled);
+  phonePlay.textContent=enabled?"Done dragging":"Enable dragging";
+});
+phoneGuy.addEventListener("pointerdown",event=>{
+  if(window.matchMedia("(max-width:600px), (max-width:1000px) and (pointer:coarse)").matches&&phonePlay.getAttribute("aria-pressed")!=="true")event.stopImmediatePropagation();
+},true);
+document.getElementById("quickWater").onclick=()=>document.getElementById("water").click();
+document.getElementById("quickUndo").onclick=()=>document.getElementById("undo").click();
+document.getElementById("quickDrink").onclick=()=>document.getElementById("add-beer").click();
+document.getElementById("keyboardDone").onclick=()=>document.activeElement?.blur();
+const phoneDock=document.querySelector(".phone-nav");
+function syncPhoneViewport(){
+  const viewport=window.visualViewport;
+  const field=document.activeElement;
+  const editing=field?.matches("input:not([type=checkbox]):not([type=range]),select,textarea");
+  const inset=viewport?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+  document.body.classList.toggle("keyboard-open",!!editing);
+  document.documentElement.style.setProperty("--keyboard-inset",`${editing?inset:0}px`);
+  document.documentElement.style.setProperty("--dock-height",`${phoneDock.getBoundingClientRect().height}px`);
+  if(editing&&viewport){
+    const rect=field.getBoundingClientRect(),dockHeight=phoneDock.getBoundingClientRect().height;
+    const visibleBottom=viewport.offsetTop+viewport.height-dockHeight-16;
+    if(rect.bottom>visibleBottom||rect.top<viewport.offsetTop+16)field.scrollIntoView({block:"center",behavior:"instant"});
+  }
+}
+document.addEventListener("focusin",syncPhoneViewport);
+document.addEventListener("focusout",()=>requestAnimationFrame(syncPhoneViewport));
+window.addEventListener("resize",syncPhoneViewport);
+window.visualViewport?.addEventListener("resize",syncPhoneViewport);
+window.visualViewport?.addEventListener("scroll",syncPhoneViewport);
+if(window.ResizeObserver)new ResizeObserver(syncPhoneViewport).observe(phoneDock);
+syncPhoneViewport();
+
+let lastToke=-1,curIdx=0,isHang=false,needW=false,react={kind:null,start:0,until:0};
+const LINES={
+  0:["Just one. I have a\nmeeting tomorrow.","Q4 numbers look good.","Is it 5 o'clock yet?","Ahh, that hits the spot."],
+  1:["Okay, maybe one more.","Who put on this song?","I'm a great dancer,\nyou know."],
+  2:["This is my JAM!","Somebody get the boss\na drink!","Let's gooo!"],
+  3:["I love you guys.\nSeriously.","Let's do shots!","I'm not even drunk."],
+  4:["I LOVE YOU, MAN!","I'm taking a cab\ntonight. Promise.","Should I text my ex?\nNO. Bad idea."],
+  5:["Who moved the floor?","I'm fiiine.\nTotally fiiine.","Why are there two\nof you?","Is that my cab?"],
+  6:["Zzz... five more\nminutes...","...mmh... spreadsheets..."],
+  hang:["Never drinking again.","Too... bright...","Who let me order\nthe shots?"],
+  water:["Okay okay. Water.","My liver says thanks."],
+  high:["Duuude...","Is there any food?","My hands are huge, man.","What if the clock...\nis watching us?","I could go for some\nfry jacks right now.","Who turned the floor\ninto a cloud?","This song is like...\nin my soul, bro."]
+};
+const POKE={0:"Hey! I'm working here.",1:"Oh hey! Want one?",2:"Come dance with us!",3:"You're my best friend.\nSeriously.",4:"I LOVE YOU, MAN!",5:"Whoa whoa whoa...",6:"...five more minutes...",hang:"Shhh. Too loud.",high:"Whoa... you're like...\nglowing, man."};
+let say=()=>{};
+function reactTo(k){
+  const now=performance.now()/1000;react={kind:k,start:now,until:now+1.4};
+  const pl=document.querySelector("#guy .plus");
+  if(pl&&k!=="poke"){pl.textContent=k==="drink"?"+1":"H₂O";pl.classList.remove("pop");void pl.getBBox();pl.classList.add("pop")}
+  if(k==="poke")say(POKE[isHang?"hang":(window.HIGH>0&&Math.random()<.5)?"high":curIdx]);
+}
+(function(){
+  const g=document.getElementById("guy"),q=s=>g.querySelector(s),NS="http://www.w3.org/2000/svg";
+  const E={fig:q(".fig"),uwrap:q(".uwrap"),bob:q(".bob"),upper:q(".upper"),head:q(".head"),armL:q(".armL"),foreL:q(".foreL"),armR:q(".armR"),foreR:q(".foreR"),tap:q(".tap"),brow:q(".brow"),
+    pBody:q(".pbody"),pAL:q(".pAL"),pAR:q(".pAR"),pHead:q(".pHead"),pTail:q(".pTail")};
+  const mouths=[...g.querySelectorAll(".mouth")];
+  const S=Math.sin,C=Math.cos,A=Math.abs,PI=Math.PI,P=v=>Math.max(0,v);
+  const T=(el,v)=>el&&el.setAttribute("transform",v);
+  // legs that bend at the knee and stay attached
+  const LP=q("#legLp"),RP=q("#legRp"),SL=q("#shoeL"),SR=q("#shoeR"),TH=28.5,SH=27.5;
+  function knee(hx,hy,fx,fy,side){
+    let d=Math.hypot(fx-hx,fy-hy);d=Math.min(Math.max(d,Math.abs(TH-SH)+1),TH+SH-.01);
+    const th=Math.atan2(fy-hy,fx-hx),al=Math.acos((TH*TH+d*d-SH*SH)/(2*TH*d)),an=th+side*al;
+    return [hx+TH*Math.cos(an),hy+TH*Math.sin(an)];
+  }
+  function legs(o,down){
+    const r=o.sway*PI/180,c=Math.cos(r),s=Math.sin(r),hip=x=>[160+(x-160)*c,140+(x-160)*s+down];
+    const [hlx,hly]=hip(153),[hrx,hry]=hip(167);
+    const flx=150+o.lL*.7,fly=195-A(o.kL)*.35,frx=170+o.lR*.7,fry=195-A(o.kR)*.35;
+    const [klx,kly]=knee(hlx,hly,flx,fly,1),[krx,kry]=knee(hrx,hry,frx,fry,-1);
+    LP.setAttribute("d",`M${hlx} ${hly} L${klx} ${kly} L${flx} ${fly}`);
+    RP.setAttribute("d",`M${hrx} ${hry} L${krx} ${kry} L${frx} ${fry}`);
+    SL.setAttribute("cx",flx-3);SL.setAttribute("cy",fly+3);SR.setAttribute("cx",frx+3);SR.setAttribute("cy",fry+3);
+  }
+  // speech bubble
+  const SP=q("#speech"),SPR=q("#spRect"),SPT=q("#spText");
+  let spW=80,spH=18,spUntil=0,nextSay=performance.now()/1000+2.5;
+  say=function(txt){
+    const lines=txt.split("\n");SPT.textContent="";
+    lines.forEach((l,i)=>{const ts=document.createElementNS(NS,"tspan");ts.setAttribute("x",11);ts.setAttribute("dy",i?10:0);ts.textContent=l;SPT.appendChild(ts)});
+    SP.classList.add("show");
+    let w=0;try{w=Math.max(...[...SPT.children].map(c=>c.getComputedTextLength()))}catch(e){}
+    if(!w)w=Math.max(...lines.map(l=>l.length))*4.4;
+    spW=w+14;spH=lines.length*10+8;
+    SPR.setAttribute("x",4);SPR.setAttribute("y",-spH-10);SPR.setAttribute("width",spW);SPR.setAttribute("height",spH);
+    SPT.setAttribute("y",-spH-10+13);
+    const now=performance.now()/1000;spUntil=now+3.8;nextSay=now+8+Math.random()*5;
+  };
+  const beats=[1.6,1.1,.85,.72,.58,.5,1];
+  const Z=()=>({x:0,bob:0,sx:1,sway:0,nod:0,aL:6,eL:0,aR:0,eR:0,lL:0,kL:0,lR:0,kR:0,tap:0,mouth:1,brow:0});
+  const M={
+    chill:(p,t)=>{const s=Math.pow(P(S(t*PI/3.2)),6);return {...Z(),sway:1.5*S(p/2),nod:3*S(p),aR:-55*s,eR:-25*s,tap:6*A(S(p*1.5))}},
+    hung:(p,t)=>{const s=Math.pow(P(S(t*PI/5)),8);return {...Z(),sway:1.2*S(t*.5),nod:9+2*S(t*.7),aL:135,eL:-115,aR:-55*s,eR:-25*s,mouth:1}},
+    seatgroove:p=>({...Z(),sway:5*S(p),bob:2*A(S(p)),nod:8*S(p),aL:25+20*S(p),eL:-50,aR:-30-20*S(p),eR:20,tap:8*A(S(p)),mouth:1+.4*A(S(p)),brow:1.5*A(S(p))}),
+    seatroof:p=>({...Z(),sway:3*S(p),bob:3*A(S(p)),nod:10*S(p),aL:120,eL:-60+25*S(2*p),aR:-120,eR:60-25*S(2*p),tap:8*A(S(p)),mouth:1.4,brow:2*A(S(p))}),
+    groove:p=>({...Z(),x:8*S(p/2),bob:3*A(S(p)),sway:4*S(p/2),lL:8*S(p),kL:-14*P(S(p)),lR:-8*S(p),kR:14*P(-S(p)),aL:12+15*S(p),eL:-55,aR:-12-15*S(p),eR:35,nod:6*S(p),mouth:1+.3*A(S(p))}),
+    fistpump:p=>({...Z(),x:4*S(p/2),bob:9*P(S(p)),sway:3*S(p),lL:6*S(p),lR:-6*S(p),kL:-10*P(S(p)),kR:10*P(S(p)),aL:20,eL:-70,aR:-150+25*A(S(p)),eR:-10+30*A(S(p)),nod:8*S(p),mouth:1.5,brow:2.5*A(S(p))}),
+    disco:p=>({...Z(),x:12*S(p/2),bob:5*A(S(p)),sway:7*S(p),lL:12*S(p),lR:-12*S(p),kL:-12*P(S(p)),kR:12*P(-S(p)),aL:85+70*S(p/2),eL:-10,aR:-35+15*S(p),eR:-60,nod:8*S(p),mouth:1+.4*A(S(p))}),
+    sprinkler:(p,t,b)=>{const s=((t/b)%2)/2;return {...Z(),x:6*S(p/2),bob:3*A(S(p)),sway:4*S(p),aL:95,eL:-120,aR:-60-50*s,eR:0,nod:-10+20*s,lL:6*S(p),lR:-6*S(p),mouth:1.3}},
+    roof:p=>({...Z(),x:14*S(p/4),bob:8*A(S(p)),sway:6*S(p),aL:115,eL:-70+35*A(S(p)),aR:-115,eR:70-35*A(S(p)),lL:14*S(p),lR:-14*S(p),kL:-16*P(S(p)),kR:16*P(-S(p)),nod:10*S(p),mouth:1.5,brow:2}),
+    shimmy:p=>({...Z(),x:10*S(p/2),bob:4*A(S(p*2)),sway:5*S(p*2),lL:10*S(p),lR:-10*S(p),kL:-12*P(S(p)),kR:12*P(-S(p)),aL:55+12*S(p*2),eL:-95+10*S(p*2),aR:-55-12*S(p*2+PI),eR:95-10*S(p*2+PI),nod:6*S(p),mouth:1.4+.3*A(S(p*2)),brow:2*A(S(p*2))}),
+    twirl:(p,t,b)=>({...Z(),sx:C(t*PI/(b*2)),bob:6*A(S(p)),aL:150,eL:-20,aR:-150,eR:20,lL:10*S(p),lR:-10*S(p),nod:6*S(p),mouth:1.5}),
+    flail:p=>({...Z(),x:14*S(p/3)+5*S(p*1.7),bob:6*A(S(p)),sway:12*S(p*.8)+6*S(p*2.3),lL:22*S(p),lR:-18*S(p*1.2),kL:-25*P(S(p*1.3)),kR:25*P(S(p*.9)),aL:100+70*S(p*1.3),eL:-60*S(p*2.1),aR:-100-70*S(p*1.7+1),eR:70*S(p*1.9),nod:16*S(p*1.1),mouth:1+.6*A(S(p*1.4)),brow:3*A(S(p))}),
+    stumble:(p,t)=>{const l=S(t*.9);return {...Z(),x:28*l,bob:3*A(S(p)),sway:18*l+5*S(p*2),lL:20*l,lR:-10*l,kL:-20*P(-l),kR:20*P(l),aL:60-50*l,eL:-30,aR:-60-50*l,eR:30,nod:-14*l+6*S(p*1.7),mouth:1.2}}
+  };
+  M.stepTouch=p=>({...Z(),x:11*S(p/2),bob:-2.5*(1-C(p*2)),sway:5*S(p/2),lL:13*S(p/2),lR:13*S(p/2+.65),kL:18*P(S(p)),kR:18*P(-S(p)),aL:28+22*S(p/2-.4),eL:-65+15*S(p),aR:-28+22*S(p/2-.4),eR:55-15*S(p),nod:4*S(p-.35),mouth:1.25});
+  M.shoulderRoll=p=>({...Z(),x:7*S(p/2),bob:-3*(1-C(p*2)),sway:7*S(p),aL:50+22*S(p-.5),eL:-80+18*C(p),aR:-50+22*S(p+.5),eR:80+18*C(p),lL:9*S(p/2),lR:-9*S(p/2),kL:12*P(S(p)),kR:12*P(-S(p)),nod:7*S(p-.7),mouth:1.4,brow:1.2});
+  const LIST=[["chill"],["seatgroove","seatroof"],["stepTouch","groove","fistpump"],["disco","stepTouch","shoulderRoll","sprinkler"],["roof","fistpump","shoulderRoll","shimmy","twirl"],["flail","stumble","twirl"],["chill"]];
+  const keys=Object.keys(Z());
+  const lerp=(a,b,w)=>{const o={};keys.forEach(k=>o[k]=a[k]+(b[k]-a[k])*w);return o};
+  function target(o,k,r,L){
+    if(k==="drink")return {...o,aR:-165,eR:-15,bob:o.bob+8*A(S(r*PI*2)),mouth:1.8,brow:3,nod:-6};
+    if(k==="water")return {...o,aR:-95,eR:-95,nod:-16,mouth:1};
+    if(L<2||isHang)return {...o,aL:150,eL:-20+35*S(r*PI*8),mouth:1.4,brow:2};
+    if(L<=3)return {...o,aL:95,eL:-95,bob:o.bob+4,mouth:1.6,brow:2.5};
+    if(L===4)return {...o,aL:80,eL:0,aR:-150,eR:-10,mouth:1.8,brow:3};
+    return {...o,sway:28,x:o.x+10,aL:150,eL:-30,aR:-40,nod:20,mouth:1.4};
+  }
+  function extras(t,L,p,o,now){
+    // speech bubble
+    if(now>spUntil)SP.classList.remove("show");
+    if(now>nextSay){const pool=isHang?LINES.hang:(window.HIGH>0&&L<6&&Math.random()<.55)?LINES.high:needW&&Math.random()<.5?LINES.water:LINES[L];say(pool[Math.floor(Math.random()*pool.length)])}
+    let hx,hy;
+    if(window.RAG&&RAG.active&&RAG.head){hx=RAG.head[0]-6;hy=RAG.head[1]-14}
+    else if(L===6){hx=96;hy=174}else if(L<2||isHang){hx=168;hy=66}else{hx=168+o.x;hy=44+o.bob}
+    const tx=Math.min(Math.max(hx,0),316-spW-4),ty=Math.max(hy,spH+12);
+    T(SP,`translate(${tx} ${ty})`);
+  }
+  let previousFrame=0,phase=0,tempo=beats[0],smoothed=null,previousLevel=0;
+  const reducedMotion=window.matchMedia("(prefers-reduced-motion: reduce)");
+  function frame(ms){
+    const dt=previousFrame?Math.min((ms-previousFrame)/1000,.05):1/60;
+    previousFrame=ms;
+    const t=ms/1000,L=curIdx,desiredBeat=beats[L]*(1+.3*Math.min(window.HIGH||0,2));
+    tempo+=(desiredBeat-tempo)*(1-Math.exp(-dt*4));
+    phase+=dt*PI/tempo;
+    const b=tempo,p=phase,now=performance.now()/1000;
+    const r=react.kind&&now<react.until?(now-react.start)/1.4:-1,env=r>=0?S(Math.min(1,r)*PI):0;
+    let o=Z();
+    if(L===6){
+      T(E.fig,"translate(70 -12) rotate(-90 160 200)");
+      const br=1+.025*S(t*PI/2);
+      T(E.bob,`translate(0 ${140-140*br}) scale(1 ${br})`);
+      ["uwrap","upper","head","armL","foreL","foreR","brow"].forEach(k=>T(E[k],""));
+      T(E.armR,`rotate(${-35*env} 174 92)`);
+      mouths.forEach(m=>T(m,""));
+      legs(Z(),0);
+    }else{
+      const list=isHang?["hung"]:LIST[L],len=b*8,n=Math.floor(t/len),loc=t-n*len;
+      const cur=M[list[n%list.length]](p,t,b),prev=M[list[(n+list.length*99-1)%list.length]](p,t,b);
+      const blend=Math.min(1,loc/.85),ease=blend*blend*(3-2*blend);
+      o=lerp(prev,cur,ease);
+      if((window.HIGH||0)>0&&!isHang&&env===0){
+        const c=t%9,cyc=Math.floor(t/9);
+        if(c<1.9){const w=Math.min(1,Math.sin(c/1.9*PI)*1.7);o=lerp(o,{...o,aL:126,eL:156,nod:-6,mouth:.6,brow:-1},w)}
+        else if(lastToke!==cyc){lastToke=cyc;if(window.SMOKE)SMOKE.exhale()}
+      }
+      if(env>0)o=lerp(o,target(o,react.kind,r,L),env);
+      // Delayed head and forearm motion adds follow-through at any frame rate.
+      if(!smoothed||previousLevel===6)smoothed={...o};
+      keys.forEach(k=>{
+        const follow=["nod","eL","eR"].includes(k)?9:["aL","aR","sway"].includes(k)?13:20;
+        smoothed[k]+=(o[k]-smoothed[k])*(1-Math.exp(-dt*follow));
+      });
+      o={...smoothed};
+      if(reducedMotion.matches)o={...Z(),aL:o.aL*.25,aR:o.aR*.25,eL:o.eL*.25,eR:o.eR*.25};
+      let lift=0;
+      if(L>=3){const h=(t%3.4)/3.4;if(h>.88&&h<.95)lift=6*S((h-.88)/.07*PI)}
+      if(reducedMotion.matches)lift=0;
+      let sx=o.sx;if(A(sx)<.06)sx=sx<0?-.06:.06;
+      T(E.fig,`translate(${160+o.x} 0) scale(${sx} 1) translate(-160 0)`);
+      const seated=L<2&&!window.CHAIR_GONE;
+      T(E.uwrap,`translate(0 ${(seated?24:0)+lift})`);
+      T(E.bob,`translate(0 ${o.bob})`);
+      T(E.upper,`rotate(${o.sway} 160 140)`);
+      T(E.head,`rotate(${o.nod} 160 80)`);
+      T(E.armL,`rotate(${o.aL} 146 92)`);T(E.foreL,`rotate(${o.eL} 139 114)`);
+      T(E.armR,`rotate(${o.aR} 174 92)`);T(E.foreR,`rotate(${o.eR} 184 112)`);
+      if(!seated)legs(o,o.bob+lift);
+      T(E.tap,`rotate(${-o.tap} 175 182)`);
+      T(E.brow,`translate(0 ${-o.brow})`);
+      mouths.forEach(m=>T(m,`translate(160 73) scale(1 ${o.mouth}) translate(-160 -73)`));
+    }
+    previousLevel=L;
+    extras(t,L,p,o,now);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+(function(){
+  const g=document.getElementById("guy"),fig=g.querySelector(".fig"),rag=g.querySelector("#rag"),NS="http://www.w3.org/2000/svg";
+  const REST={head:[160,62],neck:[160,86],sL:[146,92],sR:[174,92],hL:[153,140],hR:[167,140],eL:[140,114],aL:[141,136],eR:[180,114],aR:[182,136],kL:[151.5,168],fL:[150,195],kR:[168.5,168],fR:[170,195]};
+  const RAD={head:14,fL:3,fR:3},names=Object.keys(REST),FLOOR=200,G=1500,DT=1/120,SUB=2,DEG=Math.PI/180;
+  const dist=(a,b)=>Math.hypot(REST[a][0]-REST[b][0],REST[a][1]-REST[b][1]);
+  const sticks=[],mins=[],torso=["neck","sL","sR","hL","hR"];
+  for(let i=0;i<torso.length;i++)for(let j=i+1;j<torso.length;j++)sticks.push([torso[i],torso[j],dist(torso[i],torso[j])]);
+  [["head","neck"],["sL","eL"],["eL","aL"],["sR","eR"],["eR","aR"],["hL","kL"],["kL","fL"],["hR","kR"],["kR","fR"]].forEach(([a,b])=>sticks.push([a,b,dist(a,b)]));
+  [["head","sL",.85],["head","sR",.85],["head","hL",.8],["head","hR",.8],["sL","aL",.45],["sR","aR",.45],["hL","fL",.55],["hR","fR",.55]].forEach(([a,b,k])=>mins.push([a,b,dist(a,b)*k]));
+  const RAG=window.RAG={active:false,head:null};
+  let P={},grab=null,gt=null,gtPrev=null,released=0,still=0,getup=null,hitSaid=true,V={};
+  const pick=a=>a[Math.floor(Math.random()*a.length)],rnd=(a,b)=>a+Math.random()*(b-a);
+  const lvl=()=>typeof curIdx==="number"?curIdx:0,nowS=()=>performance.now()/1000;
+  function mk(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent.appendChild(e);return e}
+  function figPoints(){
+    let m=null;try{const c=fig.transform.baseVal.consolidate();if(c)m=c.matrix}catch(e){}
+    const o={};names.forEach(n=>{const [x,y]=REST[n];o[n]=m?{x:m.a*x+m.c*y+m.e,y:m.b*x+m.d*y+m.f}:{x,y}});return o;
+  }
+  function buildVisual(){
+    rag.innerHTML="";
+    V.legL=mk("path",{class:"pants"},rag);V.legR=mk("path",{class:"pants"},rag);
+    V.shoeL=mk("ellipse",{class:"shoe",rx:8,ry:3.5},rag);V.shoeR=mk("ellipse",{class:"shoe",rx:8,ry:3.5},rag);
+    V.torso=mk("g",{},rag);
+    [...fig.querySelector(".upper").children].forEach(c=>{if(!c.matches(".head,.armL,.armR"))V.torso.appendChild(c.cloneNode(true))});
+    V.head=fig.querySelector(".head").cloneNode(true);V.head.removeAttribute("transform");rag.appendChild(V.head);
+    V.armL=mk("path",{class:"sleeve"},rag);V.handL=mk("circle",{class:"skinf",r:4.5},rag);
+    V.armR=mk("path",{class:"sleeve"},rag);V.held=mk("g",{},rag);
+    const hc=fig.querySelector("#held").cloneNode(true);hc.removeAttribute("id");V.held.appendChild(hc);
+    V.held.appendChild(fig.querySelector(".water").cloneNode(true));
+    V.handR=mk("circle",{class:"skinf",r:4.5},rag);
+  }
+  function start(){
+    const fp=figPoints();
+    names.forEach(n=>P[n]={x:fp[n].x,y:fp[n].y,px:fp[n].x,py:fp[n].y});
+    buildVisual();fig.style.display="none";rag.style.display="";
+    RAG.active=true;getup=null;still=0;released=nowS();hitSaid=false;
+  }
+  function stop(){fig.style.display="";rag.style.display="none";RAG.active=false;RAG.head=null;getup=null}
+
+  // ---------------- impact effects ----------------
+  let IMP=null,lastFx=0,dizzyUntil=0,boardTilt=0,clockTilt=0;
+  const fxL=g.querySelector("#fx"),scene=g.querySelector("g[clip-path]");
+  function hit(x,y,side,s){if(!grab&&s>3.5&&(!IMP||s>IMP.s))IMP={x,y,side,s}}
+  const DIR={left:[-75,75],right:[105,255],floor:[195,345],ceil:[15,165]};
+  const anim=(el,kf,o)=>{try{const a=el.animate(kf,o);if(o.rm)a.onfinish=()=>el.remove();return a}catch(e){if(o.rm)setTimeout(()=>el.remove(),o.duration+(o.delay||0))}};
+  function burst(i,word,size){
+    const off={left:[24,0],right:[-24,0],floor:[0,-22],ceil:[0,22]}[i.side];
+    const x=Math.min(Math.max(i.x+off[0],26),294),y=Math.min(Math.max(i.y+off[1],24),186);
+    const o=mk("g",{transform:`translate(${x} ${y})`},fxL),inner=mk("g",{},o);
+    let pts="";for(let k=0;k<20;k++){const a=k/20*Math.PI*2,r=(k%2?size*.55:size)*rnd(.85,1.1);pts+=`${(Math.cos(a)*r*1.35).toFixed(1)},${(Math.sin(a)*r).toFixed(1)} `}
+    mk("polygon",{class:"fx-star",points:pts},inner);
+    const t=mk("text",{class:"fx-word",y:3.4},inner);t.textContent=word;
+    inner.setAttribute("transform",`rotate(${rnd(-14,14)})`);
+    anim(o,[{transform:`translate(${x}px,${y}px) scale(.2)`,opacity:1},{transform:`translate(${x}px,${y}px) scale(1.15)`,opacity:1,offset:.25},{transform:`translate(${x}px,${y}px) scale(1)`,opacity:1,offset:.7},{transform:`translate(${x}px,${y}px) scale(1.05)`,opacity:0}],{duration:900,easing:"ease-out",rm:1});
+  }
+  function crack(i,big){
+    const [a0,a1]=DIR[i.side];let d="";const n=big?7:5;
+    for(let k=0;k<n;k++){
+      let a=(a0+(a1-a0)*(k+rnd(.1,.9))/n)*DEG,x=i.x,y=i.y;d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;
+      for(let s=0;s<(big?4:3);s++){a+=rnd(-.45,.45);const L=rnd(4,big?10:7);x+=Math.cos(a)*L;y+=Math.sin(a)*L;d+=` L${x.toFixed(1)} ${y.toFixed(1)}`;
+        if(s===1&&Math.random()<.5){const b=a+rnd(.5,.9)*(Math.random()<.5?-1:1);d+=` M${x.toFixed(1)} ${y.toFixed(1)} l${(Math.cos(b)*5).toFixed(1)} ${(Math.sin(b)*5).toFixed(1)} M${x.toFixed(1)} ${y.toFixed(1)}`}}
+    }
+    const c=mk("path",{class:"fx-crack",d},fxL);fxL.insertBefore(c,fxL.firstChild);
+    const all=fxL.querySelectorAll(".fx-crack");if(all.length>10)all[all.length-1].remove();
+    anim(c,[{opacity:.85},{opacity:0}],{duration:2500,delay:12000,fill:"forwards",rm:1});
+  }
+  function dust(i,n,wood){
+    const [a0,a1]=DIR[i.side];
+    for(let k=0;k<n;k++){
+      const a=rnd(a0,a1)*DEG,L=rnd(10,wood?34:26),chip=wood||k%3===0;
+      const c=chip?mk("rect",{class:wood?"fx-wood":"fx-chip",x:i.x-1,y:i.y-1,width:rnd(1.5,wood?5:3),height:rnd(1.2,3)},fxL):mk("circle",{class:"fx-dust",cx:i.x,cy:i.y,r:rnd(1.5,3.2)},fxL);
+      const dx=Math.cos(a)*L,dy=Math.sin(a)*L+(chip?14:-4);
+      anim(c,[{transform:"translate(0,0) rotate(0deg)",opacity:.95},{transform:`translate(${dx}px,${dy}px) rotate(${rnd(-200,200)}deg)`,opacity:0}],{duration:rnd(450,850),easing:"cubic-bezier(.2,.7,.4,1)",rm:1});
+    }
+  }
+  function shake(p){
+    const kf=[];for(let k=0;k<7;k++){const s=p*(1-k/7);kf.push({transform:`translate(${rnd(-s,s)}px,${rnd(-s,s)}px)`})}
+    kf.push({transform:"translate(0,0)"});anim(scene,kf,{duration:320,easing:"linear"});
+  }
+  function rattle(p){
+    boardTilt=Math.max(-16,Math.min(16,boardTilt+rnd(-p,p)));clockTilt=Math.max(-20,Math.min(20,clockTilt+rnd(-p,p)));
+    const b=g.querySelector(".board"),c=g.querySelector(".clock");
+    if(b){b.style.transformOrigin="265px 58px";b.style.transform=`rotate(${boardTilt}deg)`}
+    if(c){c.style.transformOrigin="204px 25px";c.style.transform=`rotate(${clockTilt}deg)`}
+  }
+  const dz=mk("g",{class:"fx-dizzy",style:"display:none"},fxL);
+  for(let k=0;k<3;k++)mk("path",{d:"M0 -3.2 L.9 -1 L3.2 -1 L1.4 .4 L2 2.8 L0 1.4 L-2 2.8 L-1.4 .4 L-3.2 -1 L-.9 -1Z"},dz);
+  function hurt(){dizzyUntil=nowS()+3.2;window.HURT=performance.now()+30000;g.classList.add("hurt");setTimeout(()=>{if(performance.now()>=window.HURT)g.classList.remove("hurt")},30200)}
+  function effects(i){
+    lastFx=nowS();
+    const hard=i.s>8,mid=i.s>5,wall=i.side!=="floor";
+    shake(Math.min(9,i.s*.65));
+    const words=i.words||(hard?["WHAM!","KAPOW!","CRACK!","SPLAT!"]:mid?["BAM!","POW!","BONK!","WHACK!"]:["THUD!","BONK!","OOF!"]);
+    burst(i,pick(words),hard?21:mid?17:13);
+    if(!i.noCrack&&(mid||wall))crack(i,hard);
+    dust(i,hard?12:mid?8:5);
+    if(mid)rattle(hard?9:4);
+    if(hard&&!i.noHurt){
+      hurt();
+      if(wall&&!i.noCrack&&lvl()<6){hitSaid=true;say(pick(["Who put that wall there?!","My spine!","Call HR!","I see stars..."]))}
+    }
+  }
+  function sideOf(vx,vy){return Math.abs(vx)>Math.abs(vy)?(vx>0?"left":"right"):(vy>0?"ceil":"floor")}
+  function dizzy(now){
+    if(now<dizzyUntil&&RAG.head){
+      dz.style.display="";const [hx,hy]=RAG.head;
+      [...dz.children].forEach((s,k)=>{const a=now*5+k*2.094;s.setAttribute("transform",`translate(${(hx+Math.cos(a)*15).toFixed(1)} ${(hy-15+Math.sin(a)*4.5).toFixed(1)}) scale(${(1+.25*Math.sin(a)).toFixed(2)})`)});
+    }else dz.style.display="none";
+  }
+
+  // ---------------- props: desk, laptop, mug, phone ----------------
+  const deskEl=g.querySelector(".desk"),deskWhole=g.querySelector(".deskWhole");
+  let deskOK=true,mess=false,lastMess=0;
+  const PROPS=[],held={obj:null,gt:null,prev:null,off:{x:0,y:0}};
+  const WORDS={laptop:["CLONK!","CRUNCH!","WHACK!"],mug:["CLINK!","PLINK!","SPLOSH!"],phone:["RING-DING!","BOP!","CLATTER!"],plant:["SMASH!","THONK!","FWUMP!"],desk:["THWACK!","WHUMP!","CRASH!"],chair:["CLUNK!","WHAM!","SPROING!"],piece:["THWACK!","WHAM!","KRAK!"],ball:["BONK!","DONG!","SMACK!"]};
+  function addProp(sel,o){const el=typeof sel==="string"?g.querySelector(sel):sel;if(!el)return null;const p=Object.assign({el,dyn:false,a:0,va:0,m:1,lastHit:0},o);p.x=p.px=p.cx;p.y=p.py=p.cy;PROPS.push(p);return p}
+  const laptop=addProp(".pLaptop",{cx:258,cy:135,hx:20,hy:15,m:1.6,name:"laptop"});
+  addProp(".pMug",{cx:293.5,cy:144.5,hx:6,hy:5.5,m:.5,name:"mug"});
+  addProp(".pPhone",{cx:230,cy:143,hx:8.5,hy:7,m:.7,name:"phone"});
+  const deskProp={el:deskWhole,cx:263,cy:170,hx:43,hy:20,m:3,name:"desk",isDesk:true,dyn:false,a:0,va:0,lastHit:0,x:263,y:170,px:263,py:170};
+  function liftDesk(){
+    deskOK=false;mess=true;lastMess=nowS();
+    Object.assign(deskProp,{x:263,y:170,px:263,py:170,a:0,va:0,dyn:true});PROPS.push(deskProp);
+    PROPS.forEach(p=>{if(!p.dyn&&p.cy<152)knock(p,rnd(-1,1),-1.5)});
+  }
+  function makePieces(){
+    const L=mk("g",{class:"dpiece"},deskEl),R=mk("g",{class:"dpiece"},deskEl);
+    mk("polygon",{class:"top",points:"220,150 263,150 259,153 265,156 220,156"},L);mk("rect",{class:"leg",x:226,y:156,width:5,height:34},L);
+    mk("polygon",{class:"top",points:"263,150 306,150 306,156 265,156 259,153"},R);mk("rect",{class:"leg",x:296,y:156,width:5,height:34},R);
+    deskEl.insertBefore(L,deskEl.firstChild);deskEl.insertBefore(R,deskEl.firstChild);
+    return [addProp(L,{cx:241.5,cy:170,hx:21.5,hy:20,m:2.5,name:"piece",piece:true}),addProp(R,{cx:284.5,cy:170,hx:21.5,hy:20,m:2.5,name:"piece",piece:true})];
+  }
+  function breakFromProp(p,s){
+    const i=PROPS.indexOf(p);if(i>=0)PROPS.splice(i,1);
+    if(held.obj===p){held.obj=null;held.gt=null;held.prev=null}
+    p.dyn=false;deskWhole.style.display="none";deskWhole.setAttribute("transform","");
+    const vx=p.x-p.px,vy=p.y-p.py,c=Math.cos(p.a*DEG),sn=Math.sin(p.a*DEG);
+    makePieces().forEach((q,k)=>{const off=k?21.5:-21.5;q.x=q.px=p.x+c*off;q.y=q.py=p.y+sn*off;q.a=p.a;knock(q,vx+(k?1.5:-1.5),vy-2);q.va=(k?1:-1)*rnd(5,11)});
+    effects({x:p.x,y:p.y,side:sideOf(vx,vy),s:Math.max(s,10),words:["CRASH!","KRAK!","SMASH!"],noCrack:true});
+    dust({x:p.x,y:p.y,side:"floor"},14,true);
+    if(lvl()<6)setTimeout(()=>say(pick(["My desk!!","That was mahogany!","...I'll expense it."])),250);
+  }
+  const chairEl=g.querySelector(".chair");
+  const chairProp={el:chairEl,cx:160,cy:151,hx:26,hy:49,m:2,name:"chair",dyn:false,a:0,va:0,lastHit:0,x:160,y:151,px:160,py:151};
+  function takeChair(){
+    Object.assign(chairProp,{x:160,y:151,px:160,py:151,a:0,va:0,dyn:true,ghostUntil:nowS()+.5});
+    PROPS.push(chairProp);mess=true;lastMess=nowS();window.CHAIR_GONE=true;g.classList.add("nochair");
+    if(!RAG.active&&lvl()<2){start();say(pick(["WHOA—","Hey! My chair!","Not cool!"]))}
+  }
+  addProp(".pPlant",{cx:310.5,cy:172,hx:7.5,hy:18,m:1.2,name:"plant"});
+  function drawProp(p){p.el.setAttribute("transform",(p.dyn||p===held.obj)?`translate(${(p.x-p.cx).toFixed(2)} ${(p.y-p.cy).toFixed(2)}) rotate(${p.a.toFixed(1)} ${p.cx} ${p.cy})`:"")}
+  function knock(p,vx,vy){p.dyn=true;p.el.classList.add("moved");p.px=p.x-vx;p.py=p.y-vy;p.va=rnd(-9,9);mess=true;lastMess=nowS()}
+  function breakLaptop(){if(!laptop||laptop.el.classList.contains("broken"))return;laptop.el.classList.add("broken");if(lvl()<6)say(pick(["Not the laptop! My spreadsheets!","There goes Q4.","Did I save that?!"]))}
+  function surface(x,prevBottom){return deskOK&&x>220&&x<306&&prevBottom<=151?150:FLOOR}
+  function propFx(p,x,y,side,s){
+    if(p.isDesk&&s>7){breakFromProp(p,s);return}
+    const now=nowS();if(now-p.lastHit<.25)return;p.lastHit=now;
+    if(p.name==="laptop"&&s>5)breakLaptop();
+    if(s>6){if(now-lastFx>.15)effects({x,y,side,s:Math.min(s,8),words:WORDS[p.name]||WORDS.piece,noCrack:side!=="left"&&side!=="right",noHurt:true})}
+    else dust({x,y,side},4);
+    if(p.name==="plant"&&s>4)dust({x,y,side},8,true);
+  }
+  function propPhys(p,s){
+    if(p===held.obj){
+      const w=(s+1)/SUB,f=held.prev||held.gt;
+      p.px=p.x;p.py=p.y;p.x=f.x+(held.gt.x-f.x)*w-held.off.x;p.y=f.y+(held.gt.y-f.y)*w-held.off.y;p.va*=.9;p.a+=p.va;return;
+    }
+    const vx=(p.x-p.px)*.992,vy=(p.y-p.py)*.992;p.px=p.x;p.py=p.y;p.x+=vx;p.y+=vy+G*DT*DT;p.a+=p.va;p.va*=.99;
+    const c=Math.abs(Math.cos(p.a*DEG)),sn=Math.abs(Math.sin(p.a*DEG)),ex=p.hx*c+p.hy*sn,ey=p.hx*sn+p.hy*c;
+    const fl=surface(p.x,p.py+ey);
+    if(p.y+ey>fl){const v=p.y-p.py;p.y=fl-ey;p.py=p.y+v*.3;p.px=p.x-(p.x-p.px)*.7;p.va*=.7;const t=Math.round(p.a/90)*90;p.va+=(t-p.a)*.06;if(v>4.5)propFx(p,p.x,fl,"floor",v)}
+    if(p.x-ex<6){const v=p.x-p.px;p.x=6+ex;p.px=p.x+v*.5;p.va*=-.6;if(-v>4.5)propFx(p,6,p.y,"left",-v)}
+    if(p.x+ex>314){const v=p.x-p.px;p.x=314-ex;p.px=p.x+v*.5;p.va*=-.6;if(v>4.5)propFx(p,314,p.y,"right",v)}
+    if(p.y-ey<6){p.y=6+ey;p.py=p.y}
+  }
+  // a point (ragdoll joint or the disco ball) against every prop
+  function collide(q,r,qm,kind){
+    for(const p of PROPS){
+      if(p===q||(p.ghostUntil&&nowS()<p.ghostUntil))continue;
+      const ca=Math.cos(p.a*DEG),sa=Math.sin(p.a*DEG),dx=q.x-p.x,dy=q.y-p.y;
+      const lx=dx*ca+dy*sa,ly=-dx*sa+dy*ca,ox=p.hx+r-Math.abs(lx),oy=p.hy+r-Math.abs(ly);
+      if(ox<=0||oy<=0)continue;
+      const qvx=q.x-q.px,qvy=q.y-q.py,pvx=p.x-p.px,pvy=p.y-p.py,rel=Math.hypot(qvx-pvx,qvy-pvy);
+      if(p.isDesk&&p!==held.obj&&rel>9){breakFromProp(p,rel);continue}
+      if(!p.dyn&&p!==held.obj&&rel>2.2){
+        knock(p,qvx*1.1,qvy*1.1-1);
+        if(p.name==="laptop"&&rel>4)breakLaptop();
+        propFx(p,q.x,q.y,sideOf(qvx,qvy),rel*1.3);
+        continue;
+      }
+      let nx,ny,pen;if(ox<oy){pen=ox;nx=Math.sign(lx)||1;ny=0}else{pen=oy;nx=0;ny=Math.sign(ly)||1}
+      const wx=nx*ca-ny*sa,wy=nx*sa+ny*ca;
+      const pm=(p===held.obj||!p.dyn)?1e9:p.m,kq=pm/(qm+pm),kp=qm/(qm+pm);
+      q.x+=wx*pen*kq;q.y+=wy*pen*kq;
+      if(p.dyn&&p!==held.obj){p.x-=wx*pen*kp;p.y-=wy*pen*kp;p.va+=(lx*wy-ly*wx)*.01*pen}
+      const ps=Math.hypot(pvx,pvy);
+      if(kind==="body"&&ps>3&&ps>Math.hypot(qvx,qvy)){
+        q.px=q.x-pvx*1.1;q.py=q.y-pvy*1.1;
+        smack(q.x,q.y,pvx,pvy,ps,p.name);
+      }
+    }
+  }
+  function smack(x,y,vx,vy,s,name){
+    const now=nowS();if(now-lastFx<.18)return;
+    getup=null;still=0;released=now;
+    effects({x,y,side:sideOf(vx,vy),s:Math.max(s*1.4,6),words:WORDS[name]||WORDS.piece,noCrack:true});
+    if(s>5&&lvl()<6)say(name==="ball"?pick(["Disco ball to the face!","Who threw that?!","My head!"]):pick(["Hey!","Ow! Watch it!","Was that my laptop?!"]));
+  }
+  function deskHit(q,r){
+    if(!deskOK||q.x<220-r||q.x>306+r||q.y<150-r||q.y>190)return;
+    const vx=q.x-q.px,vy=q.y-q.py,sp=Math.hypot(vx,vy);
+    if(sp>6.5){breakDesk(q.x,vx,vy,sp);return}
+    if(q.py<=150-r+1.5){q.y=150-r;q.py=q.y+vy*.2;q.px=q.x-vx*.7}
+    else if(q.x<263){q.x=220-r;q.px=q.x+vx*.3}else{q.x=306+r;q.px=q.x+vx*.3}
+  }
+  function breakDesk(x,vx,vy,sp){
+    deskOK=false;mess=true;lastMess=nowS();deskWhole.style.display="none";
+    const [pl,pr]=makePieces();
+    knock(pl,-1.5+vx*.35,-2.5+vy*.15);pl.va=-6-rnd(0,6);
+    knock(pr,1.5+vx*.35,-2.5+vy*.15);pr.va=6+rnd(0,6);
+    PROPS.forEach(p=>{if(!p.dyn)knock(p,vx*.3+rnd(-1.5,1.5),-2.5-rnd(0,2.5))});
+    effects({x,y:150,side:"floor",s:Math.max(sp,10),words:["CRASH!","KRAK!","SMASH!"],noCrack:true});
+    dust({x,y:152,side:"floor"},14,true);
+    if(lvl()<6)setTimeout(()=>say(pick(["My desk!!","That was mahogany!","...I'll expense it.","HR is gonna hear about this."])),250);
+  }
+  function resetProps(){
+    {const ci=PROPS.indexOf(chairProp);if(ci>=0)PROPS.splice(ci,1);chairProp.dyn=false;chairEl.setAttribute("transform","");window.CHAIR_GONE=false;g.classList.remove("nochair")}
+    {const di=PROPS.indexOf(deskProp);if(di>=0)PROPS.splice(di,1);deskProp.dyn=false;deskWhole.setAttribute("transform","")}
+    for(let i=PROPS.length-1;i>=0;i--){const p=PROPS[i];if(p.piece){p.el.remove();PROPS.splice(i,1)}}
+    PROPS.forEach(p=>{p.dyn=false;p.el.classList&&p.el.classList.remove("moved");p.x=p.px=p.cx;p.y=p.py=p.cy;p.a=0;p.va=0;drawProp(p)});
+    if(laptop)laptop.el.classList.remove("broken");
+    if(!deskOK){deskWhole.style.display="";anim(deskEl,[{opacity:0},{opacity:1}],{duration:700})}
+    deskOK=true;mess=false;boardTilt=clockTilt=0;rattle(0);
+    B.x=B.px=118;B.y=B.py=30;B.len=30;
+  }
+  window.resetProps=resetProps;
+
+  // ---------------- disco ball on a rope ----------------
+  const discoBody=g.querySelector(".discoBody"),rope=g.querySelector(".rope");
+  const B={x:118,y:30,px:118,py:30,len:30,spin:0,r:12,lastHit:0};
+  const ballOn=()=>lvl()>=2;
+  function ballStep(s){
+    if(!ballOn()){B.x=B.px=118;B.y=B.py=30;B.len=30;return}
+    if(held.obj===B){
+      const w=(s+1)/SUB,f=held.prev||held.gt;
+      B.px=B.x;B.py=B.y;B.x=f.x+(held.gt.x-f.x)*w-held.off.x;B.y=f.y+(held.gt.y-f.y)*w-held.off.y;
+      B.len=Math.max(30,Math.min(190,Math.hypot(B.x-118,B.y)));
+    }else{
+      const vx=(B.x-B.px)*.997,vy=(B.y-B.py)*.997;B.px=B.x;B.py=B.y;B.x+=vx;B.y+=vy+G*DT*DT;
+      B.len+=(30-B.len)*.0025;
+      const dx=B.x-118,dy=B.y,d=Math.hypot(dx,dy);if(d>B.len){B.x=118+dx/d*B.len;B.y=dy/d*B.len}
+    }
+    if(B.y>FLOOR-12){const v=B.y-B.py;B.y=FLOOR-12;B.py=B.y+v*.4}
+    if(B.x<18){const v=B.x-B.px;B.x=18;B.px=B.x+v*.5;if(-v>5&&nowS()-lastFx>.2)effects({x:6,y:B.y,side:"left",s:-v,words:WORDS.ball})}
+    if(B.x>302){const v=B.x-B.px;B.x=302;B.px=B.x+v*.5;if(v>5&&nowS()-lastFx>.2)effects({x:314,y:B.y,side:"right",s:v,words:WORDS.ball})}
+    collide(B,12,3,"ball");deskHit(B,12);
+  }
+  function ballVsBody(){
+    if(!ballOn())return;
+    const bvx=B.x-B.px,bvy=B.y-B.py,bs=Math.hypot(bvx,bvy);
+    if(!RAG.active){
+      if(bs<2.5)return;
+      const fp=figPoints();if(!names.some(n=>Math.hypot(fp[n].x-B.x,fp[n].y-B.y)<16+(RAD[n]||4)))return;
+      start();
+    }
+    if(getup&&bs<2.5)return;
+    let any=false;
+    names.forEach(n=>{
+      const q=P[n],r=RAD[n]||4,dx=q.x-B.x,dy=q.y-B.y,d=Math.hypot(dx,dy)||.01,min=12+r;
+      if(d>=min)return;
+      const nx=dx/d,ny=dy/d,pen=min-d;
+      q.x+=nx*pen*.75;q.y+=ny*pen*.75;
+      if(held.obj!==B){B.x-=nx*pen*.25;B.y-=ny*pen*.25}
+      if(bs>2){q.px=q.x-bvx*1.3-nx*1.5;q.py=q.y-bvy*1.3-ny*1.5;any=true}
+    });
+    if(any){getup=null;if(held.obj!==B){B.px=B.x-bvx*.6;B.py=B.y-bvy*.6}smack(B.x,B.y,bvx,bvy,bs,"ball")}
+  }
+  function thrownVsFig(){
+    if(RAG.active)return;
+    for(const p of PROPS){
+      if(!p.dyn&&p!==held.obj)continue;
+      const s=Math.hypot(p.x-p.px,p.y-p.py);if(s<3.5)continue;
+      const fp=figPoints();
+      if(names.some(n=>Math.abs(fp[n].x-p.x)<p.hx+8&&Math.abs(fp[n].y-p.y)<p.hy+8)){start();return}
+    }
+  }
+  function drawBall(){
+    B.spin+=(B.x-B.px)*4;
+    discoBody.setAttribute("transform",`translate(${(B.x-118).toFixed(2)} ${(B.y-30).toFixed(2)}) rotate(${B.spin.toFixed(1)} 118 30)`);
+    const d=Math.hypot(B.x-118,B.y)||1;
+    rope.setAttribute("x2",(B.x-(B.x-118)/d*12).toFixed(2));rope.setAttribute("y2",(B.y-B.y/d*12).toFixed(2));
+  }
+
+  // ---------------- ragdoll physics ----------------
+  function solve(){
+    for(let it=0;it<12;it++){
+      sticks.forEach(([a,b,len])=>link(a,b,len,false));
+      mins.forEach(([a,b,len])=>link(a,b,len,true));
+      names.forEach(n=>{
+        const q=P[n],r=RAD[n]||4;
+        if(q.y>FLOOR-r){const vy=q.y-q.py;q.y=FLOOR-r;q.py=q.y+vy*.25;q.px=q.x-(q.x-q.px)*.75;hit(q.x,FLOOR,"floor",vy);
+          if(!hitSaid&&!grab&&vy>5){hitSaid=true;if(lvl()<6)say(pick(["Ow!","My back!","Not the face!","Ow ow ow."]))}}
+        if(q.y<6+r){const vy=q.py-q.y;q.y=6+r;q.py=q.y-vy*.3;hit(q.x,6,"ceil",vy)}
+        if(q.x<6+r){const vx=q.x-q.px;q.x=6+r;q.px=q.x+vx*.4;hit(6,q.y,"left",-vx)}
+        if(q.x>314-r){const vx=q.x-q.px;q.x=314-r;q.px=q.x+vx*.4;hit(314,q.y,"right",vx)}
+      });
+      if(grab){P[grab].x=gt.cx;P[grab].y=gt.cy}
+    }
+  }
+  function link(a,b,len,minOnly){
+    const A=P[a],B2=P[b],dx=B2.x-A.x,dy=B2.y-A.y,d=Math.hypot(dx,dy)||.001;
+    if(minOnly&&d>=len)return;
+    const wa=a===grab?0:1,wb=b===grab?0:1,tot=wa+wb;if(!tot)return;
+    const f=(d-len)/d;
+    A.x+=dx*f*wa/tot;A.y+=dy*f*wa/tot;B2.x-=dx*f*wb/tot;B2.y-=dy*f*wb/tot;
+  }
+  function step(s){
+    names.forEach(n=>{
+      const q=P[n];if(n===grab)return;
+      const vx=(q.x-q.px)*.99,vy=(q.y-q.py)*.99;
+      q.px=q.x;q.py=q.y;q.x+=vx;q.y+=vy+G*DT*DT;
+    });
+    if(grab){
+      const q=P[grab],w=(s+1)/SUB,from=gtPrev||gt;
+      q.px=q.x;q.py=q.y;gt.cx=from.x+(gt.x-from.x)*w;gt.cy=from.y+(gt.y-from.y)*w;q.x=gt.cx;q.y=gt.cy;
+    }
+    solve();
+    names.forEach(n=>{if(n!==grab){collide(P[n],RAD[n]||4,1,"body");deskHit(P[n],RAD[n]||4)}});
+    // lying on the floor: friction stops endless rolling
+    if(!grab){
+      let ground=0;names.forEach(n=>{if(P[n].y>=FLOOR-(RAD[n]||4)-1)ground++});
+      if(ground>=3)names.forEach(n=>{const q=P[n];q.px=q.x-(q.x-q.px)*.88;q.py=q.y-(q.y-q.py)*.88});
+    }
+  }
+  function draw(){
+    const p=P,hx=(p.hL.x+p.hR.x)/2,hy=(p.hL.y+p.hR.y)/2,D=180/Math.PI;
+    V.torso.setAttribute("transform",`translate(${hx} ${hy}) rotate(${Math.atan2(p.neck.y-hy,p.neck.x-hx)*D+90}) translate(-160 -140)`);
+    V.head.setAttribute("transform",`translate(${p.neck.x} ${p.neck.y}) rotate(${Math.atan2(p.head.y-p.neck.y,p.head.x-p.neck.x)*D+90}) translate(-160 -86)`);
+    V.legL.setAttribute("d",`M${p.hL.x} ${p.hL.y} L${p.kL.x} ${p.kL.y} L${p.fL.x} ${p.fL.y}`);
+    V.legR.setAttribute("d",`M${p.hR.x} ${p.hR.y} L${p.kR.x} ${p.kR.y} L${p.fR.x} ${p.fR.y}`);
+    [["shoeL","kL","fL",-3],["shoeR","kR","fR",3]].forEach(([s,k,f,off])=>{
+      const a=Math.atan2(p[f].y-p[k].y,p[f].x-p[k].x)*D-90;
+      V[s].setAttribute("cx",p[f].x+off);V[s].setAttribute("cy",p[f].y+3);V[s].setAttribute("transform",`rotate(${a} ${p[f].x} ${p[f].y})`);
+    });
+    V.armL.setAttribute("d",`M${p.sL.x} ${p.sL.y} L${p.eL.x} ${p.eL.y} L${p.aL.x} ${p.aL.y}`);
+    V.armR.setAttribute("d",`M${p.sR.x} ${p.sR.y} L${p.eR.x} ${p.eR.y} L${p.aR.x} ${p.aR.y}`);
+    V.handL.setAttribute("cx",p.aL.x);V.handL.setAttribute("cy",p.aL.y);
+    V.handR.setAttribute("cx",p.aR.x);V.handR.setAttribute("cy",p.aR.y);
+    V.held.setAttribute("transform",`translate(${p.aR.x-193} ${p.aR.y-99})`);
+    RAG.head=[p.head.x,p.head.y];
+  }
+  function loop(){
+    const now=nowS();
+    if(RAG.active){
+      if(getup){
+        const k=Math.min(1,(now-getup.t0)/.75),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+        names.forEach(n=>{const a=getup.from[n],b=getup.to[n];P[n].x=a.x+(b.x-a.x)*e;P[n].y=a.y+(b.y-a.y)*e;P[n].px=P[n].x;P[n].py=P[n].y});
+        if(k>=1){draw();stop();if(lvl()<6)say(pick(["I meant to do that.","Totally fine.","Nobody saw that.","*dusts off suit*"]))}
+      }else{
+        IMP=null;
+        for(let s=0;s<SUB;s++)step(s);
+        if(IMP&&now-lastFx>.16)effects(IMP);
+        if(!grab){
+          let mv=0;names.forEach(n=>{mv=Math.max(mv,Math.hypot(P[n].x-P[n].px,P[n].y-P[n].py))});
+          still=mv<.4?still+1/60:0;
+          if(still>.9||now-released>4.5){
+            const from={};names.forEach(n=>from[n]={x:P[n].x,y:P[n].y});
+            getup={t0:now,from,to:figPoints()};
+          }
+        }
+      }
+      if(RAG.active)draw();
+    }
+    for(let s=0;s<SUB;s++){PROPS.forEach(p=>{if(p.dyn||p===held.obj)propPhys(p,s)});ballStep(s);ballVsBody()}
+    thrownVsFig();
+    PROPS.forEach(drawProp);drawBall();dizzy(now);
+    if(mess&&!held.obj&&now-lastMess>40)resetProps();
+    gtPrev=gt?{x:gt.x,y:gt.y}:null;
+    if(held.gt)held.prev={x:held.gt.x,y:held.gt.y};
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // ---------------- pointer: tap = poke, drag = grab him or an object ----------------
+  const toSvg=e=>{const m=g.getScreenCTM();if(!m)return{x:0,y:0};const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(m.inverse());return{x:p.x,y:p.y}};
+  let down=null;
+  g.addEventListener("pointerdown",e=>{
+    const pt=toSvg(e),t=e.target;let obj=null;
+    if(ballOn()&&t.closest(".discoBody"))obj=B;
+    else for(const p of PROPS){if(p.el.contains(t)){obj=p;break}}
+    if(!obj&&deskOK&&deskWhole.contains(t))obj=deskProp;
+    if(!obj&&lvl()<2&&chairEl.contains(t)&&!PROPS.includes(chairProp))obj=chairProp;
+    const onBody=!obj&&!!t.closest(".fig,#rag");
+    down={x:pt.x,y:pt.y,onBody,obj,started:false};
+    if(obj||onBody){try{g.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()}
+  });
+  g.addEventListener("pointermove",e=>{
+    if(!down)return;const pt=toSvg(e);
+    if(!down.started&&(down.onBody||down.obj)&&Math.hypot(pt.x-down.x,pt.y-down.y)>3){
+      down.started=true;
+      if(down.obj){
+        const o=down.obj;held.obj=o;held.off={x:down.x-o.x,y:down.y-o.y};held.gt={x:pt.x,y:pt.y};held.prev={x:down.x,y:down.y};
+        if(o===deskProp&&!PROPS.includes(o))liftDesk();
+        if(o===chairProp&&!PROPS.includes(o))takeChair();
+        if(o!==B){o.dyn=true;o.el.classList.add("moved");mess=true;lastMess=nowS()}
+      }else{
+        if(!RAG.active)start();
+        getup=null;names.forEach(n=>{P[n].px=P[n].x;P[n].py=P[n].y});
+        let best=null,bd=1e9;names.forEach(n=>{const d=Math.hypot(P[n].x-down.x,P[n].y-down.y)-(n==="head"?8:0);if(d<bd){bd=d;best=n}});
+        grab=best;gt={x:pt.x,y:pt.y,cx:P[best].x,cy:P[best].y};gtPrev={x:P[best].x,y:P[best].y};
+        say(lvl()===6?"...wha...?":pick(["Hey! Put me down!","Whoa whoa whoa!","Not the suit!","Easy, easy!"]));
+      }
+    }
+    if(down.started){if(down.obj)held.gt={x:pt.x,y:pt.y};else{gt.x=pt.x;gt.y=pt.y}}
+  });
+  function clampVel(o,max){const vx=o.x-o.px,vy=o.y-o.py,v=Math.hypot(vx,vy);if(v>max){o.px=o.x-vx*max/v;o.py=o.y-vy*max/v}}
+  function release(){
+    if(!grab)return;
+    const q=P[grab],sp=Math.hypot(q.x-q.px,q.y-q.py);
+    names.forEach(n=>clampVel(P[n],14));
+    if(sp>5&&lvl()<6)say("Wheeeee!");
+    grab=null;gt=null;released=nowS();still=0;hitSaid=false;
+  }
+  function releaseObj(){const o=held.obj;if(!o)return;clampVel(o,16);if(o!==B){o.va=rnd(-8,8);lastMess=nowS()}held.obj=null;held.gt=null;held.prev=null}
+  g.addEventListener("pointerup",()=>{if(!down)return;if(!down.started){if(down.onBody||(!down.obj))reactTo("poke")}else if(down.obj)releaseObj();else release();down=null});
+  g.addEventListener("pointercancel",()=>{if(down&&down.started){if(down.obj)releaseObj();else release()}down=null});
+})();
+const DRINKS=[
+  {id:"beer",name:"Beer",desc:"12 oz · 5%",ml:355,abv:.05},
+  {id:"light",name:"Light Beer",desc:"12 oz · 4.2%",ml:355,abv:.042},
+  {id:"stout",name:"Stout",desc:"12 oz · 7%",ml:355,abv:.07},
+  {id:"rum",name:"Rum & mix",desc:"1.5 oz · 40%",ml:44,abv:.40},
+  {id:"shot",name:"Shot",desc:"1.5 oz · 40%",ml:44,abv:.40},
+  {id:"wine",name:"Wine",desc:"5 oz · 12%",ml:148,abv:.12},
+  {id:"double",name:"Double",desc:"3 oz · 40%",ml:89,abv:.40},
+  {id:"espresso",name:"Espresso Martini",desc:"2.5 oz · ~30%",ml:74,abv:.30},
+  {id:"whisky",name:"Whisky",desc:"1.5 oz · 43%",ml:44,abv:.43}
+];
+const LEVELS=[
+  {max:.5,name:"Stone sober",msg:"Fresh as a morning coffee."},
+  {max:1.5,name:"Warmed up",msg:"Loosening up. Nice."},
+  {max:3,name:"Buzzed",msg:"Good vibes, still sharp-ish."},
+  {max:4.5,name:"Tipsy",msg:"Talking louder than you think. Grab a water."},
+  {max:6,name:"Drunk",msg:"Time to slow way down."},
+  {max:8,name:"Very drunk",msg:"You're done. Water, food, and a ride home."},
+  {max:Infinity,name:"Too far",msg:"Stop drinking. Water, and stay with friends."}
+];
+const std=d=>d.ml*d.abv*0.789/14;
+const GL='class="eglass"';
+const EMPTY={
+  beer:'<rect class="e-brown" x="-2.5" y="-11" width="5" height="11" rx="1.5"/><rect class="e-brown" x="-1" y="-15" width="2" height="5"/><rect class="e-label" x="-2.5" y="-8" width="5" height="3"/>',
+  light:'<rect class="e-can" x="-3" y="-10" width="6" height="10" rx="1"/><rect class="e-canstripe" x="-3" y="-6.5" width="6" height="2"/><rect class="e-cantop" x="-2.6" y="-10.6" width="5.2" height="1"/>',
+  stout:'<rect class="e-dark" x="-2.5" y="-11" width="5" height="11" rx="1.5"/><rect class="e-dark" x="-1" y="-15" width="2" height="5"/><rect class="e-gold" x="-2.5" y="-8" width="5" height="3"/>',
+  rum:'<rect '+GL+' x="-3" y="-12" width="6" height="12" rx=".8"/><rect class="e-amber" x="-2.4" y="-2.6" width="4.8" height="2.2"/><circle class="e-lime" cx="2.6" cy="-12" r="2"/>',
+  shot:'<path '+GL+' d="M-2.6 -6 h5.2 l-.8 6 h-3.6z"/><rect class="e-amber" x="-1.8" y="-1.4" width="3.6" height="1.1"/>',
+  double:'<path '+GL+' d="M-3.6 -7 h7.2 l-.6 7 h-6z"/><rect class="e-amber" x="-3" y="-2" width="6" height="1.6"/><rect class="e-ice" x="-1.5" y="-4.5" width="2.4" height="2.4"/>',
+  whisky:'<path '+GL+' d="M-3.6 -7 h7.2 l-.6 7 h-6z"/><rect class="e-whisky" x="-3" y="-2.6" width="6" height="2.2"/>',
+  wine:'<path '+GL+' d="M-3 -15 h6 q0 6.5 -3 6.5 q-3 0 -3 -6.5z"/><path class="e-red" d="M-2.7 -11.5 h5.4 q-.4 3 -2.7 3 q-2.3 0 -2.7 -3z"/><path class="e-stem" d="M0 -8.5 V-.5 M-2.8 0 H2.8"/>',
+  espresso:'<path '+GL+' d="M-5 -14 L5 -14 L0 -8z"/><path class="e-coffee" d="M-2.6 -11.2 L2.6 -11.2 L0 -8.3z"/><circle class="e-bean" cx="-1" cy="-14.6" r=".9"/><circle class="e-bean" cx="1.2" cy="-14.6" r=".9"/><path class="e-stem" d="M0 -8 V-.5 M-2.8 0 H2.8"/>'
+};
+const SET={weight:170,food:false,prices:{beer:6,light:6,stout:7,rum:8,shot:7,wine:12,double:14,espresso:18,whisky:12},look:{skin:"Medium",hair:"Black",beard:"Yes",suit:"Charcoal",tie:"Red"}};
+try{const s=JSON.parse(localStorage.getItem("bartab-set")||"{}");if(s.weight)SET.weight=s.weight;SET.food=!!s.food;Object.assign(SET.prices,s.prices||{});Object.assign(SET.look,s.look||{})}catch(e){}
+const saveSet=()=>{try{localStorage.setItem("bartab-set",JSON.stringify(SET))}catch(e){}};
+const HELD={
+  coffee:'<rect class="e-mug" x="-3.2" y="-8" width="6.4" height="8" rx="1"/><path class="e-mughandle" d="M3.2 -6.5 q3 0 3 2.5 q0 2.5 -3 2.5"/><rect class="e-coffee" x="-2.6" y="-7.4" width="5.2" height="1.4"/>',
+  beer:EMPTY.beer, light:EMPTY.light, stout:EMPTY.stout,
+  rum:'<rect class="e-cola" x="-2.5" y="-10.5" width="5" height="10"/><rect '+GL+' x="-3" y="-12" width="6" height="12" rx=".8"/><path class="e-straw" d="M1 -10 L2.8 -16"/><circle class="e-lime" cx="2.6" cy="-12" r="2"/>',
+  shot:'<path class="e-amber" d="M-2.3 -5 h4.6 l-.7 4.6 h-3.2z"/><path '+GL+' d="M-2.6 -6 h5.2 l-.8 6 h-3.6z"/>',
+  double:'<path class="e-amber" d="M-3.3 -4.6 h6.6 l-.4 4.2 h-5.8z"/><path '+GL+' d="M-3.6 -7 h7.2 l-.6 7 h-6z"/><rect class="e-ice" x="-2" y="-6" width="2.6" height="2.6"/><rect class="e-ice" x=".6" y="-5" width="2.2" height="2.2"/>',
+  whisky:'<path class="e-whisky" d="M-3.3 -4 h6.6 l-.4 3.6 h-5.8z"/><path '+GL+' d="M-3.6 -7 h7.2 l-.6 7 h-6z"/><rect class="e-ice" x="-1.6" y="-5.6" width="3.4" height="3.4"/>',
+  wine:'<path class="e-red" d="M-2.9 -12.5 h5.8 q-.2 4 -2.9 4 q-2.7 0 -2.9 -4z"/><path '+GL+' d="M-3 -15 h6 q0 6.5 -3 6.5 q-3 0 -3 -6.5z"/><path class="e-stem" d="M0 -8.5 V-.5 M-2.8 0 H2.8"/>',
+  espresso:'<path class="e-coffee" d="M-4.4 -13.5 L4.4 -13.5 L0 -8.4z"/><path class="e-foam" d="M-4.4 -13.5 h8.8 v.9 h-8.8z"/><path '+GL+' d="M-5 -14 L5 -14 L0 -8z"/><circle class="e-bean" cx="-1" cy="-14.4" r=".9"/><circle class="e-bean" cx="1.2" cy="-14.4" r=".9"/><path class="e-stem" d="M0 -8 V-.5 M-2.8 0 H2.8"/>'
+};
+let heldNow="";
+let log=[];
+try{log=JSON.parse(localStorage.getItem("bartab")||"[]")}catch(e){log=[]}
+const save=()=>{try{localStorage.setItem("bartab",JSON.stringify(log))}catch(e){}};
+const $=id=>document.getElementById(id);
+const fmtTime=t=>new Date(t).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+
+const grid=$("grid");
+DRINKS.forEach(d=>{
+  const b=document.createElement("button");
+  b.id="add-"+d.id;
+  b.innerHTML=`<span class="n" data-n="${d.id}">0</span><b>${d.name}</b><small>${d.desc} · ${std(d).toFixed(1)} std</small>`;
+  b.onclick=()=>{log.push({id:d.id,t:Date.now(),s:std(d),p:SET.prices[d.id]});save();render();reactTo("drink")};
+  d.btn=b;
+  grid.appendChild(b);
+});
+const beer=DRINKS.find(d=>d.id==="beer"),abvIn=$("abv");
+function setAbv(v){
+  beer.abv=v/100;
+  $("abvOut").textContent=v.toFixed(1)+"%";
+  beer.btn.querySelector("small").textContent=`12 oz · ${v.toFixed(1)}% · ${std(beer).toFixed(1)} std`;
+}
+try{const v=parseFloat(localStorage.getItem("bartab-abv"));if(v>=3&&v<=10)abvIn.value=v}catch(e){}
+setAbv(parseFloat(abvIn.value));
+abvIn.oninput=()=>{const v=parseFloat(abvIn.value);setAbv(v);try{localStorage.setItem("bartab-abv",v)}catch(e){}};
+const pr=$("prices");
+DRINKS.forEach(d=>{
+  const w=document.createElement("div");
+  w.innerHTML=`<label for="price-${d.id}">${d.name}</label><input type="number" id="price-${d.id}" min="0" step="0.5" inputmode="decimal" value="${SET.prices[d.id]}">`;
+  w.querySelector("input").oninput=ev=>{const v=parseFloat(ev.target.value);if(v>=0){SET.prices[d.id]=v;saveSet()}};
+  pr.appendChild(w);
+});
+const LOOK={
+  skin:{label:"Skin",opts:{Light:"#f0c8a0",Medium:"#c68a5c",Tan:"#a9714a",Brown:"#7a4a2c",Deep:"#5a3520"}},
+  hair:{label:"Hair",opts:{Black:"#24170e","Dark brown":"#3a2618",Brown:"#6b4226",Blonde:"#c9a25a",Grey:"#9a9a9a",Bald:"bald"}},
+  beard:{label:"Beard",opts:{Yes:"1",No:""}},
+  suit:{label:"Suit",opts:{Charcoal:["#2e3440","#2a2f3a"],Navy:["#1f2f55","#1b2848"],Brown:["#5a3d2b","#4a3223"],Grey:["#6b7280","#5b616d"],Black:["#16181d","#121418"]}},
+  tie:{label:"Tie",opts:{Red:"#c8323a",Blue:"#2f6fd6",Green:"#2f8f5a",Purple:"#7a3fb8",Gold:"#c9a34a"}}
+};
+function applyLook(){
+  const gy=$("guy"),L=SET.look,v=(k)=>LOOK[k].opts[L[k]]??Object.values(LOOK[k].opts)[0];
+  const hair=v("hair"),suit=v("suit");
+  gy.style.setProperty("--skin",v("skin"));
+  if(hair!=="bald")gy.style.setProperty("--hair",hair);
+  gy.style.setProperty("--beardc",hair==="bald"?"#3a2618":hair);
+  gy.style.setProperty("--suit",suit[0]);gy.style.setProperty("--pants",suit[1]);
+  gy.style.setProperty("--tie",v("tie"));
+}
+const lk=$("look");
+Object.entries(LOOK).forEach(([k,o])=>{
+  const lab=document.createElement("label");lab.htmlFor="lk-"+k;lab.textContent=o.label;
+  const sel=document.createElement("select");sel.id="lk-"+k;
+  Object.keys(o.opts).forEach(n=>{const op=document.createElement("option");op.textContent=n;if(n===SET.look[k])op.selected=true;sel.appendChild(op)});
+  sel.onchange=()=>{SET.look[k]=sel.value;saveSet();applyLook();render()};
+  lk.appendChild(lab);lk.appendChild(sel);
+});
+applyLook();
+$("weight").value=SET.weight;
+$("weight").oninput=ev=>{const v=parseFloat(ev.target.value);if(v>=80&&v<=450){SET.weight=v;saveSet();render()}};
+$("food").checked=SET.food;
+$("food").onchange=ev=>{SET.food=ev.target.checked;saveSet();render()};
+$("wbBtn").onclick=()=>{log.push({id:"water",t:Date.now()});save();render();reactTo("water")};
+$("joint").onclick=()=>{log.push({id:"joint",t:Date.now()});save();render();say(["Ohhh yeah...","Puff puff pass.","Now THIS is a party."][Math.floor(Math.random()*3)])};
+$("water").onclick=()=>{log.push({id:"water",t:Date.now()});save();render();reactTo("water")};
+$("undo").onclick=()=>{log.pop();save();render()};
+$("reset").onclick=()=>{$("confirm").hidden=false};
+$("no").onclick=()=>{$("confirm").hidden=true};
+$("yes").onclick=()=>{log=[];save();$("confirm").hidden=true;render();if(window.resetProps)resetProps()};
+
+function tally(n){
+  let s="";for(let i=0;i<Math.floor(n/5);i++)s+="卌 ";
+  return s+"|".repeat(n%5);
+}
+function render(){
+  const drinks=log.filter(e=>e.id!=="water"&&e.id!=="joint");
+  const total=drinks.length;
+  let since=0;for(let i=log.length-1;i>=0&&log[i].id!=="water";i--)if(log[i].id!=="joint")since++;
+  const cost=drinks.reduce((a,e)=>a+(e.p!=null?e.p:(SET.prices[e.id]||0)),0);
+  $("cost").textContent="BZ$"+cost.toFixed(2);
+  const s=drinks.reduce((a,e)=>a+(e.s!=null?e.s:std(DRINKS.find(d=>d.id===e.id))),0);
+  $("total").textContent=total;
+  $("tally").textContent=tally(total);
+  $("std").textContent=s.toFixed(1);
+  DRINKS.forEach(d=>{document.querySelector(`[data-n="${d.id}"]`).textContent=drinks.filter(e=>e.id===d.id).length});
+  let rate=0;
+  if(drinks.length){
+    const hrs=Math.max((Date.now()-drinks[0].t)/36e5,1);
+    rate=s/hrs;
+    const mins=Math.round((Date.now()-drinks[0].t)/6e4);
+    $("since").textContent=`Started ${fmtTime(drinks[0].t)} · ${Math.floor(mins/60)}h ${mins%60}m`;
+  }else $("since").textContent="No drinks yet";
+  $("rate").textContent=rate.toFixed(1);
+  const p=$("pace");
+  if(!total){p.textContent="Steady pace";p.className="pace"}
+  else if(rate>2){p.textContent="Fast pace — maybe grab a water";p.className="pace high"}
+  else if(rate>1.2){p.textContent="Picking up — pace yourself";p.className="pace"}
+  else{p.textContent="Steady pace";p.className="pace"}
+  const elapsed=drinks.length?(Date.now()-drinks[0].t)/36e5:0;
+  const inBody=Math.max(0,s-elapsed);
+  const eff=inBody*(170/SET.weight)*(SET.food?0.8:1);
+  const L=LEVELS.find(l=>eff<=l.max);
+  const idx=LEVELS.indexOf(L);
+  $("lvl").textContent=L.name;
+  $("msg").textContent=L.msg;
+  $("inbody").textContent=inBody.toFixed(1);
+  if(inBody>0.05){const mins=Math.round(inBody*60);$("sober").innerHTML=`Back to sober in about <strong>${Math.floor(mins/60)}h ${mins%60}m</strong> if you stop now`}
+  else $("sober").textContent=total?"Fully worn off.":"";
+  const pct=Math.min(100,eff/9*100);
+  $("fill").style.left=pct+"%";
+  $("barwrap").setAttribute("aria-valuenow",inBody.toFixed(1));
+  document.querySelector(".meter").classList.toggle("danger",idx>=4);
+  const guy=$("guy");
+  let peak=0,cum=0;
+  drinks.forEach(e=>{cum+=(e.s!=null?e.s:std(DRINKS.find(d=>d.id===e.id)));peak=Math.max(peak,cum-(e.t-drinks[0].t)/36e5)});
+  isHang=total>0&&idx===0&&peak*(170/SET.weight)*(SET.food?.8:1)>4.5;
+  if(isHang){$("lvl").textContent="Hungover";$("msg").textContent="Big night. Water, food and a nap."}
+  const needWater=since>=3&&idx<6&&!isHang;needW=needWater;
+  $("wb").hidden=!needWater;
+  $("wbText").textContent=`${since} drinks since your last water.`;
+  const HMS=90*60000,nowMs=Date.now(),joints=log.filter(e=>e.id==="joint");
+  window.HIGH=joints.reduce((a,e)=>a+Math.max(0,1-(nowMs-e.t)/HMS),0);
+  const hl=$("highline");
+  if(window.HIGH>0){
+    const rem=Math.max(...joints.map(e=>e.t+HMS))-nowMs,mm=Math.round(rem/60000);
+    const name=window.HIGH<.8?"Chill":window.HIGH<1.6?"Baked":"Couch-locked";
+    hl.hidden=false;hl.innerHTML=`Also high: <strong>${name}</strong> · wears off in about ${Math.floor(mm/60)}h ${mm%60}m. Weed and alcohol together hit harder than either alone.`;
+  }else hl.hidden=true;
+  guy.setAttribute("class","guy l"+idx+(window.HIGH>0?" high":"")+(needWater?" needwater":"")+(isHang?" hangover":"")+(SET.look.beard==="Yes"?"":" nobeard")+(SET.look.hair==="Bald"?" bald":"")+(window.HURT&&performance.now()<window.HURT?" hurt":"")+(window.CHAIR_GONE?" nochair":""));
+  const set=(k,v)=>guy.style.setProperty(k,v);
+  curIdx=idx;
+  set("--lid",Math.max([0,.1,.2,.4,.5,.3,1][idx],window.HIGH>0?.5:0));
+  set("--haze",Math.min(.2,.06+window.HIGH*.06).toFixed(3));
+  set("--sunY",[0,8,20,34,50,66,90][idx]+"px");
+  set("--dim",[0,0,.25,.45,.6,.7,.75][idx]);
+  set("--s1",["#8fd0ec","#9acde6","#e9c39b","#e8a77e","#c97a6c","#3b3566","#1c1f3d"][idx]);
+  set("--s2",["#d9eef6","#dcebf0","#f6e2c4","#f5cfa6","#eeae84","#7a5a86","#3a3a66"][idx]);
+  const lastId=isHang||!drinks.length?"coffee":drinks[drinks.length-1].id;
+  if(lastId!==heldNow){heldNow=lastId;$("held").innerHTML=`<g transform="translate(193 99) scale(1.3)">${HELD[lastId]||HELD.beer}</g>`}
+  const emp=$("empties");let g="";
+  const MAX=20;
+  drinks.slice(0,MAX).forEach((e,i)=>{
+    const front=i>=10, k=front?i-10:i;
+    const x=front?19+k*11:14+k*11, y=front?208:192;
+    const tip=i%4===3;
+    g+=`<g transform="translate(${x} ${y}) rotate(${tip?78:0})">${EMPTY[e.id]||EMPTY.beer}</g>`;
+  });
+  if(drinks.length>MAX) g+=`<text class="more" x="122" y="214">+${drinks.length-MAX}</text>`;
+  emp.innerHTML=g;
+  guy.setAttribute("aria-label","A businessman, "+L.name.toLowerCase()+", "+(idx<2?"relaxing at his desk":idx<6?"dancing at an office party":"passed out on the floor with a water bottle"));
+  const ol=$("log");ol.innerHTML="";
+  [...log].reverse().forEach(e=>{
+    const d=DRINKS.find(x=>x.id===e.id);
+    const li=document.createElement("li");
+    li.innerHTML=`<span>${d?d.name:e.id==="joint"?"Joint":"Water"}</span><span>${fmtTime(e.t)}</span>`;
+    ol.appendChild(li);
+  });
+  $("empty").hidden=log.length>0;
+}
+render();
+setInterval(render,30000);
+(function(){
+  const g=document.getElementById("guy"),fx=g.querySelector("#fx"),fig=g.querySelector(".fig"),NS="http://www.w3.org/2000/svg",rnd=(a,b)=>a+Math.random()*(b-a);
+  function pt(el,x,y){const a=g.getScreenCTM(),b=el&&el.getScreenCTM();if(!a||!b)return null;return new DOMPoint(x,y).matrixTransform(a.inverse().multiply(b))}
+  function puff(x,y,r,dx,dy,dur,op){
+    const c=document.createElementNS(NS,"circle");c.setAttribute("class","fx-smoke");c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r",r);fx.appendChild(c);
+    try{c.animate([{transform:"translate(0,0) scale(.6)",opacity:op},{transform:`translate(${dx*.45}px,${dy*.5}px) scale(1.5)`,opacity:op*.7,offset:.45},{transform:`translate(${dx}px,${dy}px) scale(2.6)`,opacity:0}],{duration:dur,easing:"ease-out"}).onfinish=()=>c.remove()}catch(e){setTimeout(()=>c.remove(),dur)}
+  }
+  const visible=()=>g.classList.contains("high")&&!g.classList.contains("l6")&&fig.style.display!=="none";
+  setInterval(()=>{
+    if(!visible())return;
+    const p=pt(fig.querySelector(".jt-ember"),135.8,130.4);if(p)puff(p.x,p.y,1.3,rnd(-7,7),-rnd(24,40),rnd(1700,2600),.5);
+  },240);
+  window.SMOKE={exhale(){
+    if(!visible())return;
+    const p=pt(fig.querySelector(".head"),160,75);if(!p)return;
+    for(let k=0;k<8;k++)setTimeout(()=>puff(p.x+rnd(-1,2),p.y,rnd(2.4,4),rnd(4,20),-rnd(10,28),rnd(1800,2800),.75),k*70);
+  }};
+})();
+(function tick(){
+  const d=new Date(),h=d.getHours(),m=d.getMinutes(),colon=d.getSeconds()%2?" ":":";
+  const t=document.getElementById("ckTime"),am=document.getElementById("ckAm"),pm=document.getElementById("ckPm");
+  if(t)t.textContent=String(h%12||12).padStart(2," ")+colon+String(m).padStart(2,"0");
+  if(am&&pm){am.classList.toggle("on",h<12);pm.classList.toggle("on",h>=12)}
+  setTimeout(tick,1000-d.getMilliseconds());
+})();
+</script>
+
+</body>
+</html>
