@@ -112,7 +112,7 @@ ol li span:last-child{color:var(--muted)}
 .n-body{padding:10px 14px 14px;display:grid;gap:10px}
 .n-break{display:flex;flex-wrap:wrap;gap:6px}
 .n-body ol{margin:0}.n-body ol li{padding:7px 0;font-size:.9rem}
-.n-del{justify-self:start}
+.n-del,.n-rep{justify-self:start}
 .night .confirm{background:var(--bg);border-radius:10px;padding:8px 10px}
 .note{color:var(--muted);font-size:.8rem;line-height:1.5}
 .lvl{font-family:var(--display);font-weight:800;font-size:2.4rem;text-transform:uppercase;letter-spacing:.03em;line-height:1}
@@ -222,6 +222,58 @@ ol li span:last-child{color:var(--muted)}
 .guy .e-straw{stroke:#d9573f;stroke-width:.9;stroke-linecap:round} .guy .e-foam{fill:#d8b58c}
 .guy{cursor:pointer;--beardc:#3a2618;touch-action:none;user-select:none;-webkit-user-select:none}
 .guy .fig,.guy #rag{cursor:grab}
+/* personalities */
+.guy .acc{display:none}
+.guy.persona-troll .acc-troll,.guy.persona-uncle .acc-uncle,.guy.persona-butler .acc-butler,.guy.persona-reaper .acc-reaper{display:inline}
+.guy.persona-butler .tie{display:none} .guy.persona-butler .hand{fill:#fbfbf7;stroke:#cfcfc6;stroke-width:.8}
+.guy .horn{fill:#c8323a;stroke:#7a1a20;stroke-width:.8} .guy .tail{fill:none;stroke:#c8323a;stroke-width:2.4;stroke-linecap:round} .guy .tailtip{fill:#c8323a}
+.guy .bushy{fill:none;stroke:#d9d6d0;stroke-width:3;stroke-linecap:round} .guy .halfmoon path{fill:#fff;fill-opacity:.25;stroke:#2a2622;stroke-width:1.1} .guy .halfmoon .hm-arm{fill:none}
+.guy .monocle{fill:#fff;fill-opacity:.22;stroke:#c9a34a;stroke-width:1.3} .guy .mono-chain{fill:none;stroke:#c9a34a;stroke-width:.8}
+.guy .bowtie path,.guy .bowtie circle{fill:#16171c}
+.guy .hood{fill:#17161c;stroke:#4a4656;stroke-width:1.4} .guy.persona-reaper .head .skinf{filter:saturate(.35) brightness(.9)} .guy.persona-reaper .hair,.guy.persona-reaper .hairhl{display:none}
+.guy .staff{stroke:#5b3a1e;stroke-width:2.6;stroke-linecap:round} .guy .blade{fill:#d4dae2;stroke:#8a939f;stroke-width:.8}
+/* money reactions */
+.guy .moths{display:none} .guy.budget-s5 .moths{display:inline}
+.guy .moth{fill:#cbbfa8;stroke:#7d7262;stroke-width:.4;transform-box:fill-box;transform-origin:center}
+.guy .m1{animation:moth1 2.6s ease-in-out infinite} .guy .m2{animation:moth2 3.2s ease-in-out infinite}
+@keyframes moth1{0%{transform:translate(0,0)}25%{transform:translate(9px,-14px) rotate(15deg)}50%{transform:translate(18px,-4px)}75%{transform:translate(6px,-20px) rotate(-12deg)}100%{transform:translate(0,0)}}
+@keyframes moth2{0%{transform:translate(0,0)}30%{transform:translate(-12px,-10px) rotate(-18deg)}60%{transform:translate(-4px,-24px)}100%{transform:translate(0,0)}}
+.guy.budget-s2 .sweat,.guy.budget-s3 .sweat,.guy.budget-s4 .sweat,.guy.budget-s5 .sweat{display:inline;animation:drip 1.4s ease-in infinite}
+.guy.budget-s3 .sweat,.guy.budget-s4 .sweat,.guy.budget-s5 .sweat{animation-duration:.8s}
+.guy #walletMeter{pointer-events:none} .guy.game-trash #walletMeter,.guy.game-ball #walletMeter{display:none!important}
+.guy .wm-bg{fill:#15161a;opacity:.78} .guy .wm-w{fill:#8a5f3c;stroke:#4e3420;stroke-width:.8} .guy .wm-flap{fill:#6f4a2c} .guy .wm-snap{fill:#e0c070}
+.guy .wm-t{font:700 7.6px var(--body);fill:#fff;font-variant-numeric:tabular-nums}
+.guy .wm-track{fill:#ffffff33} .guy .wm-fill{fill:#5ccf7a;transition:width .6s ease,fill .6s}
+.guy .wm-band,.guy .wm-ecg{display:none} .guy .wm-band{stroke:#f4efe6;stroke-width:2.2;stroke-linecap:round}
+.guy .wm-ecg{fill:none;stroke:#ff5a4e;stroke-width:1.4;stroke-linejoin:round}
+.guy.budget-s2 .wm-fill{fill:#e8c33f} .guy.budget-s3 .wm-fill{fill:#ff8a3d} .guy.budget-s4 .wm-fill{fill:#ff4a3d}
+.guy.budget-s3 .wm-wallet{animation:wshake .35s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes wshake{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+.guy.budget-s4 .wm-band,.guy.budget-s5 .wm-band{display:inline} .guy.budget-s5 .wm-ecg{display:inline} .guy.budget-s5 .wm-track,.guy.budget-s5 .wm-fill{display:none}
+.guy .fx-coin{fill:#f1c94b;stroke:#a77f14;stroke-width:.8} .guy .fx-dollar{font:800 9px var(--body);fill:#3fa35a}
+.guy .fx-stamp rect{fill:none;stroke:#e5322a;stroke-width:3} .guy .fx-stamp text{font:800 25px var(--display);fill:#e5322a;text-anchor:middle;letter-spacing:.06em}
+.guy .fx-flash{fill:#ff3b30;pointer-events:none}
+.guy .gh-cloak{fill:#141318;stroke:#000;stroke-width:.6} .guy .gh-face{fill:#e9e6dc} .guy .gh-eye{fill:#141318} .guy .gh-staff{stroke:#5b3a1e;stroke-width:2.6;stroke-linecap:round} .guy .gh-blade{fill:#d4dae2;stroke:#8a939f;stroke-width:.8}
+.guy .tomb path{fill:#8f949c;stroke:#5f646c;stroke-width:1} .guy .tomb text{font:800 7.5px var(--display);fill:#2f3238;text-anchor:middle;letter-spacing:.06em}
+.guy.ring .clock{animation:ring .12s linear 10}
+@keyframes ring{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
+.persona-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.persona-row label{font-weight:700}
+.persona-row select{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);flex:1 1 200px;min-width:0;min-height:44px}
+/* morning after report */
+.report-wrap{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,#120c08 70%,transparent);display:grid;place-items:center;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+.report{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:16px;width:min(520px,100%);max-height:100%;overflow:auto;padding:16px;display:grid;grid-auto-rows:max-content;gap:12px;box-shadow:0 20px 60px #0006}
+.rp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.rp-head .btn{flex-shrink:0;white-space:nowrap}
+.rp-head h2{font-family:var(--display);font-weight:800;font-size:1.7rem;text-transform:uppercase;margin:0;line-height:1;text-wrap:balance}
+.rp-card{position:relative;border-radius:12px;overflow:hidden;background:#18120d;max-width:100%;min-height:180px}
+.rp-card img{display:block;width:100%;height:auto}
+.rp-wait{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#a8957d;font-size:.9rem}
+.rp-actions{display:flex;flex-wrap:wrap;gap:8px;position:sticky;bottom:-16px;background:var(--card);padding:8px 0 12px;margin-bottom:-4px;z-index:1}.rp-actions .btn{flex:1 1 auto}
+.rp-text{display:grid;gap:6px;font-size:.92rem;line-height:1.45}
+.rp-text .rp-verdict{font-weight:700;font-size:1.02rem}
+.rp-text ul{margin:0;padding-left:1.1em;color:var(--muted)}
+.rp-text .rp-sign{color:var(--muted);font-style:italic}
 .guy #fx,.guy .haze,.guy .dim,.guy .beams,.guy .notes,.guy .bubbles,.guy .confetti,.guy .plus,.guy .zzz,.guy .speech{pointer-events:none}
 .guy .pPlant.moved .plant{transform:none!important;transition:none}
 .guy.nochair .legs-sit{display:none} .guy.nochair .legs-stand{display:inline}
@@ -482,6 +534,7 @@ button{ -webkit-tap-highlight-color:transparent }
             <g class="tap"><path class="pants" d="M167 168 L175 182 L177 196"/><ellipse class="shoe" cx="180" cy="198" rx="8" ry="3.5"/></g>
           </g>
           <g class="uwrap"><g class="bob"><g class="upper">
+            <g class="acc acc-troll"><path class="tail" d="M171 137 q16 6 15 -9 q-1 -7 4 -9"/><path class="tailtip" d="M187 120 l6 -6 l1 8z"/></g>
             <rect class="pelvis" x="145" y="134" width="30" height="12" rx="6"/>
             <rect class="shirt" x="143" y="84" width="34" height="58" rx="9"/>
             <path class="detail-shadow" d="M169 87 Q176 90 177 100 V136 Q172 142 166 141 L168 107Z"/>
@@ -500,6 +553,8 @@ button{ -webkit-tap-highlight-color:transparent }
             </g>
             <polygon class="collar" points="152,84 160,92 155,96"/><polygon class="collar" points="168,84 160,92 165,96"/>
             <g class="tie"><polygon points="157,90 163,90 162,95 158,95"/><polygon points="158,95 162,95 165,124 160,131 155,124"/><path class="tiestripe" d="M157 104 l6 3 M156.5 112 l7 3 M156 120 l8 3"/></g><g class="badge"><path d="M156 88 L166 112 M164 88 L169 112"/><rect x="162" y="112" width="12" height="8" rx="1"/><text x="168" y="117.6">BOSS</text></g>
+            <g class="acc acc-butler bowtie"><path d="M160 91.5 l-7.5 -4.2 v8.4z M160 91.5 l7.5 -4.2 v8.4z"/><circle cx="160" cy="91.5" r="1.8"/></g>
+            <g class="moths"><path class="moth m1" d="M170 101 q-4 -5 -7 -1 q3 3 7 1 q4 -5 7 -1 q-3 3 -7 1z"/><path class="moth m2" d="M172 104 q-3 -4 -6 -1 q2 3 6 1 q3 -4 6 -1 q-2 3 -6 1z"/></g>
             <g class="head">
               <rect class="skinf" x="155" y="74" width="10" height="12"/>
               <path class="detail-shadow" d="M155 77 Q160 82 165 77 V82 Q160 86 155 82Z"/>
@@ -511,7 +566,11 @@ button{ -webkit-tap-highlight-color:transparent }
               <path class="hairhl" d="M150 49 q8 -6 18 -4"/><g class="bandaid" transform="rotate(-25 167 52)"><rect x="160" y="49.5" width="14" height="5" rx="2.5"/><rect class="pad" x="164.5" y="50" width="5" height="4" rx="1"/><path d="M161.5 51 v2 M172.5 51 v2"/></g><g class="bruise"><ellipse cx="151" cy="56" rx="3" ry="2.2"/></g><g class="sweat"><path d="M176 50 q2.5 4 0 6.5 q-2.5 -2.5 0 -6.5z"/></g><g class="band"><path d="M143 51 Q160 45 177 51 L177 57 Q160 51 143 57Z"/><g class="tails"><path d="M176 53 l15 -7 l-3 7z"/><path d="M176 55 l14 5 l-4 -7z"/></g></g>
               <path class="detail-hair" d="M146 52 Q150 43 159 44 M150 51 Q156 44 165 45 M155 50 Q164 46 172 50 M169 48 l5 5 M146 56 l2 -4"/>
               <path class="detail-seam" d="M153 51 q7 -2 13 0 M149 65 q3 2 6 1 M165 66 q4 1 6 -1"/>
+              <g class="acc acc-troll"><path class="horn" d="M149 47 q-7 -9 -3 -17 q3 8 8 12z"/><path class="horn" d="M171 47 q7 -9 3 -17 q-3 8 -8 12z"/></g>
+              <g class="acc acc-reaper"><path class="hood" fill-rule="evenodd" d="M137 88 C132 52 146 33 160 33 C174 33 188 52 183 88 Q172 80 171 76 Q160 86 149 76 Q148 80 137 88Z M147.5 68 C147 51 173 51 172.5 68 C172.5 77 167 82 160 82 C153 82 147.5 77 147.5 68Z"/></g>
               <path class="brow" d="M150 55 q4 -3 8 0 M162 55 q4 -3 8 0"/>
+              <g class="acc acc-uncle"><path class="bushy" d="M148.5 54.5 q5.5 -5 11 -.5 M160.5 54 q5.5 -4.5 11 .5"/><g class="halfmoon"><path d="M149 65.5 h9 q0 5 -4.5 5 q-4.5 0 -4.5 -5z M162 65.5 h9 q0 5 -4.5 5 q-4.5 0 -4.5 -5z"/><path class="hm-arm" d="M158 66.5 h4 M149 66 l-5 -2.5 M171 66 l5 -2.5"/></g></g>
+              <g class="acc acc-butler"><circle class="monocle" cx="166.5" cy="61.5" r="5.4"/><path class="mono-chain" d="M171 64.5 q5 9 1 17"/></g>
               <g class="eyes">
                 <ellipse class="white" cx="154" cy="61" rx="4" ry="4.5"/><ellipse class="white" cx="166" cy="61" rx="4" ry="4.5"/>
                 <g class="pupils"><circle cx="155" cy="62" r="2.2"/><circle cx="167" cy="62" r="2.2"/><circle class="detail-eye" cx="154.4" cy="61.2" r=".8"/><circle class="detail-eye" cx="166.4" cy="61.2" r=".8"/></g>
@@ -529,12 +588,12 @@ button{ -webkit-tap-highlight-color:transparent }
               <g class="hshades"><rect x="148.5" y="57" width="11" height="8" rx="3"/><rect x="160.5" y="57" width="11" height="8" rx="3"/><path d="M159.5 60 h1"/></g>
               <g class="icepack" transform="rotate(-8 160 42)"><rect x="148" y="37" width="24" height="10" rx="5"/><path d="M152 40 q4 2 8 0"/></g>
             </g>
-            <g class="armL"><path class="sleeve" d="M146 92 L139 114"/><g class="foreL"><path class="sleeve" d="M139 114 L141 134"/><rect class="watch" x="137" y="127" width="8" height="4.5" rx="1" transform="rotate(8 141 129)"/><g class="joint"><path class="jt-paper" d="M137.2 131.2 L144.6 145.6 L142.4 146.4 L135.6 132.4Z"/><path class="jt-ash" d="M135.6 132.4 L137.2 131.2 L136.4 129.8 L134.8 130.9Z"/><circle class="jt-ember" cx="135.8" cy="130.4" r="1.3"/></g><circle class="skinf" cx="141" cy="136" r="4.5"/></g></g>
+            <g class="armL"><path class="sleeve" d="M146 92 L139 114"/><g class="foreL"><path class="sleeve" d="M139 114 L141 134"/><rect class="watch" x="137" y="127" width="8" height="4.5" rx="1" transform="rotate(8 141 129)"/><g class="joint"><path class="jt-paper" d="M137.2 131.2 L144.6 145.6 L142.4 146.4 L135.6 132.4Z"/><path class="jt-ash" d="M135.6 132.4 L137.2 131.2 L136.4 129.8 L134.8 130.9Z"/><circle class="jt-ember" cx="135.8" cy="130.4" r="1.3"/></g><g class="acc acc-reaper scythe"><path class="staff" d="M141 168 L140 90"/><path class="blade" d="M140 91 q-26 -9 -38 9 q18 -7 38 -3z"/></g><circle class="skinf hand" cx="141" cy="136" r="4.5"/></g></g>
             <g class="armR">
               <path class="sleeve" d="M174 92 L184 112"/><g class="foreR"><path class="sleeve" d="M184 112 L192 100"/>
               <g class="cup" id="held"></g>
               <g class="water"><rect x="188" y="76" width="10" height="24" rx="3"/><rect x="190.5" y="72" width="5" height="5" rx="1"/></g>
-              <circle class="skinf" cx="193" cy="99" r="4.5"/>
+              <circle class="skinf hand" cx="193" cy="99" r="4.5"/>
               <path class="detail-seam" d="M190 98 l3 1 M190 100 l3 1 M193 96 q3 0 3 3"/>
               <path class="detail-light" d="M184 109 l5 -7 l1 2 l-5 7Z"/></g>
             </g>
@@ -553,6 +612,13 @@ button{ -webkit-tap-highlight-color:transparent }
         <g class="confetti"><rect x="20" y="0" width="4" height="7"/><rect x="48" y="0" width="4" height="7"/><rect x="80" y="0" width="4" height="7"/><rect x="110" y="0" width="4" height="7"/><rect x="140" y="0" width="4" height="7"/><rect x="172" y="0" width="4" height="7"/><rect x="200" y="0" width="4" height="7"/><rect x="228" y="0" width="4" height="7"/><rect x="258" y="0" width="4" height="7"/><rect x="290" y="0" width="4" height="7"/></g>
         <g class="speech" id="speech"><path id="spTail" d="M8 -11 L5 0 L16 -11Z"/><rect id="spRect" rx="6" x="4" y="-28" width="80" height="18"/><path id="spCover" d="M8.8 -11 L15.2 -11"/><text id="spText"></text></g>
         <text class="plus" x="186" y="44">+1</text>
+        <g id="walletMeter" style="display:none" aria-hidden="true">
+          <rect class="wm-bg" x="8" y="8" width="104" height="27" rx="6"/>
+          <g class="wm-wallet"><rect class="wm-w" x="13" y="13.5" width="18" height="14" rx="2.5"/><path class="wm-flap" d="M13 18 H31 V22.5 H24.5 a2.2 2.2 0 0 1 0 -4.5"/><circle class="wm-snap" cx="26.5" cy="20.2" r="1.1"/><path class="wm-band" d="M14 15 L30 26 M14 26 L30 15"/></g>
+          <text class="wm-t" id="wmText" x="37" y="19">Wallet</text>
+          <rect class="wm-track" x="37" y="23" width="68" height="5" rx="2.5"/><rect class="wm-fill" id="wmFill" x="37" y="23" width="68" height="5" rx="2.5"/>
+          <path class="wm-ecg" d="M37 25.5 h16 l3 -6 l3 10 l3 -4 h43"/>
+        </g>
         <g id="hud" style="display:none"><rect x="8" y="8" width="118" height="28" rx="6"/><text id="hudT" x="15" y="19.5">TRASH TOSS</text><text id="hudS" x="15" y="30.5">Score 0 · 45s</text></g>
         <text class="zzz" x="88" y="166">z z Z</text>
       </g>
@@ -564,6 +630,16 @@ button{ -webkit-tap-highlight-color:transparent }
       <button type="button" class="btn" id="tiltBtn" aria-pressed="false">Tilt mode</button>
     </div>
     <p class="hint" id="playHint" hidden></p>
+    <div class="persona-row">
+      <label for="persona">Personality</label>
+      <select id="persona">
+        <option value="classic">The Businessman (original)</option>
+        <option value="troll">The Troll</option>
+        <option value="uncle">The Disappointed Uncle</option>
+        <option value="butler">The British Butler</option>
+        <option value="reaper">The Grim Reaper</option>
+      </select>
+    </div>
     <div class="lvl" id="lvl">Stone sober</div>
     <div class="bar" role="meter" aria-labelledby="lvl" id="barwrap"><div class="fill" id="fill"></div></div>
     <div class="ticks"><span>Sober</span><span>Buzzed</span><span>Drunk</span><span>Too far</span></div>
@@ -577,6 +653,7 @@ button{ -webkit-tap-highlight-color:transparent }
 
   <div class="notice" id="notice" role="status" hidden>
     <span id="noticeText"></span>
+    <button type="button" class="btn primary" id="noticeReport" hidden>Morning After report</button>
     <button type="button" class="btn" id="noticeView">View history</button>
     <button type="button" class="btn" id="noticeClose" aria-label="Dismiss">OK</button>
   </div>
@@ -668,6 +745,22 @@ button{ -webkit-tap-highlight-color:transparent }
   <p class="note">A standard drink is about 14 g of alcohol (a 12 oz 5% beer, a 1.5 oz shot of 40% rum, or 5 oz of 12% wine). The body clears roughly one per hour. This is a counter, not a breathalyzer — never use it to decide if you're okay to drive.</p>
 </div>
 
+<div class="report-wrap" id="reportWrap" hidden>
+  <div class="report" role="dialog" aria-modal="true" aria-labelledby="rpTitle">
+    <div class="rp-head">
+      <div><p class="label">The Morning After</p><h2 id="rpTitle">Last night</h2></div>
+      <button type="button" class="btn" id="rpClose">Close</button>
+    </div>
+    <div class="rp-card"><img id="rpImg" alt=""><p class="rp-wait" id="rpWait">Drawing your report…</p></div>
+    <div class="rp-actions">
+      <button type="button" class="btn primary" id="rpShare">Share</button>
+      <button type="button" class="btn" id="rpSave">Save image</button>
+      <button type="button" class="btn" id="rpCopy">Copy text</button>
+    </div>
+    <p class="hint" id="rpMsg" role="status"></p>
+    <div class="rp-text" id="rpText"></div>
+  </div>
+</div>
 <nav class="phone-nav" aria-label="Main navigation">
   <div class="phone-quick" role="group" aria-label="Quick actions">
     <button type="button" class="quick-primary" id="quickDrink">+ Beer</button>
@@ -746,8 +839,8 @@ let say=()=>{};
 function reactTo(k){
   const now=performance.now()/1000;react={kind:k,start:now,until:now+1.4};
   const pl=document.querySelector("#guy .plus");
-  if(pl&&k!=="poke"){pl.textContent=k==="drink"?"+1":"H₂O";pl.classList.remove("pop");void pl.getBBox();pl.classList.add("pop")}
-  if(k==="poke")say(POKE[isHang?"hang":(window.HIGH>0&&Math.random()<.5)?"high":curIdx]);
+  if(pl&&(k==="drink"||k==="water")){pl.textContent=k==="drink"?"+1":"H₂O";pl.classList.remove("pop");void pl.getBBox();pl.classList.add("pop")}
+  if(k==="poke"){const pp=window.personaPoke&&personaPoke();if(pp)say(pp);else say(POKE[isHang?"hang":(window.HIGH>0&&Math.random()<.5)?"high":curIdx])}
 }
 (function(){
   const g=document.getElementById("guy"),q=s=>g.querySelector(s),NS="http://www.w3.org/2000/svg";
@@ -811,6 +904,12 @@ function reactTo(k){
   function target(o,k,r,L){
     if(k==="drink")return {...o,aR:-165,eR:-15,bob:o.bob+8*A(S(r*PI*2)),mouth:1.8,brow:3,nod:-6};
     if(k==="water")return {...o,aR:-95,eR:-95,nod:-16,mouth:1};
+    if(k==="bow")return {...o,nod:30,sway:-7,aR:-25,eR:-70,aL:35,eL:-95,mouth:.8,brow:1};
+    if(k==="shake")return {...o,nod:16*S(r*PI*7),aL:28,eL:-115,aR:-28,eR:115,mouth:.7,brow:-1.5};
+    if(k==="laugh")return {...o,bob:o.bob+5*A(S(r*PI*7)),nod:-8+7*S(r*PI*7),mouth:2.3,brow:3,sway:o.sway+4*S(r*PI*7)};
+    if(k==="wallet")return {...o,aR:-35,eR:-125,nod:16,brow:-2,mouth:.6};
+    if(k==="panic")return {...o,aL:155,eL:-40,aR:-155,eR:40,mouth:2.5,brow:4,sway:8*S(r*PI*10),nod:6*S(r*PI*9)};
+    if(k==="spin")return {...o,sx:C(r*PI*4),aL:150,eL:-20,aR:-150,eR:20,mouth:2,brow:3,bob:o.bob+6*A(S(r*PI*4))};
     if(L<2||isHang)return {...o,aL:150,eL:-20+35*S(r*PI*8),mouth:1.4,brow:2};
     if(L<=3)return {...o,aL:95,eL:-95,bob:o.bob+4,mouth:1.6,brow:2.5};
     if(L===4)return {...o,aL:80,eL:0,aR:-150,eR:-10,mouth:1.8,brow:3};
@@ -819,6 +918,7 @@ function reactTo(k){
   function extras(t,L,p,o,now){
     // speech bubble
     if(now>spUntil)SP.classList.remove("show");
+    if(now>nextSay&&window.personaIdle){const pl=personaIdle(L);if(pl){say(pl)}}
     if(now>nextSay){const pool=isHang?LINES.hang:(window.HIGH>0&&L<6&&Math.random()<.55)?LINES.high:needW&&Math.random()<.5?LINES.water:LINES[L];say(pool[Math.floor(Math.random()*pool.length)])}
     let hx,hy;
     if(window.RAG&&RAG.active&&RAG.head){hx=RAG.head[0]-6;hy=RAG.head[1]-14}
@@ -915,11 +1015,11 @@ function reactTo(k){
     V.torso=mk("g",{},rag);
     [...fig.querySelector(".upper").children].forEach(c=>{if(!c.matches(".head,.armL,.armR"))V.torso.appendChild(c.cloneNode(true))});
     V.head=fig.querySelector(".head").cloneNode(true);V.head.removeAttribute("transform");rag.appendChild(V.head);
-    V.armL=mk("path",{class:"sleeve"},rag);V.handL=mk("circle",{class:"skinf",r:4.5},rag);
+    V.armL=mk("path",{class:"sleeve"},rag);V.handL=mk("circle",{class:"skinf hand",r:4.5},rag);
     V.armR=mk("path",{class:"sleeve"},rag);V.held=mk("g",{},rag);
     const hc=fig.querySelector("#held").cloneNode(true);hc.removeAttribute("id");V.held.appendChild(hc);
     V.held.appendChild(fig.querySelector(".water").cloneNode(true));
-    V.handR=mk("circle",{class:"skinf",r:4.5},rag);
+    V.handR=mk("circle",{class:"skinf hand",r:4.5},rag);
   }
   function start(){
     const fp=figPoints();
@@ -1166,7 +1266,8 @@ function reactTo(k){
     if(mode==="ball"&&lvl()<2){B.x=B.px=118;B.y=B.py=30;B.len=30}
     window.onGameChange&&window.onGameChange(null);
   }
-  window.GAMES={start:startGame,stop:()=>stopGame(false)};
+  window.GAMES={start:startGame,stop:()=>stopGame(false),active:()=>!!GM.mode};
+  window.knockOver=knockOver;
   function smack(x,y,vx,vy,s,name){
     const now=nowS();if(now-lastFx<.18)return;
     getup=null;still=0;released=now;
@@ -1360,7 +1461,7 @@ function reactTo(k){
     if(!obj&&deskOK&&deskWhole.contains(t))obj=deskProp;
     if(!obj&&lvl()<2&&chairEl.contains(t)&&!PROPS.includes(chairProp))obj=chairProp;
     const onBody=!obj&&!!t.closest(".fig,#rag");
-    down={x:pt.x,y:pt.y,onBody,obj,started:false};
+    down={x:pt.x,y:pt.y,onBody,obj,started:false,target:t};
     if(obj||onBody){try{g.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()}
   });
   g.addEventListener("pointermove",e=>{
@@ -1391,7 +1492,7 @@ function reactTo(k){
     grab=null;gt=null;released=nowS();still=0;hitSaid=false;
   }
   function releaseObj(){const o=held.obj;if(!o)return;clampVel(o,16);if(o!==B){o.va=rnd(-8,8);lastMess=nowS()}held.obj=null;held.gt=null;held.prev=null}
-  g.addEventListener("pointerup",()=>{if(!down)return;if(!down.started){if(down.onBody||(!down.obj))reactTo("poke")}else if(down.obj)releaseObj();else release();down=null});
+  g.addEventListener("pointerup",()=>{if(!down)return;if(!down.started){const eg=window.sceneTap&&sceneTap(down.target);if(!eg&&(down.onBody||(!down.obj)))reactTo("poke")}else if(down.obj)releaseObj();else release();down=null});
   g.addEventListener("pointercancel",()=>{if(down&&down.started){if(down.obj)releaseObj();else release()}down=null});
 })();
 const DRINKS=[
@@ -1428,7 +1529,7 @@ const EMPTY={
   espresso:'<path '+GL+' d="M-5 -14 L5 -14 L0 -8z"/><path class="e-coffee" d="M-2.6 -11.2 L2.6 -11.2 L0 -8.3z"/><circle class="e-bean" cx="-1" cy="-14.6" r=".9"/><circle class="e-bean" cx="1.2" cy="-14.6" r=".9"/><path class="e-stem" d="M0 -8 V-.5 M-2.8 0 H2.8"/>'
 };
 const SET={weight:170,food:false,prices:{beer:6,light:6,stout:7,rum:8,shot:7,wine:12,double:14,espresso:18,whisky:12},look:{skin:"Medium",hair:"Black",beard:"Yes",suit:"Charcoal",tie:"Red"}};
-try{const s=JSON.parse(localStorage.getItem("bartab-set")||"{}");if(s.weight)SET.weight=s.weight;SET.food=!!s.food;Object.assign(SET.prices,s.prices||{});Object.assign(SET.look,s.look||{});if(s.currency&&typeof s.currency==="object")SET.currency={code:["BZD","USD","custom"].includes(s.currency.code)?s.currency.code:"BZD",custom:String(s.currency.custom||"").slice(0,4)};if(s.budget>0)SET.budget=+s.budget;if(Array.isArray(s.thresholds)&&s.thresholds.length===4&&s.thresholds.every(n=>n>=1&&n<=300))SET.thresholds=s.thresholds.map(Number)}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("bartab-set")||"{}");if(s.weight)SET.weight=s.weight;SET.food=!!s.food;Object.assign(SET.prices,s.prices||{});Object.assign(SET.look,s.look||{});if(s.currency&&typeof s.currency==="object")SET.currency={code:["BZD","USD","custom"].includes(s.currency.code)?s.currency.code:"BZD",custom:String(s.currency.custom||"").slice(0,4)};if(s.budget>0)SET.budget=+s.budget;if(Array.isArray(s.thresholds)&&s.thresholds.length===4&&s.thresholds.every(n=>n>=1&&n<=300))SET.thresholds=s.thresholds.map(Number);if(typeof s.persona==="string")SET.persona=s.persona}catch(e){}
 if(!SET.currency||typeof SET.currency!=="object")SET.currency={code:"BZD",custom:""};
 if(!(SET.budget>0))SET.budget=null;
 if(!Array.isArray(SET.thresholds)||SET.thresholds.length!==4)SET.thresholds=[25,50,75,100];
@@ -1461,10 +1562,12 @@ function archiveNight(reason,now){
   if(!log.length)return null;
   const entries=log.map(e=>{const c={...e};const d=DRINKS.find(x=>x.id===e.id);if(d){if(c.p==null)c.p=SET.prices[e.id]||0;if(c.s==null)c.s=std(d)}return c});
   const s={id:"n"+entries[0].t+"-"+Math.random().toString(36).slice(2,7),start:entries[0].t,end:entries[entries.length-1].t,
-    savedAt:now||Date.now(),closed:reason,currency:curSym(),budget:SET.budget,weight:SET.weight,food:!!SET.food,entries};
+    savedAt:now||Date.now(),closed:reason,currency:curSym(),budget:SET.budget,weight:SET.weight,food:!!SET.food,persona:SET.persona||"classic",reportSeen:false,entries};
   sessions.push(s);
   if(!saveSessions()){sessions.pop();showNotice("Couldn't save this night to History because your phone's storage for this site is full. Tonight was kept. Back up your data, then delete some old nights.",false);return false}
   log=[];save();
+  SET.food=false;saveSet();{const fd=document.getElementById("food");if(fd)fd.checked=false}
+  try{localStorage.removeItem("bartab-night")}catch(e){}
   return s;
 }
 function checkAutoClose(now){
@@ -1473,12 +1576,419 @@ function checkAutoClose(now){
   const last=log[log.length-1].t;
   if(now-last<AUTO_CLOSE_MS)return null;
   const s=archiveNight("auto",now);
-  if(s){showNotice(`Your night from ${nightLabel(s)} was saved to History automatically after 8 hours with nothing logged.`,true);renderHistory()}
+  if(s){showNotice(`Your night from ${nightLabel(s)} was saved to History automatically after 8 hours with nothing logged.`,true,s);renderHistory()}
   return s;
 }
 function logPush(e){checkAutoClose(e.t);log[log.length]=e}
 function nightLabel(s){return new Date(s.start).toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})}
-function showNotice(text,withView){const n=document.getElementById("notice");if(!n)return;document.getElementById("noticeText").textContent=text;document.getElementById("noticeView").hidden=!withView;n.hidden=false}
+// =================== Stage 1: hangover source ===================
+const HANG_MS=18*36e5;
+function latestSession(){let b=null;sessions.forEach(s=>{if(!b||s.end>b.end)b=s});return b}
+function nightPeak(entries,weight,food){
+  const d=entries.filter(e=>e.id!=="water"&&e.id!=="joint");if(!d.length)return {peak:0,lastT:0};
+  let cum=0,peak=0;const t0=d[0].t;
+  d.forEach(e=>{cum+=(e.s!=null?e.s:std(DRINKS.find(x=>x.id===e.id)||DRINKS[0]));peak=Math.max(peak,cum-(e.t-t0)/36e5)});
+  return {peak:peak*(170/(weight||170))*(food?.8:1),lastT:d[d.length-1].t};
+}
+
+// =================== Stage 1: personalities ===================
+if(!SET.persona)SET.persona="classic";
+const PERSONAS={
+  classic:{name:"The Businessman",bit:"laugh",
+    intro:["Back to my usual self. Suit pressed, judgement minimal."],
+    budget1:["A quarter of the budget. Still looking sharp.","25% spent. Totally under control. Probably."],
+    budget2:["Halfway through the budget. Let's ease off a bit.","Half the budget. My accountant just texted me a sad face."],
+    budget3:["75% of the budget. I'm sweating through the suit.","Three-quarters gone. Maybe water next?"],
+    budget4:["That's the budget. I'm calling it here.","Budget's done. I need to sit down. On the floor, apparently."],
+    budget5:["Way over budget. Somebody hide my card.","Over budget. My wallet just filed for divorce."],
+    end:["Night saved. Good game, everyone.","Logged and saved. Bed time."],
+    morning:["Morning. Coffee first, then the damage report.","Okay. Let's see what we did last night."],
+    nobudget:["Set a budget and I'll keep you honest."],
+    secret:["You found my secret move. Don't tell HR."]},
+  troll:{name:"The Troll",bit:"laugh",
+    intro:["Hehehe. Let's ruin your finances together.","Troll mode on. Nothing in this office is safe."],
+    idle:["I hid your receipt. Kidding. Or am I?","Fun fact: I unplugged the budget. Hehe.","I licked the laptop. Don't ask.","Psst. Try throwing me at the desk.","I put the mug somewhere you'll never find it.","Your wallet's ticklish. Watch this.","I'm not saying I'm chaotic. I'm saying the plant knows.","I renamed your bank app 'Bye Money'.","The disco ball and I have a plan. A bad one."],
+    drink:["Another one? Bold. Wrong, but bold.","Ka-ching! That sound was your savings leaving.","Hehehe, the bartender thanks you.","I'm adding that to the evidence file.","Oh, we're doing this? Cool cool cool.","Your wallet just flinched. I saw it.","{cost} tonight. I'm telling your bank. Hehe."],
+    water:["Water?! Who invited the responsible one?","Ugh, hydration. Fine. Respect.","Plot twist: you're smart now.","Boring. Healthy. Annoyingly smart."],
+    poke:["Boop me again. I dare you.","Poke count: too many. Keep going.","You found the secret button. It does nothing. Hehe.","Ow. I'm telling the disco ball.","That tickles. I'm filing a complaint with myself."],
+    fast:["Whoa, speedrun mode? Slow down, champ.","You're drinking like the bar's on fire. Pace it.","Even I think that's fast, and I'm a troll."],
+    noWater:["Three drinks, zero water. Your kidneys are writing an angry email.","Psst. Water exists. It's free. Hehe."],
+    budget1:["A quarter of the budget gone. The appetizer of financial chaos.","25% spent. I can smell the ATM sweating."],
+    budget2:["Halfway through the budget! Halfway to ruin!","50%. Your wallet just started a podcast about trauma."],
+    budget3:["75%?! I'm a troll and even I'm nervous.","Your wallet's packing a bag. I'm helping it."],
+    budget4:["BUDGET: DESTROYED. I'm so proud. Kidding. Go home.","You hit the limit! Achievement unlocked: Broke."],
+    budget5:["We're WAY over. I called the Grim Reaper. He's laughing.","Over budget. Your bank app just fainted."],
+    end:["Night saved. I hid nothing. Probably.","Session over. Evidence filed. Hehe."],
+    morning:["Rise and shine, chaos goblin. Your report is ready.","Good morning! I read your receipts. Hehehehe."],
+    nobudget:["No budget? Chaos. I love it. Set one anyway."],
+    joint:["Oh, it's THAT kind of night. Hehe.","Smells like bad decisions. Wonderful."],
+    secret:["You found the troll button! There is no prize. HEHEHE."]},
+  uncle:{name:"The Disappointed Uncle",bit:"shake",
+    intro:["I'm not angry. I'm just... disappointed.","Your uncle's here. Pull up a chair. Not that one."],
+    idle:["In my day a beer cost a quarter and we were grateful.","Have you thought about a savings account? No? Hm.","Your cousin bought a house. Just saying.","I'm not mad. I'm just doing the math.","You know what compounds? Interest. Not drinks.","At your age I had a pension plan and a mustache.","I'm not judging. I'm observing. Loudly."],
+    drink:["That's {cost} you'll never see again.","Another one. Interesting choice. Not a good one.","Do you know what that costs over a year? I do.","Your grandmother saved bottle caps, you know.","I'll just write that down in the family ledger.","Mm-hm. Mm-hm. Okay."],
+    water:["Water. Finally, a sensible purchase.","Now THAT is a wise investment.","See? Free. Like advice from your uncle."],
+    poke:["Don't poke me, I'm doing your taxes.","Poking won't fix your spending, kid.","Is that how you treat family?","I changed your diapers. Show some respect."],
+    fast:["Slow down. The drinks aren't going anywhere. Your money is.","At this pace you'll need a loan by midnight."],
+    noWater:["Have a water. It costs nothing, which I know confuses you."],
+    budget1:["A quarter of your budget. I'm keeping an eye on you.","25% gone. I'm making the face."],
+    budget2:["Half the budget. Your father walked home to save bus fare.","50%. I'm going to need to sit down."],
+    budget3:["75%. I'm calling your mother.","Three-quarters gone. I've started a spreadsheet about you."],
+    budget4:["That's the whole budget. It's going in the family newsletter.","You hit your limit. We'll talk at Christmas."],
+    budget5:["Over budget. I'm removing you from the group chat.","Way over. This is why we can't have savings."],
+    end:["Night's over. I'll be reviewing the receipts.","Saved. We'll discuss this at the next family dinner."],
+    morning:["Morning. Sit down. We need to talk about last night.","I made coffee. And a report. Mostly the report."],
+    nobudget:["No budget? That's how it starts. Set one."],
+    joint:["Is that... I don't want to know.","Your aunt is going to hear about this."],
+    secret:["Fine. I'm proud of you. Don't tell anyone I said that."]},
+  butler:{name:"The British Butler",bit:"bow",
+    intro:["Good evening. I shall judge you with the utmost courtesy.","At your service, sir. Regrettably."],
+    idle:["Shall I fetch your dignity, sir? It appears to have left early.","How delightful. Another evening of fiscal adventure.","I've hidden the credit cards in plain sight. Fruitlessly.","Might I suggest water? I already know the answer.","Your posture is impeccable. Your choices, less so.","I do so enjoy watching money leave in such style.","The silver has been counted, sir. Twice. You understand."],
+    drink:["Splendid. Another {drinkname}. The wallet weeps quietly.","An inspired choice, sir. Expensive, but inspired.","Very good, sir. Added to the tab of regret.","Excellent. Your bank will be informed by courier.","Marvellous. That's {cost} tonight. A triumph of enthusiasm."],
+    water:["Water. How refreshingly sensible of you, sir.","A glass of water. I may shed a single proud tear.","Hydration. I shall alert the newspapers."],
+    poke:["I beg your pardon.","One does not poke the staff, sir.","Most kind. Please never do that again.","I shall pretend that didn't happen. For both our sakes."],
+    fast:["The drinks are not a race, sir. Your wallet, however, is losing.","A brisk pace, sir. Brisk and ruinous."],
+    noWater:["Might I suggest water, sir? It's complimentary, like my disdain."],
+    budget1:["A quarter of the budget, sir. Proceeding at a stately pace.","25% spent. Entirely acceptable decadence."],
+    budget2:["Half the budget, sir. I've loosened my collar slightly.","50%. I shall begin drafting a polite letter to your bank."],
+    budget3:["Three-quarters spent. I've locked away the silverware.","75%. Shall I prepare a modest gruel for the coming weeks?"],
+    budget4:["The budget is spent, sir. Congratulations on your thoroughness.","Limit reached. I've informed the staff we're in austerity."],
+    budget5:["Over budget, sir. I've taken the liberty of selling the horses.","We've exceeded the budget. I'll be in the pantry, quietly weeping."],
+    end:["The evening is concluded, sir. Filed under 'Regrettable'.","Session saved. Shall I draw a bath and a budget?"],
+    morning:["Good morning, sir. Your report is served, with a side of shame.","Breakfast is ready. So is the bill. Mostly the bill."],
+    nobudget:["Sir has no budget. How very aristocratic. Do set one."],
+    joint:["Ah. A herbal interlude. How very contemporary.","I shall open a window, sir."],
+    secret:["You've found the butler's pantry. There is only tea and judgement."]},
+  reaper:{name:"The Grim Reaper",bit:"laugh",
+    intro:["I am here for your wallet. The rest of you may stay.","Don't be alarmed. I only collect money tonight."],
+    idle:["Don't mind me. Just waiting for your wallet.","Every receipt brings me closer.","I sense a balance... declining.","I've reaped many things. Wallets are the easiest.","The scythe is for show. The receipts do the real work.","Tick tock. Not you. Your money.","Death and taxes. I'm the first one. Your tab is the second."],
+    drink:["Another soul... I mean, another {cost}.","Your wallet grows weaker.","I'll put that one on the tombstone.","I felt that one in my bones. All of them.","The end draws near. For your cash.","One more coin for the ferryman."],
+    water:["Water? You're delaying the inevitable. Wisely.","Hydration. My one weakness.","Fine. Live a little longer."],
+    poke:["You dare poke Death?","Careful. I'm ticklish and I own a scythe.","Death does not do tickles.","Poke me again and I'll reap your phone battery."],
+    fast:["Slow down, mortal. Even I don't move that fast.","At this pace, your wallet won't see midnight."],
+    noWater:["No water? Bold of you to make my job easier."],
+    budget1:["25% gone. I've started sharpening the scythe.","A quarter of the budget. I can wait. I'm very patient."],
+    budget2:["Halfway there. I'm warming up.","50%. Your wallet's life is flashing before its eyes."],
+    budget3:["75%. I can hear the funeral music.","Three-quarters. I've pre-ordered the flowers."],
+    budget4:["The budget is dead. I'm just here for the paperwork.","Time of death: just now. Cause: the tab."],
+    budget5:["Over budget. Your wallet has joined the choir invisible.","Beyond the budget. Even I didn't see this coming."],
+    end:["The night has ended. Your wallet rests in peace.","Session sealed. May your receipts rest easy."],
+    morning:["Good morning. You survived. Your wallet... less so.","Rise, mortal. Read what you have done."],
+    nobudget:["No budget? I'll need a number for the tombstone."],
+    joint:["Ah, smoke. My favourite entrance effect.","Hazy. Mysterious. Very on brand."],
+    secret:["You found me. Nobody finds me. Except, eventually, everyone."]}
+};
+const bags={};
+function pickFrom(key,pool){
+  if(!pool||!pool.length)return null;
+  let b=bags[key];
+  if(!b||!b.left.length){const idx=pool.map((_,i)=>i);for(let i=idx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]]}
+    if(b&&idx.length>1&&idx[0]===b.last)idx.push(idx.shift());b={left:idx,last:b?b.last:-1};bags[key]=b}
+  const i=b.left.shift();b.last=i;return pool[i];
+}
+function wrapLine(t,n){
+  const out=[];t.split("\n").forEach(par=>{let cur="";par.split(" ").forEach(w=>{if((cur+" "+w).trim().length>n&&cur){out.push(cur);cur=w}else cur=(cur+" "+w).trim()});if(cur)out.push(cur)});
+  return out.slice(0,4).join("\n");
+}
+function personaVars(extra){
+  const drinks=log.filter(e=>e.id!=="water"&&e.id!=="joint"),cost=drinks.reduce((a,e)=>a+priceOf(e),0);
+  const last=drinks.length?DRINKS.find(d=>d.id===drinks[drinks.length-1].id):null;
+  return Object.assign({cost:fmtMoney(cost),drinkname:last?last.name.toLowerCase():"drink",budget:SET.budget?fmtMoney(SET.budget):""},extra||{});
+}
+const fillVars=(t,v)=>t.replace(/\{(\w+)\}/g,(m,k)=>v[k]!=null?v[k]:m);
+function personaLine(pool,vars){const P=PERSONAS[SET.persona]||PERSONAS.classic;const t=pickFrom(SET.persona+":"+pool,P[pool]);return t?wrapLine(fillVars(t,personaVars(vars)),26):null}
+let lastEventSay=0;const throttle={},BOOT_T=Date.now();
+// returns true when the personality said something
+function personaOn(kind,opt){
+  opt=opt||{};const now=Date.now();
+  if(document.hidden)return false;
+  if(kind==="fast"||kind==="noWater"){if(now-BOOT_T<6000||now-(throttle[kind]||0)<15*60000)return false}
+  if(kind==="drink"&&(now-lastEventSay<2500||Math.random()>.45))return false;
+  if(kind==="water"&&Math.random()>.75)return false;
+  const line=personaLine(kind,opt.drink?{drinkname:opt.drink.name.toLowerCase()}:null);
+  if(!line)return false;
+  if(kind==="fast"||kind==="noWater")throttle[kind]=now;
+  say(line);return true;
+}
+window.personaOn=personaOn;
+window.personaPoke=()=>{
+  tapTimes.push(Date.now());tapTimes=tapTimes.filter(t=>Date.now()-t<3000);
+  if(tapTimes.length>=7){tapTimes=[];setTimeout(()=>reactTo("spin"),20);return personaLine("secret")}
+  return personaLine("poke");
+};
+let tapTimes=[];
+window.personaIdle=L=>{
+  if(isHang)return SET.persona==="classic"?null:personaLine("morning");
+  if(L>=6)return null;
+  const r=Math.random();
+  if(!SET.budget&&r<.08)return personaLine("nobudget");
+  if(SET.persona==="classic")return null;
+  if(window.HIGH>0&&r<.3)return personaLine("joint");
+  return personaLine("idle");
+};
+// little personality "bits" now and then
+let nextBit=Date.now()+30000+Math.random()*30000;
+setInterval(()=>{
+  if(SET.persona==="classic"||document.hidden||(window.RAG&&RAG.active)||curIdx>=6)return;
+  if(Date.now()<nextBit)return;
+  nextBit=Date.now()+35000+Math.random()*40000;
+  reactTo(PERSONAS[SET.persona].bit);
+},1000);
+// scene easter eggs
+window.sceneTap=t=>{
+  if(!t||!t.closest)return false;
+  if(t.closest(".board")){boardCrash();return true}
+  if(t.closest(".clock")){clockRing();return true}
+  return false;
+};
+function boardCrash(){
+  const ch=document.querySelector("#guy .board .chart"),ar=document.querySelector("#guy .board .arrow"),tx=document.querySelector("#guy .board text");
+  if(!ch||ch.dataset.crashed)return;
+  const d0=ch.getAttribute("d"),a0=ar&&ar.getAttribute("d"),t0=tx&&tx.textContent;
+  ch.dataset.crashed="1";ch.setAttribute("d","M238 72 L250 78 L258 74 L270 88 L290 97");if(ar)ar.setAttribute("d","M284 97 h6 v-6");if(tx)tx.textContent="Q4 CANCELLED";
+  ch.style.stroke="#e5322a";
+  say(wrapLine(["Q4 is cancelled. Effective immediately.","Who touched the chart?! That was our best quarter.","Ah. So that's where the money went."][Math.floor(Math.random()*3)],26));
+  setTimeout(()=>{ch.setAttribute("d",d0);if(ar)ar.setAttribute("d",a0);if(tx)tx.textContent=t0;ch.style.stroke="";delete ch.dataset.crashed},6000);
+}
+function clockRing(){
+  const g=$("guy");g.classList.add("ring");setTimeout(()=>g.classList.remove("ring"),1300);
+  reactTo("panic");
+  say(wrapLine(["BRRRING! Is it Monday already?!","Don't look at the time. Look at the budget.","Time flies when your money does."][Math.floor(Math.random()*3)],26));
+}
+let wished="";
+window.elevenEleven=()=>{const k=new Date().toDateString()+new Date().getHours();if(wished===k)return;wished=k;say(wrapLine("It's 11:11. I wish for a bigger budget.",26))};
+
+// =================== Stage 1: Financial Grim Reaper ===================
+let budgetStage=0;
+const NIGHT_KEY="bartab-night";
+function nightState(){
+  const start=log.length?log[0].t:0;let st=null;
+  try{st=JSON.parse(localStorage.getItem(NIGHT_KEY)||"null")}catch(e){}
+  if(!st||st.start!==start)st={start,stage:null,exact:false};
+  return st;
+}
+function saveNightState(st){try{localStorage.setItem(NIGHT_KEY,JSON.stringify(st))}catch(e){}}
+function stageFor(pct){if(pct==null)return 0;const th=SET.thresholds;return pct>=th[3]*1.15?5:pct>=th[3]?4:pct>=th[2]?3:pct>=th[1]?2:pct>=th[0]?1:0}
+function updateBudget(cost){
+  const has=SET.budget>0,pct=has?cost/SET.budget*100:null,stg=has&&log.length?stageFor(pct):0;
+  const st=nightState();
+  if(st.stage===null){st.stage=stg;saveNightState(st)}
+  else if(stg>st.stage){st.stage=stg;saveNightState(st);setTimeout(()=>grimEvent(stg),60)}
+  else if(stg<st.stage){st.stage=stg;saveNightState(st)}
+  budgetStage=stg;
+  if(has&&log.length&&Math.abs(cost-SET.budget)<0.005&&!st.exact){st.exact=true;saveNightState(st);setTimeout(()=>{lastEventSay=Date.now();say(wrapLine("Exactly on budget. Accountants everywhere are weeping with joy.",26))},80)}
+  const wm=$("walletMeter");
+  if(!has||!log.length){wm.style.display="none";return}
+  wm.style.display="";
+  const left=Math.max(0,100-pct/SET.thresholds[3]*100);
+  $("wmFill").setAttribute("width",(68*left/100).toFixed(1));
+  $("wmText").textContent=stg>=5?"Wallet: R.I.P.":stg===4?"Wallet: budget hit":`Wallet: ${Math.round(left)}% left`;
+}
+const SVGNS="http://www.w3.org/2000/svg";
+function smk(tag,attrs,parent){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||$("fx")).appendChild(e);return e}
+function sanim(el,kf,o){try{const a=el.animate(kf,o);a.onfinish=()=>{if(o.rm)el.remove()};return a}catch(e){if(o.rm)setTimeout(()=>el.remove(),(o.duration||0)+(o.delay||0))}}
+function headPoint(){const g=$("guy"),h=document.querySelector(window.RAG&&RAG.active?"#rag .head":"#guy .fig .head");try{const a=g.getScreenCTM(),b=h.getScreenCTM();return new DOMPoint(160,62).matrixTransform(a.inverse().multiply(b))}catch(e){return {x:160,y:62}}}
+function sceneShake(p){const sc=document.querySelector("#guy g[clip-path]");const kf=[];for(let k=0;k<7;k++){const s=p*(1-k/7);kf.push({transform:`translate(${(Math.random()*2-1)*s}px,${(Math.random()*2-1)*s}px)`})}kf.push({transform:"translate(0,0)"});sanim(sc,kf,{duration:340})}
+function grimEvent(s){
+  lastEventSay=Date.now();
+  const busy=(window.RAG&&RAG.active)||(window.GAMES&&GAMES.active())||curIdx>=6;
+  const line=personaLine("budget"+s);if(line)say(line);
+  if(s===1){
+    const t=smk("text",{class:"fx-pts",x:60,y:48});t.textContent="CHA-CHING!";sanim(t,[{transform:"translateY(0)",opacity:1},{transform:"translateY(-14px)",opacity:0}],{duration:1300,rm:1});
+    for(let k=0;k<5;k++){const c=smk("circle",{class:"fx-coin",cx:22,cy:20,r:3});sanim(c,[{transform:"translate(0,0)"},{transform:`translate(${8+k*9}px,-${14+k*3}px)`,offset:.4},{transform:`translate(${14+k*12}px,40px)`,opacity:0}],{duration:900+k*90,easing:"ease-in",rm:1})}
+  }else if(s===2){
+    if(!busy)reactTo("wallet");
+    const p=headPoint(),t=smk("text",{class:"fx-pts",x:p.x+22,y:p.y-8});t.textContent="gulp.";sanim(t,[{opacity:0},{opacity:1,offset:.2},{opacity:0,transform:"translateY(-10px)"}],{duration:1600,rm:1});
+  }else if(s===3){
+    if(!busy)reactTo("panic");sceneShake(3);
+    const p=headPoint();
+    for(let k=0;k<8;k++){const t=smk("text",{class:"fx-dollar",x:p.x+(Math.random()*30-15),y:p.y-6});t.textContent="$";sanim(t,[{transform:"translate(0,0)",opacity:1},{transform:`translate(${Math.random()*20-10}px,${40+Math.random()*30}px)`,opacity:0}],{duration:900+Math.random()*500,delay:k*90,easing:"ease-in",fill:"backwards",rm:1})}
+  }else if(s===4){
+    sceneShake(6);
+    const fl=smk("rect",{class:"fx-flash",width:320,height:220,opacity:0});sanim(fl,[{opacity:0},{opacity:.35,offset:.25},{opacity:0}],{duration:600,rm:1});
+    const g=smk("g",{class:"fx-stamp",transform:"translate(160 92) rotate(-11)"}),inner=smk("g",{},g);
+    smk("rect",{x:-74,y:-19,width:148,height:36,rx:4},inner);const tx=smk("text",{y:9},inner);tx.textContent="BUDGET HIT";
+    sanim(inner,[{transform:"scale(2.2)",opacity:0},{transform:"scale(1)",opacity:1,offset:.12},{transform:"scale(1)",opacity:1,offset:.85},{transform:"scale(1)",opacity:0}],{duration:2800,rm:0});
+    setTimeout(()=>g.remove(),2850);
+    if(!busy&&window.knockOver)setTimeout(()=>{if(!(window.RAG&&RAG.active))knockOver(0)},700);
+  }else if(s===5){
+    sceneShake(5);
+    if(SET.persona==="reaper")setTimeout(()=>say("Ah. My colleague."),1200);
+    const gh=smk("g",{}),body=smk("g",{},gh);
+    smk("path",{class:"gh-cloak",d:"M0 -40 C-14 -40 -18 -22 -18 -8 L-24 30 Q-12 24 -8 32 Q0 24 6 32 Q12 24 22 30 L18 -8 C18 -22 14 -40 0 -40Z"},body);
+    smk("ellipse",{class:"gh-face",cx:0,cy:-22,rx:8,ry:9},body);smk("circle",{class:"gh-eye",cx:-3,cy:-23,r:2},body);smk("circle",{class:"gh-eye",cx:3,cy:-23,r:2},body);
+    smk("path",{class:"gh-staff",d:"M17 -52 L22 30"},body);smk("path",{class:"gh-blade",d:"M17 -51 q-27 -7 -38 12 q17 -7 38 -6z"},body);
+    const w=smk("g",{opacity:0},body);smk("rect",{class:"wm-w",x:-26,y:-2,width:16,height:12,rx:2},w);smk("path",{class:"wm-flap",d:"M-26 2 H-10 V6 H-15 a2 2 0 0 1 0 -4"},w);
+    sanim(gh,[{transform:"translate(-50px,120px)"},{transform:"translate(128px,112px)",offset:.38},{transform:"translate(132px,108px)",offset:.55},{transform:"translate(380px,70px)"}],{duration:3800,easing:"ease-in-out",rm:1});
+    sanim(body,[{transform:"translateY(0)"},{transform:"translateY(-5px)"},{transform:"translateY(0)"}],{duration:900,iterations:5});
+    sanim(w,[{opacity:0},{opacity:0,offset:.48},{opacity:1,offset:.52},{opacity:1}],{duration:3800,fill:"forwards"});
+    const tomb=smk("g",{class:"tomb",transform:"translate(52 200)"}),tin=smk("g",{},tomb);
+    smk("path",{d:"M-17 0 V-27 Q-17 -42 0 -42 Q17 -42 17 -27 V0Z"},tin);
+    const t1=smk("text",{y:-26},tin);t1.textContent="R.I.P.";const t2=smk("text",{y:-15},tin);t2.textContent="WALLET";
+    sanim(tin,[{transform:"translateY(46px)"},{transform:"translateY(0)",offset:.08},{transform:"translateY(0)",offset:.9},{transform:"translateY(46px)"}],{duration:9000,easing:"ease-out",rm:0});
+    setTimeout(()=>tomb.remove(),9050);
+  }
+}
+
+// =================== Stage 1: Morning After Report ===================
+function hashStr(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0}
+function rngFrom(seed){let a=seed||1;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const VERDICTS={
+  dry:["A night with zero drinks logged. Your wallet is throwing you a parade.","No alcohol logged. The bartender is confused and slightly hurt.","Zero drinks. Your liver sent a thank-you card. It's in the mail.","A dry night. Somewhere, a savings account is smiling.","Nothing logged but good decisions. Suspicious, but impressive."],
+  wayOver:["Last night you spent {cost} against a {budget} budget. Your wallet has officially requested counseling.","You went {overPct}% over budget. The bartender is naming a boat after you.","{cost} spent. Budget: {budget}. The math has been reported to the authorities.","Your budget said {budget}. Your night said no. Your bank said please stop.","Over budget by {over}. Your wallet has been moved to intensive care."],
+  over:["You beat your budget by {over}. Not the good kind of beating.","{cost} against a {budget} budget. Close, but your wallet still felt it.","Over by {over}. A small crime, but the court has noticed.","You overshot the budget by {over}. Your wallet would like a word.","Just over budget. Your wallet survived, but it's limping."],
+  close:["{cost} of your {budget} budget. You flew close to the sun and didn't melt. Barely.","Under budget with {left} to spare. Your wallet is nervously applauding.","Under budget by {left}. A narrow escape worthy of an action movie.","So close to the limit, yet technically innocent.","Under budget, just. Your wallet is breathing into a paper bag, but it's alive."],
+  under:["{cost} spent, comfortably under {budget}. Your wallet slept soundly.","Under budget by {left}. Responsible AND fun? Who are you?","You kept {left} of your budget. That's a whole future pizza.","A balanced night. Your accountant didn't even wake up.","Under budget. Your wallet would like to formally thank you."],
+  wayUnder:["Only {cost} of a {budget} budget. Your wallet is planning a vacation.","You spent less than half your budget. Are you okay? Blink twice.","{left} still in the bank. Financial escape artist behavior.","Way under budget. The bartender is wondering where you went.","Half the budget untouched. Your future self just high-fived you."],
+  noBudget:["{cost} spent and no budget to blame. Bold.","No budget, no rules, {cost} gone. Your wallet didn't get a vote.","{cost} on the tab. Next time set a budget so I can judge you properly.","{drinks} drinks, {cost}, zero budget. Living dangerously, financially speaking.","You spent {cost}. Without a budget that's neither good nor bad. It's just gone."],
+  bigNoBudget:["{cost} with no budget in sight. Your wallet has officially requested counseling.","You spent {cost}. The bartender's kids thank you for their college fund.","{cost}. No budget. No survivors.","Congratulations. You've personally funded the bartender's retirement."]
+};
+const FAV_LINES={beer:"Beer loyalist: {favCount} beers.",light:"Light beer ×{favCount}. Calorie-conscious chaos.",stout:"{favCount} stouts. A dark and heavy commitment.",rum:"Rum & mix ×{favCount}. Tropical and fiscally irresponsible.",shot:"{favCount} shots. Each one a tiny bad idea.",wine:"Wine ×{favCount}. Classy. Expensive. Classy-expensive.",double:"Doubles ×{favCount}. You ordered efficiency.",espresso:"Espresso martini ×{favCount}. Awake AND broke.",whisky:"Whisky ×{favCount}. Distinguished. Possibly a pirate."};
+function reportFacts(s){
+  const sym=s.currency||"BZ$",ent=s.entries||[];
+  const drinks=ent.filter(e=>e.id!=="water"&&e.id!=="joint"),water=ent.filter(e=>e.id==="water").length,joints=ent.filter(e=>e.id==="joint").length;
+  const cost=drinks.reduce((a,e)=>a+(e.p||0),0),counts={};
+  drinks.forEach(e=>{counts[e.id]=(counts[e.id]||0)+1});
+  let fav=null,favCount=0;drinks.forEach(e=>{if(counts[e.id]>favCount||(counts[e.id]===favCount&&fav!==e.id&&false)){fav=e.id;favCount=counts[e.id]}});
+  let maxE=null;drinks.forEach(e=>{if(!maxE||(e.p||0)>(maxE.p||0))maxE=e});
+  const dms=Math.max(0,s.end-s.start);
+  return {sym,drinks:drinks.length,water,joints,cost,fav,favCount,favName:fav?(DRINKS.find(d=>d.id===fav)||{name:fav}).name:"",
+    budget:s.budget>0?s.budget:null,durMs:dms,dur:dur(dms),maxE,auto:s.closed==="auto",start:s.start,end:s.end};
+}
+function verdictFor(s){
+  const f=reportFacts(s),rng=rngFrom(hashStr(s.id||String(s.start))),pickR=a=>a[Math.floor(rng()*a.length)];
+  const m=v=>fmtMoney(v,f.sym);
+  let cat;
+  if(!f.drinks)cat="dry";
+  else if(f.budget){const r=f.cost/f.budget;cat=r>1.5?"wayOver":r>1?"over":r>=.8?"close":r<=.5?"wayUnder":"under"}
+  else cat=f.cost>=100?"bigNoBudget":"noBudget";
+  const vars={cost:m(f.cost),budget:f.budget?m(f.budget):"",over:f.budget?m(Math.max(0,f.cost-f.budget)):"",left:f.budget?m(Math.max(0,f.budget-f.cost)):"",
+    overPct:f.budget?Math.round((f.cost/f.budget-1)*100):0,drinks:f.drinks,water:f.water,fav:f.favName,favCount:f.favCount,dur:f.dur};
+  const headline=fillVars(pickR(VERDICTS[cat]),vars);
+  const cand=[];
+  if(f.drinks>=2&&!f.water)cand.push(pickR(["Water logged: zero. Your kidneys have filed a formal complaint.","Not one water all night. The ocean is offended."]));
+  if(f.drinks&&f.water>=Math.ceil(f.drinks/2))cand.push(fillVars(pickR(["{water} waters for {drinks} drinks. Hydration royalty behavior.","Solid water game. Your morning self says thanks."]),vars));
+  if(f.fav&&f.favCount>=2)cand.push(fillVars(FAV_LINES[f.fav]||"Favourite: {fav} ×{favCount}.",vars));
+  if(f.durMs>=5*36e5)cand.push(fillVars("The night lasted {dur}. That's a work shift. Unpaid.",vars));
+  else if(f.drinks&&f.durMs<36e5&&f.drinks>1)cand.push(fillVars("Over in {dur}. Short, efficient, mysterious.",vars));
+  if(f.cost>0&&f.durMs>=36e5)cand.push(`That's about ${m(f.cost/(f.durMs/36e5))} an hour. Like a job, but in reverse.`);
+  if(f.maxE&&f.drinks>=2)cand.push(`Priciest pick: ${(DRINKS.find(d=>d.id===f.maxE.id)||{name:f.maxE.id}).name} at ${m(f.maxE.p||0)}.`);
+  if(f.joints)cand.push(`${f.joints} joint${f.joints>1?"s":""} logged too. The plant sends its regards.`);
+  if(f.auto)cand.push("Saved automatically after 8 quiet hours. You were clearly busy. Sleeping.");
+  for(let i=cand.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[cand[i],cand[j]]=[cand[j],cand[i]]}
+  const P=PERSONAS[s.persona]||PERSONAS[SET.persona]||PERSONAS.classic;
+  return {f,cat,headline,findings:cand.slice(0,3),signer:P.name,signoff:fillVars(pickR(P.morning),vars)};
+}
+// ---- share card (drawn on a canvas, no libraries) ----
+function wrapCanvas(ctx,text,maxW){const words=text.split(" "),lines=[];let cur="";words.forEach(w=>{const t=cur?cur+" "+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t});if(cur)lines.push(cur);return lines}
+function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+async function drawCard(v){
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  try{if(document.fonts)await Promise.race([Promise.all([document.fonts.load('800 120px "Big Shoulders Display"'),document.fonts.load('700 40px "Manrope"')]),new Promise(r=>setTimeout(r,1500))])}catch(e){}
+  const D='"Big Shoulders Display", Impact, "Arial Narrow", sans-serif',B='Manrope, system-ui, -apple-system, "Segoe UI", sans-serif';
+  const f=v.f,m=n=>fmtMoney(n,f.sym);
+  x.fillStyle="#17110c";x.fillRect(0,0,W,H);
+  const g=x.createRadialGradient(W*.85,40,40,W*.85,40,760);g.addColorStop(0,"rgba(224,138,60,.38)");g.addColorStop(1,"rgba(224,138,60,0)");x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.textBaseline="alphabetic";
+  x.fillStyle="#e08a3c";x.font=`700 30px ${B}`;x.fillText("BAR TAB",80,104);
+  const fit=(txt,weight,size,fam,maxW,min)=>{let s=size;x.font=`${weight} ${s}px ${fam}`;while(x.measureText(txt).width>maxW&&s>min){s-=2;x.font=`${weight} ${s}px ${fam}`}return s};
+  x.fillStyle="#f2e8da";fit("THE MORNING AFTER",800,124,D,920,60);x.fillText("THE MORNING AFTER",76,226);
+  const dt=new Date(f.start).toLocaleDateString([],{weekday:"long",month:"long",day:"numeric"});
+  x.fillStyle="#a8957d";const dl=`${dt} · ${fmtTime(f.start)} – ${fmtTime(f.end)}`;fit(dl,600,36,B,920,24);x.fillText(dl,80,290);
+  // money + wallet mood
+  x.fillStyle="#f2e8da";fit(m(f.cost),800,168,D,740,80);x.fillText(m(f.cost),76,470);
+  x.fillStyle="#a8957d";x.font=`600 34px ${B}`;x.fillText("spent",82,520);
+  const over=f.budget&&f.cost>f.budget;
+  let pill=f.budget?(over?`Over budget by ${m(f.cost-f.budget)}`:`Under budget by ${m(f.budget-f.cost)}`):"No budget set";
+  x.font=`700 32px ${B}`;const pw=x.measureText(pill).width+48;
+  rrect(x,200,488,pw,52,26);x.fillStyle=f.budget?(over?"#5a1d1a":"#1d3d26"):"#2c241c";x.fill();
+  x.fillStyle=f.budget?(over?"#ff8a80":"#7bd88f"):"#c7b59c";x.fillText(pill,224,525);
+  // wallet glyph
+  (function(){const wx=850,wy=330;x.save();x.translate(wx,wy);
+    rrect(x,0,0,150,112,18);x.fillStyle="#8a5f3c";x.fill();x.lineWidth=5;x.strokeStyle="#4e3420";x.stroke();
+    rrect(x,0,30,150,40,10);x.fillStyle="#6f4a2c";x.fill();
+    x.fillStyle="#e0c070";x.beginPath();x.arc(118,50,8,0,7);x.fill();
+    x.strokeStyle="#2a1a0f";x.fillStyle="#2a1a0f";x.lineWidth=6;x.lineCap="round";
+    if(over||(!f.budget&&f.cost>=100)){[[38,84],[72,84]].forEach(([a,b])=>{x.beginPath();x.moveTo(a-8,b-8);x.lineTo(a+8,b+8);x.moveTo(a+8,b-8);x.lineTo(a-8,b+8);x.stroke()});x.beginPath();x.moveTo(40,104);x.quadraticCurveTo(55,96,70,104);x.stroke()}
+    else{x.beginPath();x.arc(40,84,6,0,7);x.arc(72,84,6,0,7);x.fill();x.beginPath();x.moveTo(40,98);x.quadraticCurveTo(56,110,72,98);x.stroke()}
+    x.restore()})();
+  // stats
+  const stats=[["DRINKS",String(f.drinks)],["WATER",String(f.water)],["FAVORITE",f.fav?`${f.favName} ×${f.favCount}`:"None"],["DURATION",f.dur]];
+  stats.forEach(([k,val],i)=>{const bx=80+(i%2)*470,by=600+Math.floor(i/2)*170;
+    rrect(x,bx,by,450,150,22);x.fillStyle="#231a12";x.fill();
+    x.fillStyle="#a8957d";x.font=`700 26px ${B}`;x.fillText(k,bx+30,by+48);
+    let fs=76;x.font=`800 ${fs}px ${D}`;while(x.measureText(val).width>390&&fs>36){fs-=4;x.font=`800 ${fs}px ${D}`}
+    x.fillStyle="#f2e8da";x.fillText(val,bx+28,by+122)});
+  // verdict
+  x.fillStyle="#e08a3c";x.font=`800 110px ${D}`;x.fillText("“",74,1040);
+  let vs=44;x.font=`700 ${vs}px ${B}`;let lines=wrapCanvas(x,v.headline,850);
+  while(lines.length>4&&vs>32){vs-=3;x.font=`700 ${vs}px ${B}`;lines=wrapCanvas(x,v.headline,850)}
+  x.fillStyle="#f2e8da";lines.slice(0,4).forEach((l,i)=>x.fillText(l,142,1022+i*(vs*1.28)));
+  x.fillStyle="#a8957d";x.font=`600 30px ${B}`;x.fillText(`Verdict by ${v.signer}`,90,1286);
+  x.textAlign="right";x.fillStyle="#e08a3c";x.font=`800 34px ${D}`;x.fillText("BAR TAB",W-80,1286);x.textAlign="left";
+  return c;
+}
+let reportCtx=null,lastFocus=null;
+async function openReport(s){
+  const v=verdictFor(s);reportCtx={s,v,blob:null};
+  lastFocus=document.activeElement;
+  $("rpTitle").textContent=new Date(s.start).toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"});
+  const tx=$("rpText");tx.textContent="";
+  const p=document.createElement("p");p.className="rp-verdict";p.textContent=v.headline;tx.appendChild(p);
+  const facts=document.createElement("p");const f=v.f;
+  facts.textContent=`${f.drinks} ${f.drinks===1?"drink":"drinks"} · ${fmtMoney(f.cost,f.sym)} · ${f.water} water · ${f.dur}${f.fav?` · most logged: ${f.favName}`:""}${f.budget?` · budget ${fmtMoney(f.budget,f.sym)}`:" · no budget set"}`;
+  tx.appendChild(facts);
+  if(v.findings.length){const ul=document.createElement("ul");v.findings.forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.appendChild(li)});tx.appendChild(ul)}
+  const sg=document.createElement("p");sg.className="rp-sign";sg.textContent=`“${v.signoff}” — ${v.signer}`;tx.appendChild(sg);
+  $("rpMsg").textContent="";$("rpImg").removeAttribute("src");$("rpImg").alt="";$("rpWait").hidden=false;
+  $("rpShare").hidden=!(navigator.canShare&&navigator.share);
+  $("reportWrap").hidden=false;$("rpClose").focus();
+  if(s.reportSeen===false){s.reportSeen=true;saveSessions()}
+  try{localStorage.setItem("bartab-report-seen",s.id);sessionStorage.setItem("bartab-report-seen",s.id)}catch(e){}
+  try{
+    const c=await drawCard(v);
+    const url=c.toDataURL("image/png");if(reportCtx&&reportCtx.s===s){$("rpImg").src=url;$("rpImg").alt=`Morning After report card: ${v.headline}`;$("rpWait").hidden=true}
+    c.toBlob(b=>{if(reportCtx&&reportCtx.s===s)reportCtx.blob=b},"image/png");
+  }catch(e){$("rpWait").textContent="Couldn't draw the image on this device. The report text is below."}
+}
+window.openReport=openReport;
+function closeReport(){$("reportWrap").hidden=true;reportCtx=null;if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+function reportText(){const v=reportCtx.v,f=v.f;return `The Morning After — ${new Date(f.start).toLocaleDateString()}\n${v.headline}\n${f.drinks} drinks · ${fmtMoney(f.cost,f.sym)} · ${f.water} water · ${f.dur}\n${v.findings.join("\n")}\n— ${v.signer}, Bar Tab`}
+const cardName=()=>`bar-tab-morning-after-${new Date(reportCtx.s.start).toISOString().slice(0,10)}.png`;
+async function saveCard(){
+  if(!reportCtx||!reportCtx.blob){$("rpMsg").textContent="The image is still drawing. Try again in a second.";return}
+  try{const dl=window.claude&&typeof claude.use==="function"?await claude.use("downloads"):null;
+    if(dl){await dl.save({filename:cardName(),data:reportCtx.blob});$("rpMsg").textContent="Image saved.";return}}
+  catch(e){if(e&&e.code==="declined"){$("rpMsg").textContent="Image not saved.";return}}
+  try{const url=URL.createObjectURL(reportCtx.blob),a=document.createElement("a");a.href=url;a.download=cardName();document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);$("rpMsg").textContent="Image saved to your downloads."}
+  catch(e){$("rpMsg").textContent="This browser blocked the download. Press and hold the image to save it instead."}
+}
+function initStage1(){
+  const sel=$("persona");sel.value=PERSONAS[SET.persona]?SET.persona:"classic";
+  sel.onchange=()=>{SET.persona=sel.value;saveSet();render();const l=personaLine("intro");if(l){say(l);lastEventSay=Date.now()}reactTo(PERSONAS[SET.persona].bit)};
+  $("rpClose").onclick=closeReport;
+  $("reportWrap").addEventListener("click",e=>{if(e.target===$("reportWrap"))closeReport()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("reportWrap").hidden)closeReport()});
+  $("rpSave").onclick=saveCard;
+  $("rpShare").onclick=async()=>{
+    if(!reportCtx||!reportCtx.blob){$("rpMsg").textContent="The image is still drawing. Try again in a second.";return}
+    const file=new File([reportCtx.blob],cardName(),{type:"image/png"});
+    try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"My Morning After",text:reportCtx.v.headline});return}
+      await navigator.share({title:"My Morning After",text:reportText()})}
+    catch(e){if(e&&e.name==="AbortError")return;saveCard()}
+  };
+  $("rpCopy").onclick=()=>{const t=reportText();try{navigator.clipboard.writeText(t).then(()=>{$("rpMsg").textContent="Report text copied."},()=>{$("rpMsg").textContent="Copying was blocked on this device."})}catch(e){$("rpMsg").textContent="Copying was blocked on this device."}};
+  // a fresh report waits for you the next morning
+  const ls=latestSession();
+  let seenId=null;try{seenId=localStorage.getItem("bartab-report-seen")||sessionStorage.getItem("bartab-report-seen")}catch(e){}
+  if(ls&&ls.reportSeen===false&&seenId===ls.id){ls.reportSeen=true;saveSessions()}
+  if(ls&&ls.reportSeen===false){
+    if(Date.now()-ls.end>=3*36e5){setTimeout(()=>{openReport(ls);const l=personaLine("morning");if(l)say(l)},400)}
+    else if($("notice").hidden)showNotice(`Your report for ${nightLabel(ls)} is ready.`,false,ls);
+  }
+}
+
+function showNotice(text,withView,sess){const n=document.getElementById("notice");if(!n)return;document.getElementById("noticeText").textContent=text;document.getElementById("noticeView").hidden=!withView;const rb=document.getElementById("noticeReport");if(rb){rb.hidden=!sess;rb.dataset.id=sess?sess.id:""}n.hidden=false}
 const $=id=>document.getElementById(id);
 const fmtTime=t=>new Date(t).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 
@@ -1487,7 +1997,7 @@ DRINKS.forEach(d=>{
   const b=document.createElement("button");
   b.id="add-"+d.id;
   b.innerHTML=`<span class="n" data-n="${d.id}">0</span><b>${d.name}</b><small>${d.desc} · ${std(d).toFixed(1)} std</small>`;
-  b.onclick=()=>{logPush({id:d.id,t:Date.now(),s:std(d),p:SET.prices[d.id]});save();render();reactTo("drink")};
+  b.onclick=()=>{logPush({id:d.id,t:Date.now(),s:std(d),p:SET.prices[d.id]});save();render();reactTo("drink");personaOn("drink",{drink:d})};
   d.btn=b;
   grid.appendChild(b);
 });
@@ -1539,9 +2049,9 @@ $("weight").value=SET.weight;
 $("weight").oninput=ev=>{const v=parseFloat(ev.target.value);if(v>=80&&v<=450){SET.weight=v;saveSet();render()}};
 $("food").checked=SET.food;
 $("food").onchange=ev=>{SET.food=ev.target.checked;saveSet();render()};
-$("wbBtn").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water")};
-$("joint").onclick=()=>{logPush({id:"joint",t:Date.now()});save();render();say(["Ohhh yeah...","Puff puff pass.","Now THIS is a party."][Math.floor(Math.random()*3)])};
-$("water").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water")};
+$("wbBtn").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water");personaOn("water")};
+$("joint").onclick=()=>{logPush({id:"joint",t:Date.now()});save();render();if(!personaOn("joint"))say(["Ohhh yeah...","Puff puff pass.","Now THIS is a party."][Math.floor(Math.random()*3)])};
+$("water").onclick=()=>{logPush({id:"water",t:Date.now()});save();render();reactTo("water");personaOn("water")};
 $("undo").onclick=()=>{log.pop();save();render()};
 $("reset").onclick=()=>{
   if(!log.length){$("confirmText").textContent="Nothing logged tonight, so there's nothing to save.";$("yes").hidden=true;$("no").textContent="OK"}
@@ -1550,10 +2060,11 @@ $("reset").onclick=()=>{
 $("no").onclick=()=>{$("confirm").hidden=true};
 $("yes").onclick=()=>{
   const s=archiveNight("manual");$("confirm").hidden=true;
-  if(s){render();renderHistory();if(window.resetProps)resetProps();showNotice(`Saved ${nightLabel(s)} to History. New night started.`,true)}
+  if(s){render();renderHistory();if(window.resetProps)resetProps();showNotice(`Saved ${nightLabel(s)} to History. New night started.`,true,s);personaOn("end",{force:true})}
 };
 $("noticeClose").onclick=()=>{$("notice").hidden=true};
 $("noticeView").onclick=()=>{$("notice").hidden=true;openHistory()};
+$("noticeReport").onclick=e=>{const s=sessions.find(x=>x.id===e.currentTarget.dataset.id);$("notice").hidden=true;if(s)openReport(s)};
 function openHistory(){
   const tab=document.querySelector('[data-phone-tab="history"]');
   if(tab&&getComputedStyle(tab).display!=="none")tab.click();else $("history").scrollIntoView({behavior:"smooth",block:"start"});
@@ -1595,7 +2106,9 @@ function render(){
      bs.hidden=false;$("budgetPct").textContent=Math.round(pct)+"%";$("budgetAmt").textContent=fmtMoney(SET.budget);
      bs.classList.toggle("warn",pct>=th[1]&&pct<th[3]);bs.classList.toggle("over",pct>=th[3]);
      window.BUDGET_PCT=pct}
-   else{bs.hidden=true;window.BUDGET_PCT=null}}
+   else{bs.hidden=true;window.BUDGET_PCT=null}
+   updateBudget(cost);
+}
   const s=drinks.reduce((a,e)=>a+(e.s!=null?e.s:std(DRINKS.find(d=>d.id===e.id))),0);
   $("total").textContent=total;
   $("tally").textContent=tally(total);
@@ -1609,6 +2122,8 @@ function render(){
     $("since").textContent=`Started ${fmtTime(drinks[0].t)} · ${Math.floor(mins/60)}h ${mins%60}m`;
   }else $("since").textContent="No drinks yet";
   $("rate").textContent=rate.toFixed(1);
+  if(total&&rate>2)personaOn("fast");
+  if(since>=3)personaOn("noWater");
   const p=$("pace");
   if(!total){p.textContent="Steady pace";p.className="pace"}
   else if(rate>2){p.textContent="Fast pace — maybe grab a water";p.className="pace high"}
@@ -1629,9 +2144,10 @@ function render(){
   $("barwrap").setAttribute("aria-valuenow",inBody.toFixed(1));
   document.querySelector(".meter").classList.toggle("danger",idx>=4);
   const guy=$("guy");
-  let peak=0,cum=0;
-  drinks.forEach(e=>{cum+=(e.s!=null?e.s:std(DRINKS.find(d=>d.id===e.id)));peak=Math.max(peak,cum-(e.t-drinks[0].t)/36e5)});
-  isHang=total>0&&idx===0&&peak*(170/SET.weight)*(SET.food?.8:1)>4.5;
+  let hsrc=null;
+  if(total)hsrc=nightPeak(log,SET.weight,SET.food);
+  else{const ls=latestSession();if(ls)hsrc=nightPeak(ls.entries,ls.weight,ls.food)}
+  isHang=!!hsrc&&idx===0&&hsrc.peak>4.5&&Date.now()-hsrc.lastT<HANG_MS;
   if(isHang){$("lvl").textContent="Hungover";$("msg").textContent="Big night. Water, food and a nap."}
   const needWater=since>=3&&idx<6&&!isHang;needW=needWater;
   $("wb").hidden=!needWater;
@@ -1644,7 +2160,7 @@ function render(){
     const name=window.HIGH<.8?"Chill":window.HIGH<1.6?"Baked":"Couch-locked";
     hl.hidden=false;hl.innerHTML=`Also high: <strong>${name}</strong> · wears off in about ${Math.floor(mm/60)}h ${mm%60}m. Weed and alcohol together hit harder than either alone.`;
   }else hl.hidden=true;
-  guy.setAttribute("class","guy l"+idx+(window.HIGH>0?" high":"")+(needWater?" needwater":"")+(isHang?" hangover":"")+(SET.look.beard==="Yes"?"":" nobeard")+(SET.look.hair==="Bald"?" bald":"")+(window.HURT&&performance.now()<window.HURT?" hurt":"")+(window.CHAIR_GONE?" nochair":""));
+  guy.setAttribute("class","guy l"+idx+(window.HIGH>0?" high":"")+(needWater?" needwater":"")+(isHang?" hangover":"")+(SET.look.beard==="Yes"?"":" nobeard")+(SET.look.hair==="Bald"?" bald":"")+(window.HURT&&performance.now()<window.HURT?" hurt":"")+(window.CHAIR_GONE?" nochair":"")+" persona-"+(SET.persona||"classic")+(budgetStage?" budget-s"+budgetStage:""));
   const set=(k,v)=>guy.style.setProperty(k,v);
   curIdx=idx;
   set("--lid",Math.max([0,.1,.2,.4,.5,.3,1][idx],window.HIGH>0?.5:0));
@@ -1715,6 +2231,7 @@ function nightCard(s){
   s.entries.forEach(e=>{const li=document.createElement("li");const a=document.createElement("span"),b=document.createElement("span");
     const dd=DRINKS.find(q=>q.id===e.id);a.textContent=dd?`${dd.name}${e.p?` · ${fmtMoney(e.p,sym)}`:""}`:e.id==="joint"?"Joint":"Water";b.textContent=fmtTime(e.t);li.append(a,b);ol.appendChild(li)});
   body.appendChild(ol);
+  const rpb=document.createElement("button");rpb.type="button";rpb.className="btn primary n-rep";rpb.textContent="Morning After report";rpb.onclick=()=>openReport(s);body.appendChild(rpb);
   const del=document.createElement("button");del.type="button";del.className="btn danger n-del";del.textContent="Delete this night";
   const cf=document.createElement("div");cf.className="confirm";cf.hidden=true;
   const cfT=document.createElement("span");cfT.textContent="Delete this night for good? Make a backup first if you might want it later.";
@@ -1727,6 +2244,7 @@ function nightCard(s){
   return d;
 }
 renderHistory();
+initStage1();
 // ---- Backup & restore ----
 const BK_KEYS=["bartab","bartab-set","bartab-abv","bartab-best","bartab-sessions"];
 function backupObject(){
@@ -1838,6 +2356,7 @@ try{const s=JSON.parse(localStorage.getItem("bartab-before-restore")||"null");if
   const t=document.getElementById("ckTime"),am=document.getElementById("ckAm"),pm=document.getElementById("ckPm");
   if(t)t.textContent=String(h%12||12).padStart(2," ")+colon+String(m).padStart(2,"0");
   if(am&&pm){am.classList.toggle("on",h<12);pm.classList.toggle("on",h>=12)}
+  if(h%12===11&&m===11&&window.elevenEleven)elevenEleven();
   setTimeout(tick,1000-d.getMilliseconds());
 })();
 </script>
