@@ -273,6 +273,85 @@ ol li span:last-child{color:var(--muted)}
 .rp-text{display:grid;gap:6px;font-size:.92rem;line-height:1.45}
 .rp-text .rp-verdict{font-weight:700;font-size:1.02rem}
 .rp-text ul{margin:0;padding-left:1.1em;color:var(--muted)}
+.note.carry{color:var(--accent);font-weight:600}
+.rp-more{display:flex;flex-wrap:wrap;gap:8px}.rp-more .btn{flex:1 1 auto}
+.n-tools{display:flex;flex-wrap:wrap;gap:8px}.n-tools .btn{flex:1 1 auto}
+/* ---------- shared sheet (case file + court) ---------- */
+.sheet-wrap{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,#120c08 72%,transparent);display:grid;place-items:center;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+.sheet{width:min(560px,100%);max-height:100%;overflow:auto;border-radius:16px;padding:16px;display:grid;grid-auto-rows:max-content;gap:14px;box-shadow:0 20px 60px #0007}
+.sh-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.sh-head .btn{flex-shrink:0;white-space:nowrap}
+.sh-head h2{margin:0;line-height:1.05;text-wrap:balance}
+.sh-body{display:grid;gap:14px}
+/* case file: manila folder, typewriter */
+.sheet.case{background:#eadcb8;color:#2b2114;border:1px solid #c9b383;font-family:"Courier New",Courier,ui-monospace,monospace;
+  background-image:repeating-linear-gradient(0deg,transparent 0 27px,rgba(120,90,40,.08) 27px 28px)}
+.sheet.case .sh-kicker{color:#8a2c1d;letter-spacing:.18em}
+.sheet.case .sh-head h2{font-size:1.45rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.sheet.case .btn{background:#f6eedb;color:#2b2114;border-color:#b9a274;font-family:var(--body)}
+.cf-meta{font-size:.85rem;color:#5d4b2e;line-height:1.5}
+.cf-label{font-size:.75rem;letter-spacing:.16em;color:#8a2c1d;font-weight:700;margin:0 0 6px}
+.cf-tags{display:flex;flex-wrap:wrap;gap:8px}
+.cf-tag{position:relative;background:#fbf5e4;border:1px solid #b9a274;border-radius:4px 10px 10px 4px;padding:6px 10px 6px 18px;font-size:.82rem;box-shadow:1px 2px 0 rgba(80,60,20,.18);transform:rotate(var(--r,0deg))}
+.cf-tag:before{content:"";position:absolute;left:6px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;border:1.5px solid #8b7a55;background:#eadcb8}
+.cf-tag b{color:#8a2c1d;margin-right:4px}
+.cf-time{list-style:none;margin:0;padding:0;display:grid;gap:0;border-left:2px dashed #a8925f;margin-left:4.5em}
+.cf-time li{position:relative;padding:7px 0 7px 14px;font-size:.88rem;line-height:1.4;opacity:0;animation:cfin .35s ease-out forwards;animation-delay:calc(var(--i,0)*45ms)}
+.cf-time li:before{content:"";position:absolute;left:-6px;top:13px;width:10px;height:10px;border-radius:50%;background:#2b2114}
+.cf-time li .t{position:absolute;left:-5.1em;width:4.6em;text-align:right;top:7px;font-size:.78rem;color:#6b5634;font-variant-numeric:tabular-nums}
+.cf-time li.money:before{background:#c08a1e} .cf-time li.alert{color:#8a1d12;font-weight:700} .cf-time li.alert:before{background:#c62d1f}
+.cf-time li.water:before{background:#2f7fb8} .cf-time li.gap{color:#6b5634;font-style:italic} .cf-time li.gap:before{background:#eadcb8;border:2px solid #6b5634;width:6px;height:6px}
+@keyframes cfin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.cf-quote{background:#fbf5e4;border:1px dashed #a8925f;padding:10px 12px;font-size:.88rem;line-height:1.45}
+.cf-quote span{display:block;font-size:.75rem;color:#6b5634;margin-top:4px}
+.cf-summary{position:relative;font-size:.92rem;line-height:1.5;padding-bottom:6px}
+.cf-stamp{display:inline-block;margin-top:10px;border:3px solid #c62d1f;color:#c62d1f;font:800 1.15rem var(--display);letter-spacing:.12em;padding:4px 12px;transform:rotate(-7deg);border-radius:4px;opacity:0;animation:stamp .45s cubic-bezier(.2,1.6,.4,1) forwards;animation-delay:var(--sd,.6s)}
+@keyframes stamp{from{opacity:0;transform:rotate(-7deg) scale(2.2)}to{opacity:.9;transform:rotate(-7deg) scale(1)}}
+/* court: wood panel, cream text */
+.sheet.court{background:#3a2419;color:#f3e6d0;border:1px solid #5a3a28;background-image:linear-gradient(180deg,rgba(255,255,255,.04),rgba(0,0,0,.12))}
+.sheet.court .sh-kicker{color:#e3b55a;letter-spacing:.18em}
+.sheet.court .sh-head h2{font-family:var(--display);font-weight:800;font-size:1.7rem;text-transform:uppercase;letter-spacing:.02em}
+.sheet.court .btn{background:#4d3022;color:#f3e6d0;border-color:#7a5238}
+.sheet.court .btn.primary{background:#e3b55a;color:#2a1a10;border-color:#e3b55a}
+.ct-scene{background:#2a1810;border-radius:12px;overflow:hidden}
+.ct-scene svg{display:block;width:100%;height:auto}
+.ct-sec h3{margin:0 0 6px;font:800 .78rem var(--body);letter-spacing:.16em;text-transform:uppercase;color:#e3b55a}
+.ct-sec ol,.ct-sec ul{margin:0;padding-left:1.2em;display:grid;gap:5px;font-size:.92rem;line-height:1.4}
+.ct-sec ul{color:#d8c6a8}
+.ct-verdict{background:#2a1810;border:1px solid #6b4630;border-radius:12px;padding:14px;display:grid;gap:8px;text-align:center}
+.ct-stamp{justify-self:center;border:3px solid currentColor;font:800 1.6rem var(--display);letter-spacing:.1em;padding:4px 14px;border-radius:6px;transform:rotate(-5deg);animation:stamp .45s cubic-bezier(.2,1.6,.4,1) both}
+.ct-stamp.guilty{color:#ff6b5e} .ct-stamp.innocent{color:#7bd88f} .ct-stamp.hung{color:#e3b55a}
+.ct-verdict .v{font-weight:700;font-size:1.02rem;line-height:1.4} .ct-verdict .sn{color:#d8c6a8;font-size:.92rem}
+.ct-verdict .jr{color:#e3b55a;font-style:italic;font-size:.88rem}
+.ct-actions{display:flex;flex-wrap:wrap;gap:8px}.ct-actions .btn{flex:1 1 auto}
+.ct-msg:empty{display:none} .ct-msg{color:#d8c6a8;font-size:.85rem;margin:0}
+.gavel{transform-box:fill-box;transform-origin:85% 85%}
+.gavel.bang{animation:bang .5s ease-in-out 2}
+@keyframes bang{0%,100%{transform:rotate(0)}45%{transform:rotate(-38deg)}60%{transform:rotate(6deg)}}
+.judge-head{transform-box:fill-box;transform-origin:50% 100%;animation:jnod 3.4s ease-in-out infinite}
+@keyframes jnod{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
+/* ---------- achievements ---------- */
+.ach{display:grid;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.ach-b{all:unset;box-sizing:border-box;cursor:pointer;display:grid;justify-items:center;gap:4px;padding:6px 2px;border-radius:10px;min-height:44px;min-width:44px;text-align:center}
+.ach-b:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.ach-b[aria-pressed="true"]{background:var(--line)}
+.ach-b svg{width:48px;height:52px;display:block}
+.ach-b span{font-size:.66rem;line-height:1.15;color:var(--muted);font-weight:700;max-width:72px;overflow-wrap:anywhere}
+.ach-b.on span{color:var(--fg)}
+.ach-detail{display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:10px;padding:10px 12px}
+.ach-detail svg{width:56px;height:60px;flex:none}
+.ach-detail b{display:block} .ach-detail p{margin:2px 0 0;color:var(--muted);font-size:.88rem;line-height:1.4}
+.ach-toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;background:#17110c;color:#f2e8da;border:1px solid #e08a3c;border-radius:14px;padding:8px 14px 8px 8px;box-shadow:0 10px 30px #0006;max-width:calc(100vw - 32px);cursor:pointer;animation:toastin .5s cubic-bezier(.2,1.4,.4,1)}
+.ach-toast svg{width:40px;height:44px;flex:none;animation:badgespin .9s ease-out}
+.ach-toast small{display:block;color:#e08a3c;font-size:.7rem;letter-spacing:.12em;font-weight:800;text-transform:uppercase}
+.ach-toast b{font-size:.95rem}
+body.modal-open .ach-toast{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);animation-name:toastup}
+@keyframes toastup{from{transform:translate(-50%,140%)}to{transform:translate(-50%,0)}}
+@keyframes toastin{from{transform:translate(-50%,-120%)}to{transform:translate(-50%,0)}}
+@keyframes badgespin{from{transform:rotateY(180deg) scale(.6)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.cf-time li,.cf-stamp,.ct-stamp,.ach-toast,.ach-toast svg{animation-duration:.01s!important;animation-delay:0s!important}}
+
 .rp-text .rp-sign{color:var(--muted);font-style:italic}
 .guy #fx,.guy .haze,.guy .dim,.guy .beams,.guy .notes,.guy .bubbles,.guy .confetti,.guy .plus,.guy .zzz,.guy .speech{pointer-events:none}
 .guy .pPlant.moved .plant{transform:none!important;transition:none}
@@ -459,7 +538,7 @@ button{ -webkit-tap-highlight-color:transparent }
 
   <section class="hero meter" data-phone-panel="guy">
     <button type="button" class="btn play-toggle" id="playToggle" aria-pressed="false">Enable dragging</button>
-    <p class="label" style="margin:0">How drunk you probably are · tap or drag him</p>
+    <p class="label" style="margin:0">How drunk you probably are (estimate) · tap or drag him</p>
     <svg class="guy l0" id="guy" viewBox="0 0 320 220" role="img" aria-label="A businessman relaxing at his desk">
       <defs>
         <clipPath id="frame"><rect width="320" height="220" rx="14"/></clipPath>
@@ -648,7 +727,8 @@ button{ -webkit-tap-highlight-color:transparent }
     <div class="highline" id="highline" hidden></div>
     <div class="waterbanner" id="wb" hidden><span><strong>Water break.</strong> <span id="wbText">3 drinks since your last water.</span></span><button class="btn primary" id="wbBtn">Log a water</button></div>
     <label class="food" for="food"><input type="checkbox" id="food"> Ate a proper meal tonight</label>
-    <div class="note">About <strong id="inbody">0.0</strong> standard drinks still in your system (your body clears ~1 per hour). Adjusted for your weight and whether you ate. Still a rough guess; sleep, medication and how you feel change it a lot.</div>
+    <div class="note">About <strong id="inbody">0.0</strong> standard drinks still in your system (your body clears ~1 per hour). Adjusted for your weight and whether you ate. Still a rough guess; sleep, medication and how you feel change it a lot. Not a breathalyzer: never use it to decide whether you can drive.</div>
+    <div class="note carry" id="carryNote" hidden></div>
   </section>
 
   <div class="notice" id="notice" role="status" hidden>
@@ -737,6 +817,11 @@ button{ -webkit-tap-highlight-color:transparent }
   </section>
 
   <section data-phone-panel="history" class="history" id="history">
+    <div class="ach" id="achBox">
+      <div class="hist-head"><p class="label">Achievements</p><span class="hist-count" id="achCount"></span></div>
+      <div class="ach-grid" id="achGrid"></div>
+      <div class="ach-detail" id="achDetail" hidden></div>
+    </div>
     <div class="hist-head"><p class="label">Past nights</p><span class="hist-count" id="histCount"></span></div>
     <div class="hist-list" id="histList"></div>
     <p class="empty" id="histEmpty">No saved nights yet. A night is saved here when you tap New night, or after 8 hours with nothing logged.</p>
@@ -758,9 +843,20 @@ button{ -webkit-tap-highlight-color:transparent }
       <button type="button" class="btn" id="rpCopy">Copy text</button>
     </div>
     <p class="hint" id="rpMsg" role="status"></p>
+    <div class="rp-more"><button type="button" class="btn" id="rpCase">Open the case file</button><button type="button" class="btn" id="rpCourt">Take it to court</button></div>
     <div class="rp-text" id="rpText"></div>
   </div>
 </div>
+<div class="sheet-wrap" id="sheetWrap" hidden>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+    <div class="sh-head">
+      <div><p class="label sh-kicker" id="shKicker"></p><h2 id="shTitle"></h2></div>
+      <button type="button" class="btn" id="shClose">Close</button>
+    </div>
+    <div class="sh-body" id="shBody"></div>
+  </div>
+</div>
+<div class="ach-toast" id="achToast" role="status" aria-live="polite" hidden></div>
 <nav class="phone-nav" aria-label="Main navigation">
   <div class="phone-quick" role="group" aria-label="Quick actions">
     <button type="button" class="quick-primary" id="quickDrink">+ Beer</button>
@@ -1568,6 +1664,7 @@ function archiveNight(reason,now){
   log=[];save();
   SET.food=false;saveSet();{const fd=document.getElementById("food");if(fd)fd.checked=false}
   try{localStorage.removeItem("bartab-night")}catch(e){}
+  setTimeout(()=>achEvaluateNight(s,true),0);
   return s;
 }
 function checkAutoClose(now){
@@ -1713,7 +1810,7 @@ function personaOn(kind,opt){
 window.personaOn=personaOn;
 window.personaPoke=()=>{
   tapTimes.push(Date.now());tapTimes=tapTimes.filter(t=>Date.now()-t<3000);
-  if(tapTimes.length>=7){tapTimes=[];setTimeout(()=>reactTo("spin"),20);return personaLine("secret")}
+  if(tapTimes.length>=7){tapTimes=[];setTimeout(()=>reactTo("spin"),20);foundEgg("spin");return personaLine("secret")}
   return personaLine("poke");
 };
 let tapTimes=[];
@@ -1746,17 +1843,17 @@ function boardCrash(){
   if(!ch||ch.dataset.crashed)return;
   const d0=ch.getAttribute("d"),a0=ar&&ar.getAttribute("d"),t0=tx&&tx.textContent;
   ch.dataset.crashed="1";ch.setAttribute("d","M238 72 L250 78 L258 74 L270 88 L290 97");if(ar)ar.setAttribute("d","M284 97 h6 v-6");if(tx)tx.textContent="Q4 CANCELLED";
-  ch.style.stroke="#e5322a";
+  ch.style.stroke="#e5322a";foundEgg("board");
   say(wrapLine(["Q4 is cancelled. Effective immediately.","Who touched the chart?! That was our best quarter.","Ah. So that's where the money went."][Math.floor(Math.random()*3)],26));
   setTimeout(()=>{ch.setAttribute("d",d0);if(ar)ar.setAttribute("d",a0);if(tx)tx.textContent=t0;ch.style.stroke="";delete ch.dataset.crashed},6000);
 }
 function clockRing(){
-  const g=$("guy");g.classList.add("ring");setTimeout(()=>g.classList.remove("ring"),1300);
+  const g=$("guy");g.classList.add("ring");setTimeout(()=>g.classList.remove("ring"),1300);foundEgg("clock");
   reactTo("panic");
   say(wrapLine(["BRRRING! Is it Monday already?!","Don't look at the time. Look at the budget.","Time flies when your money does."][Math.floor(Math.random()*3)],26));
 }
 let wished="";
-window.elevenEleven=()=>{const k=new Date().toDateString()+new Date().getHours();if(wished===k)return;wished=k;say(wrapLine("It's 11:11. I wish for a bigger budget.",26))};
+window.elevenEleven=()=>{const k=new Date().toDateString()+new Date().getHours();if(wished===k)return;wished=k;foundEgg("1111");say(wrapLine("It's 11:11. I wish for a bigger budget.",26))};
 
 // =================== Stage 1: Financial Grim Reaper ===================
 let budgetStage=0;
@@ -1776,7 +1873,7 @@ function updateBudget(cost){
   else if(stg>st.stage){st.stage=stg;saveNightState(st);setTimeout(()=>grimEvent(stg),60)}
   else if(stg<st.stage){st.stage=stg;saveNightState(st)}
   budgetStage=stg;
-  if(has&&log.length&&Math.abs(cost-SET.budget)<0.005&&!st.exact){st.exact=true;saveNightState(st);setTimeout(()=>{lastEventSay=Date.now();say(wrapLine("Exactly on budget. Accountants everywhere are weeping with joy.",26))},80)}
+  if(has&&log.length&&Math.abs(cost-SET.budget)<0.005&&!st.exact){st.exact=true;saveNightState(st);foundEgg("exact");setTimeout(()=>{lastEventSay=Date.now();say(wrapLine("Exactly on budget. Accountants everywhere are weeping with joy.",26))},80)}
   const wm=$("walletMeter");
   if(!has||!log.length){wm.style.display="none";return}
   wm.style.display="";
@@ -1942,7 +2039,7 @@ async function openReport(s){
   const sg=document.createElement("p");sg.className="rp-sign";sg.textContent=`“${v.signoff}” — ${v.signer}`;tx.appendChild(sg);
   $("rpMsg").textContent="";$("rpImg").removeAttribute("src");$("rpImg").alt="";$("rpWait").hidden=false;
   $("rpShare").hidden=!(navigator.canShare&&navigator.share);
-  $("reportWrap").hidden=false;$("rpClose").focus();
+  $("reportWrap").hidden=false;$("rpClose").focus();document.body.classList.add("modal-open");
   if(s.reportSeen===false){s.reportSeen=true;saveSessions()}
   try{localStorage.setItem("bartab-report-seen",s.id);sessionStorage.setItem("bartab-report-seen",s.id)}catch(e){}
   try{
@@ -1952,7 +2049,7 @@ async function openReport(s){
   }catch(e){$("rpWait").textContent="Couldn't draw the image on this device. The report text is below."}
 }
 window.openReport=openReport;
-function closeReport(){$("reportWrap").hidden=true;reportCtx=null;if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
+function closeReport(){$("reportWrap").hidden=true;reportCtx=null;document.body.classList.remove("modal-open");if(lastFocus&&lastFocus.focus)try{lastFocus.focus()}catch(e){}}
 function reportText(){const v=reportCtx.v,f=v.f;return `The Morning After — ${new Date(f.start).toLocaleDateString()}\n${v.headline}\n${f.drinks} drinks · ${fmtMoney(f.cost,f.sym)} · ${f.water} water · ${f.dur}\n${v.findings.join("\n")}\n— ${v.signer}, Bar Tab`}
 const cardName=()=>`bar-tab-morning-after-${new Date(reportCtx.s.start).toISOString().slice(0,10)}.png`;
 async function saveCard(){
@@ -1965,7 +2062,7 @@ async function saveCard(){
 }
 function initStage1(){
   const sel=$("persona");sel.value=PERSONAS[SET.persona]?SET.persona:"classic";
-  sel.onchange=()=>{SET.persona=sel.value;saveSet();render();const l=personaLine("intro");if(l){say(l);lastEventSay=Date.now()}reactTo(PERSONAS[SET.persona].bit)};
+  sel.onchange=()=>{SET.persona=sel.value;saveSet();render();achPersona(sel.value);const l=personaLine("intro");if(l){say(l);lastEventSay=Date.now()}reactTo(PERSONAS[SET.persona].bit)};
   $("rpClose").onclick=closeReport;
   $("reportWrap").addEventListener("click",e=>{if(e.target===$("reportWrap"))closeReport()});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("reportWrap").hidden)closeReport()});
@@ -1986,6 +2083,387 @@ function initStage1(){
     if(Date.now()-ls.end>=3*36e5){setTimeout(()=>{openReport(ls);const l=personaLine("morning");if(l)say(l)},400)}
     else if($("notice").hidden)showNotice(`Your report for ${nightLabel(ls)} is ready.`,false,ls);
   }
+}
+
+// =================== Stage 2: alcohol estimate across nights ===================
+// Saved nights and tonight are kept apart; only the estimate looks across them.
+const CARRY_MS=24*36e5;
+function recentEntries(now){
+  const cut=now-CARRY_MS,out=[];
+  sessions.forEach(s=>{if(s.end>=cut)s.entries.forEach(e=>{if(e.t>=cut)out.push({e,food:!!s.food,saved:true})})});
+  log.forEach(e=>{if(e.t>=cut)out.push({e,food:!!SET.food,saved:false})});
+  out.sort((a,b)=>a.e.t-b.e.t);return out;
+}
+function alcoholModel(now){
+  now=now||Date.now();const w=170/(SET.weight||170);
+  let amt=0,last=null,peak18=0,camt=0,clast=null;
+  recentEntries(now).forEach(({e,food,saved})=>{
+    const d=DRINKS.find(x=>x.id===e.id);if(!d)return;
+    const sd=e.s!=null?e.s:std(d);
+    if(last!=null)amt=Math.max(0,amt-(e.t-last)/36e5);
+    amt+=sd;last=e.t;
+    if(now-e.t<HANG_MS)peak18=Math.max(peak18,amt*w*(food?.8:1));
+    if(saved){if(clast!=null)camt=Math.max(0,camt-(e.t-clast)/36e5);camt+=sd;clast=e.t}
+  });
+  const cur=last==null?0:Math.max(0,amt-(now-last)/36e5);
+  const carry=clast==null?0:Math.min(cur,Math.max(0,camt-(now-clast)/36e5));
+  return {inBody:cur,peak18,carry,lastT:last};
+}
+
+// =================== Stage 2: shared sheet (case file + court) ===================
+let sheetFocus=null,sheetMode=null;
+function openSheet(mode,kicker,title){
+  sheetFocus=document.activeElement;sheetMode=mode;
+  const sh=$("sheet");sh.className="sheet "+mode;
+  $("shKicker").textContent=kicker;$("shTitle").textContent=title;$("shBody").textContent="";
+  $("sheetWrap").hidden=false;$("sheet").scrollTop=0;$("shClose").focus();document.body.classList.add("modal-open");
+  return $("shBody");
+}
+function closeSheet(){$("sheetWrap").hidden=true;sheetMode=null;document.body.classList.remove("modal-open");if(sheetFocus&&sheetFocus.focus)try{sheetFocus.focus()}catch(e){}}
+const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
+Object.assign(PERSONAS.classic,{case:["Honestly? I'd have ordered the same thing.","I was there. I remember nothing. Very useful witness."],court:["I'm the judge AND your drinking buddy. Conflict of interest noted.","Order! Order! ...that came out wrong."]});
+Object.assign(PERSONAS.troll,{case:["I may have tampered with the evidence. Hehe.","Professional opinion: chaos. Also, nice."],court:["I'm the judge now. This is fine. Hehe.","Objection! I just like saying it."]});
+Object.assign(PERSONAS.uncle,{case:["I've seen this before. Your cousin. 2019. It didn't end well.","I'm not saying I told you so. I'm saying it's in the file."],court:["I've waited for this day since you got your first credit card.","The court is disappointed. The court's sister will hear about it."]});
+Object.assign(PERSONAS.butler,{case:["If I may, sir, the evidence speaks for itself. Loudly.","I've taken the liberty of ironing the evidence."],court:["The court will come to order. Do sit, sir.","Tea will be served after sentencing."]});
+Object.assign(PERSONAS.reaper,{case:["I was at the scene. Professionally.","The wallet's last words were a receipt."],court:["I'll be presiding. Also collecting.","Court is in session. Your wallet is attending from the afterlife."]});
+const personaOf=s=>PERSONAS[s.persona]||PERSONAS[SET.persona]||PERSONAS.classic;
+function sortedEntries(s){return [...(s.entries||[])].sort((a,b)=>a.t-b.t)}
+function caseNumber(s){const sorted=[...sessions].sort((a,b)=>a.start-b.start),i=sorted.findIndex(x=>x.id===s.id);return String(i>=0?i+1:(hashStr(s.id||"x")%9000)+1).padStart(4,"0")}
+function maxDrinksInHour(ents){const d=ents.filter(e=>DRINKS.some(x=>x.id===e.id)).map(e=>e.t).sort((a,b)=>a-b);let best=0,j=0;for(let i=0;i<d.length;i++){while(d[i]-d[j]>36e5)j++;best=Math.max(best,i-j+1)}return best}
+
+// =================== Stage 2A: Night-Out Detective ===================
+const CASE_TITLES={
+  wayOver:["THE MISSING PAYCHECK","THE VANISHING BUDGET","THE WALLET THAT KNEW TOO MUCH","THE GREAT TAB HEIST"],
+  over:["THE CASE OF THE LEAKY WALLET","THE BUDGET THAT SLIPPED AWAY","THE OVERDRAWN AFFAIR"],
+  close:["THE NARROW ESCAPE","THE CASE OF THE NERVOUS WALLET"],
+  under:["THE BUDGET THAT SURVIVED","THE SUSPICIOUSLY SENSIBLE NIGHT"],
+  wayUnder:["THE CASE OF THE UNTOUCHED BUDGET","THE PHANTOM SPENDER"],
+  dry:["THE CASE OF THE EMPTY GLASS","THE SOBER SUSPECT"],
+  noBudget:["THE UNACCOUNTED EVENING","THE CASE OF THE MYSTERY TAB"],
+  bigNoBudget:["THE MISSING PAYCHECK","THE GREAT TAB HEIST"]};
+const FAV_TITLE={beer:"THE BEER CONSPIRACY",light:"THE LIGHT BEER LIE",stout:"THE STOUT AFFAIR",rum:"THE RUM RUNNER",shot:"THE SHOT IN THE DARK",wine:"THE WINE CELLAR JOB",double:"THE DOUBLE CROSS",espresso:"THE ESPRESSO EXPRESS",whisky:"THE WHISKY WHISPERER"};
+const T_DRINK=["The suspect purchased another {drink}.","A {drink} changes hands. {price} leaves the wallet.","Witnesses confirm a {drink} was ordered.","The suspect acquires a {drink}. The wallet flinches.","Another {drink} enters the evidence log.","Receipt recovered: one {drink}, {price}."];
+const T_SAME=["Another {drink}. A pattern emerges.","{drink} again. Investigators exchange looks.","A repeat {drink}. The suspect has a type."];
+const T_WATER=["The suspect was seen drinking water. Investigators are baffled.","A glass of water. Possibly an attempt to mislead investigators.","Water consumed. The suspect is trying to look innocent.","Hydration detected. Motive unclear."];
+const T_JOINT=["A suspicious herbal aroma was reported.","Smoke seen near the suspect. The plant declines to comment."];
+const BUDGET_EVENTS=["{p}% of the budget is gone. Detectives note a faint smell of regret.","{p}% of the budget has vanished. Financial stability was last seen leaving the premises.","{p}% of the budget is gone. The wallet has hired a lawyer."];
+const CASE_CLOSERS={bad:["The investigation remains ongoing. The wallet refuses to cooperate.","The receipts have been filed under 'Regret'.","The suspect was released on their own recognizance. And their own card."],
+  good:["Case closed. Justice, and the budget, were served.","No crime was committed. The detective is going home early.","Case closed. The wallet sends its thanks."],
+  neutral:["No further questions. The bartender has been thanked for their testimony.","Case closed, pending a budget. Detectives recommend one."]};
+function buildCase(s){
+  const f=reportFacts(s),rng=rngFrom(hashStr((s.id||"")+"case")),pickR=a=>a[Math.floor(rng()*a.length)],m=v=>fmtMoney(v,f.sym);
+  const v=verdictFor(s),cat=v.cat;
+  const title=(f.fav&&f.favCount>=3&&rng()<.5&&FAV_TITLE[f.fav])||pickR(CASE_TITLES[cat]||CASE_TITLES.noBudget);
+  const ev=[],ents=sortedEntries(s),th=[...SET.thresholds];
+  let cost=0,prev=null,prevDrink=null,firstDrink=true;const crossedAmt=new Set();
+  ents.forEach(e=>{
+    if(prev&&e.t-prev.t>=90*60000)ev.push({kind:"gap",time:`${fmtTime(prev.t)}–${fmtTime(e.t)}`,text:`${dur(e.t-prev.t)} with nothing logged. Witnesses report a suspicious silence.`});
+    const d=DRINKS.find(x=>x.id===e.id);
+    if(d){
+      const before=cost;cost+=e.p||0;
+      const vars={drink:d.name.toLowerCase(),price:m(e.p||0)};
+      let text=firstDrink?fillVars(pickR(["The night begins. The suspect orders a {drink}.","First contact: one {drink}, {price}.","It starts innocently enough. A single {drink}."]),vars)
+        :prevDrink===e.id&&rng()<.6?fillVars(pickR(T_SAME),vars):fillVars(pickR(T_DRINK),vars);
+      text=text.charAt(0).toUpperCase()+text.slice(1);
+      ev.push({kind:"drink",time:fmtTime(e.t),text});firstDrink=false;prevDrink=e.id;
+      if(f.budget){
+        th.forEach((p,k)=>{const lim=f.budget*p/100;if(before<lim&&cost>=lim){
+          if(k===3)ev.push({kind:"alert",time:fmtTime(e.t),text:`BUDGET VIOLATION. The ${m(f.budget)} limit has been breached.`});
+          else ev.push({kind:"money",time:fmtTime(e.t),text:fillVars(BUDGET_EVENTS[Math.min(k,2)],{p})})}});
+      }else{[50,100,200,500].forEach(a=>{if(before<a&&cost>=a&&!crossedAmt.has(a)){crossedAmt.add(a);ev.push({kind:"money",time:fmtTime(e.t),text:`Spending passes ${m(a)}. No budget was found at the scene.`})}})}
+    }else if(e.id==="water")ev.push({kind:"water",time:fmtTime(e.t),text:pickR(T_WATER)});
+    else if(e.id==="joint")ev.push({kind:"joint",time:fmtTime(e.t),text:pickR(T_JOINT)});
+    prev=e;
+  });
+  if(ents.length)ev.push({kind:"end",time:fmtTime(ents[ents.length-1].t),text:"Last recorded activity. The trail goes cold."});
+  if(s.closed==="auto")ev.push({kind:"gap",time:"",text:"The file was closed automatically after 8 hours of silence."});
+  // evidence tags
+  const tags=[],L="ABCDEFG";let k=0;const tag=t=>tags.push([L[k++],t]);
+  if(f.drinks){const counts={};ents.forEach(e=>{if(DRINKS.some(x=>x.id===e.id))counts[e.id]=(counts[e.id]||0)+1});
+    tag(Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([id,c])=>`${c}× ${(DRINKS.find(q=>q.id===id)||{name:id}).name}`).join(", "))}
+  else tag("No alcohol whatsoever");
+  tag(`${f.water} glass${f.water===1?"":"es"} of water`);
+  tag(`${m(f.cost)} spent${f.budget?` of ${m(f.budget)}`:", no budget"}`);
+  if(f.maxE&&f.drinks>=2)tag(`Priciest: ${(DRINKS.find(d=>d.id===f.maxE.id)||{name:""}).name}, ${m(f.maxE.p||0)}`);
+  let gap=0;for(let i=1;i<ents.length;i++)gap=Math.max(gap,ents[i].t-ents[i-1].t);if(gap>=30*60000)tag(`Longest silence: ${dur(gap)}`);
+  if(f.joints)tag(`${f.joints} herbal incident${f.joints>1?"s":""}`);
+  const tone=cat==="wayOver"||cat==="over"||cat==="bigNoBudget"?"bad":cat==="noBudget"?"neutral":"good";
+  const summary=`The suspect logged ${f.drinks} ${f.drinks===1?"drink":"drinks"} and ${f.water} water${f.water===1?"":"s"} over ${f.dur}, spending ${m(f.cost)}${f.budget?(f.cost>f.budget?`, ${m(f.cost-f.budget)} over budget`:`, ${m(f.budget-f.cost)} under budget`):""}. ${pickR(CASE_CLOSERS[tone])}`;
+  const stamp=tone==="bad"?"WALLET MISSING":cat==="dry"?"NOTHING TO SEE HERE":"CASE CLOSED";
+  const P=personaOf(s);
+  return {f,title,ev,tags,summary,stamp,consultant:P.name,quote:pickR(P.case)};
+}
+function openCase(s){
+  const c=buildCase(s),num=caseNumber(s);
+  const b=openSheet("case",`CASE #${num}`,c.title);
+  const meta=el("div","cf-meta");meta.textContent=`Opened ${new Date(c.f.start).toLocaleDateString([],{weekday:"long",month:"long",day:"numeric",year:"numeric"})} · ${fmtTime(c.f.start)}–${fmtTime(c.f.end)}\nLead investigator: Det. B. Tab · Consultant: ${c.consultant}`;meta.style.whiteSpace="pre-line";b.appendChild(meta);
+  if(num==="0007"){const e7=el("div","cf-meta","Case 007. The suspect was licensed to spend.");b.appendChild(e7);foundEgg("007")}
+  const evs=el("div");evs.appendChild(el("p","cf-label","EVIDENCE"));const tg=el("div","cf-tags");
+  c.tags.forEach(([l,t],i)=>{const x=el("span","cf-tag");x.style.setProperty("--r",((i%3)-1)*1.2+"deg");const bb=el("b",null,"EXHIBIT "+l);x.append(bb,document.createTextNode(t));tg.appendChild(x)});
+  evs.appendChild(tg);b.appendChild(evs);
+  const tl=el("div");tl.appendChild(el("p","cf-label","TIMELINE OF EVENTS"));const ol=el("ol","cf-time");
+  c.ev.forEach((e,i)=>{const li=el("li",e.kind);li.style.setProperty("--i",Math.min(i,24));const t=el("span","t",e.time);li.append(t,document.createTextNode(e.text));ol.appendChild(li)});
+  tl.appendChild(ol);b.appendChild(tl);
+  const q=el("div","cf-quote");q.append(document.createTextNode(`“${c.quote}”`),el("span",null,`Statement from consultant ${c.consultant}`));b.appendChild(q);
+  const sm=el("div","cf-summary");sm.appendChild(el("p","cf-label","CASE SUMMARY"));sm.appendChild(el("p",null,c.summary));
+  const st=el("div","cf-stamp",c.stamp);st.style.setProperty("--sd",Math.min(c.ev.length,24)*45/1000+.4+"s");sm.appendChild(st);b.appendChild(sm);
+  const act=el("div","ct-actions");const go=el("button","btn","Take this case to court");go.type="button";go.onclick=()=>openCourt(s);
+  const cp=el("button","btn","Copy case notes");cp.type="button";
+  const msg=el("p","ct-msg");msg.setAttribute("role","status");
+  cp.onclick=()=>{const t=`CASE #${num}: ${c.title}\n${c.ev.map(e=>`${e.time?e.time+" — ":""}${e.text}`).join("\n")}\n\n${c.summary}`;try{navigator.clipboard.writeText(t).then(()=>{msg.textContent="Case notes copied."},()=>{msg.textContent="Copying was blocked on this device."})}catch(e){msg.textContent="Copying was blocked on this device."}};
+  act.append(go,cp);b.append(act,msg);
+  achBump("detective");
+}
+window.openCase=openCase;
+
+// =================== Stage 2B: Bar Tab Court ===================
+const COURT={
+  guilty:{stamp:"GUILTY",verdicts:["After reviewing the evidence, this court finds the defendant financially irresponsible but exceptionally entertaining.","Guilty on all counts. The wallet's family may now address the court.","This court finds the defendant guilty of reckless spending on overpriced drinks.","Guilty. The jury needed three minutes and a calculator.","The court finds the defendant guilty. The budget did not deserve this."],
+    sentences:["Sentenced to one week of home-cooked meals.","Sentenced to seven days without tap-to-pay privileges.","The defendant must set a budget and actually look at it.","Community service: explaining this receipt to a family member.","Probation: one water for every drink on the next night out."]},
+  close:{stamp:"NOT GUILTY",verdicts:["Not guilty, by the skin of the defendant's wallet.","Acquitted on a technicality: the budget technically survived.","Not guilty. The prosecution is furious. The budget is relieved."],
+    sentences:["Free to go, with a stern look from the bench.","Released with a warning and a glass of water.","Free to go. The court suggests not testing its patience again."]},
+  innocent:{stamp:"NOT GUILTY",verdicts:["Not guilty. Frankly, the court is impressed.","This court finds the defendant fiscally responsible. Please don't let it go to your head.","Case dismissed. The budget testified in the defendant's favour.","Not guilty on all counts. The wallet is throwing a small party."],
+    sentences:["The court awards the defendant one (1) smug feeling.","Free to go. Treat yourself to some savings.","Sentenced to absolutely nothing. Enjoy your wallet.","The defendant is free to go and slightly insufferable."]},
+  dry:{stamp:"NOT GUILTY",verdicts:["Not guilty. There was no crime. The bartender is devastated.","Case dismissed for a total lack of alcohol."],
+    sentences:["The court thanks the defendant for their service to hydration.","Free to go. Possibly the most responsible person in this building."]},
+  hung:{stamp:"HUNG JURY",verdicts:["The court cannot convict without a budget, but it is watching you.","Hung jury. Half of them want to know what a budget is.","No verdict. Without a budget, the law is confused."],
+    sentences:["Ordered to set a budget before the next hearing.","Released, on the condition that a budget appears by next time."]},
+  bigNoBudget:{stamp:"GUILTY",verdicts:["Guilty of spending {cost} without a plan.","The court finds the defendant guilty of freestyle spending. {cost} of it."],
+    sentences:["Ordered to set a budget immediately. The court will check.","Sentenced to set a budget and stare at it for one full minute."]}
+};
+function buildCourt(s){
+  const f=reportFacts(s),rng=rngFrom(hashStr((s.id||"")+"court")),pickR=a=>a[Math.floor(rng()*a.length)],m=v=>fmtMoney(v,f.sym);
+  const vcat=verdictFor(s).cat;
+  const key=vcat==="wayOver"||vcat==="over"?"guilty":vcat==="close"?"close":vcat==="under"||vcat==="wayUnder"?"innocent":vcat==="dry"?"dry":vcat==="bigNoBudget"?"bigNoBudget":"hung";
+  const charges=[],praise=[];
+  if(f.budget&&f.cost>f.budget)charges.push(pickR([`Murdering their entertainment budget in the first degree (${m(f.cost-f.budget)} over).`,`Grand theft wallet: exceeding a ${m(f.budget)} budget by ${m(f.cost-f.budget)}.`,`Assault and battery on a ${m(f.budget)} budget (${m(f.cost-f.budget)} over).`]));
+  if(!f.budget&&f.cost>0)charges.push("Operating a night out without a budget.");
+  if(f.fav&&f.favCount>=3)charges.push(`Possession of ${f.favCount} ${f.favName.toLowerCase()}${/s$/.test(f.favName)?"":"s"} with intent to spend.`);
+  if(f.drinks>=2&&!f.water)charges.push("Reckless neglect of hydration.");
+  if(f.maxE&&(f.maxE.p||0)>=15)charges.push(`A crime of passion: one ${(DRINKS.find(d=>d.id===f.maxE.id)||{name:"drink"}).name.toLowerCase()} at ${m(f.maxE.p)}.`);
+  if(f.durMs>=5*36e5)charges.push(`Loitering with intent for ${f.dur}.`);
+  if(f.joints)charges.push("Suspicious herbal activity.");
+  if(f.budget&&f.cost<=f.budget)praise.push(`Staying ${m(f.budget-f.cost)} under budget.`);
+  if(f.drinks&&f.water>=Math.ceil(f.drinks/2))praise.push(`Drinking ${f.water} water${f.water===1?"":"s"} along the way.`);
+  if(!f.drinks)praise.push("Logging a night with no alcohol at all.");
+  const evidence=[`${f.drinks} ${f.drinks===1?"drink":"drinks"} logged, ${f.water} water`,`${m(f.cost)} spent${f.budget?` against a ${m(f.budget)} budget`:", no budget set"}`,`Night lasted ${f.dur} (${fmtTime(f.start)}–${fmtTime(f.end)})`];
+  if(f.fav)evidence.push(`Most logged: ${f.favName} ×${f.favCount}`);
+  const C=COURT[key],vars={cost:m(f.cost)};
+  const P=personaOf(s);
+  return {f,key,stamp:C.stamp,charges,praise,evidence,verdict:fillVars(pickR(C.verdicts),vars),sentence:fillVars(pickR(C.sentences),vars),judge:P.name,remark:pickR(P.court)};
+}
+function judgeSVG(name){
+  const L=SET.look,v=k=>LOOK[k].opts[L[k]]??Object.values(LOOK[k].opts)[0];
+  const skin=v("skin"),hair=v("hair")==="bald"?"#3a2618":v("hair"),beard=L.beard==="Yes";
+  return `<svg viewBox="0 0 320 170" role="img" aria-label="The judge, ${name}, at the bench">
+  <rect width="320" height="170" fill="#2a1810"/>
+  <rect x="0" y="0" width="320" height="96" fill="#3d2519"/><path d="M40 0v96M120 0v96M200 0v96M280 0v96" stroke="#2f1c12" stroke-width="3"/>
+  <circle cx="160" cy="40" r="26" fill="#c9a34a" opacity=".18"/><path d="M146 40h28M160 26v28M150 30l20 20M170 30l-20 20" stroke="#c9a34a" stroke-width="2" opacity=".35"/>
+  <g class="judge-head">
+    <path d="M128 132 Q128 92 160 90 Q192 92 192 132Z" fill="#111"/>
+    <path d="M152 92 L160 104 L168 92" fill="#fff"/>
+    <rect x="155" y="78" width="10" height="12" fill="${skin}"/>
+    <g fill="#f2efe8" stroke="#cfc8b8" stroke-width="1"><circle cx="139" cy="66" r="7"/><circle cx="137" cy="78" r="7"/><circle cx="139" cy="90" r="6.5"/><circle cx="181" cy="66" r="7"/><circle cx="183" cy="78" r="7"/><circle cx="181" cy="90" r="6.5"/><circle cx="148" cy="50" r="8"/><circle cx="160" cy="46" r="8.5"/><circle cx="172" cy="50" r="8"/></g>
+    <circle cx="160" cy="66" r="16" fill="${skin}"/>
+    ${beard?`<path d="M145 67 C146 78 152 84 160 84 C168 84 174 78 175 67 C173 72 170 73 166 73 L154 73 C150 73 147 72 145 67Z" fill="${hair}"/>`:""}
+    <circle cx="154" cy="64" r="2" fill="#24170e"/><circle cx="166" cy="64" r="2" fill="#24170e"/>
+    <path d="M150 58 l7 2 M170 58 l-7 2" stroke="#24170e" stroke-width="2" stroke-linecap="round"/>
+    <path d="M155 76 q5 -2 10 0" stroke="#24170e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  </g>
+  <rect x="40" y="118" width="240" height="52" fill="#6b4226"/><rect x="40" y="114" width="240" height="8" fill="#80522f"/>
+  <rect x="122" y="128" width="76" height="20" rx="2" fill="#c9a34a"/><text x="160" y="142" text-anchor="middle" font-family="Manrope, system-ui, sans-serif" font-weight="800" font-size="8.5" fill="#3a2419">${name.replace(/^The /,"HON. ").toUpperCase()}</text>
+  <rect x="226" y="112" width="26" height="5" rx="2" fill="#4a2e18"/>
+  <g class="gavel" id="gavel" style="cursor:pointer" role="button" aria-label="Gavel"><rect x="206" y="84" width="60" height="46" fill="transparent"/><rect x="222" y="98" width="30" height="13" rx="3" fill="#5b3a1e" stroke="#3a2412"/><rect x="236" y="108" width="4" height="22" rx="2" fill="#7a4e2a" transform="rotate(-30 238 108)"/></g>
+</svg>`;
+}
+let courtShare=null,gavelTaps=[];
+function openCourt(s){
+  const c=buildCourt(s);
+  const b=openSheet("court","BAR TAB COURT · CASE #"+caseNumber(s),"The People v. Your Wallet");
+  const sc=el("div","ct-scene");sc.innerHTML=judgeSVG(c.judge);b.appendChild(sc);
+  const gv=sc.querySelector("#gavel");const bang=()=>{gv.classList.remove("bang");void gv.getBoundingClientRect();gv.classList.add("bang")};bang();
+  gv.addEventListener("click",()=>{bang();gavelTaps.push(Date.now());gavelTaps=gavelTaps.filter(t=>Date.now()-t<3000);if(gavelTaps.length>=5){gavelTaps=[];msg.textContent="ORDER! ORDER! ...fine. Have a mint.";foundEgg("gavel")}});
+  const meta=el("div","ct-sec");meta.appendChild(el("p","ct-msg",`Hearing for the night of ${new Date(c.f.start).toLocaleDateString([],{weekday:"long",month:"long",day:"numeric"})}. Presiding: The Honourable ${c.judge.replace(/^The /,"")}.`));b.appendChild(meta);
+  const ch=el("div","ct-sec");
+  if(c.charges.length){ch.appendChild(el("h3",null,"The charges"));const ol=el("ol");c.charges.forEach(t=>ol.appendChild(el("li",null,t)));ch.appendChild(ol)}
+  else{ch.appendChild(el("h3",null,"The charges"));ch.appendChild(el("p","ct-msg","No charges. The court is suspicious of how responsible you were."))}
+  if(c.praise.length){const h=el("h3",null,"Commendations");h.style.marginTop="10px";ch.appendChild(h);const ul=el("ul");c.praise.forEach(t=>ul.appendChild(el("li",null,t)));ch.appendChild(ul)}
+  b.appendChild(ch);
+  const ev=el("div","ct-sec");ev.appendChild(el("h3",null,"Evidence"));const ul=el("ul");c.evidence.forEach((t,i)=>ul.appendChild(el("li",null,`Exhibit ${"ABCDE"[i]}: ${t}`)));ev.appendChild(ul);b.appendChild(ev);
+  const go=el("button","btn primary","Hear the verdict");go.type="button";b.appendChild(go);
+  const vbox=el("div","ct-verdict");vbox.hidden=true;b.appendChild(vbox);
+  const act=el("div","ct-actions");act.hidden=true;
+  const shareB=el("button","btn primary","Share verdict");shareB.type="button";shareB.hidden=!(navigator.canShare&&navigator.share);
+  const saveB=el("button","btn","Save image");saveB.type="button";const copyB=el("button","btn","Copy text");copyB.type="button";
+  act.append(shareB,saveB,copyB);b.appendChild(act);
+  const msg=el("p","ct-msg");msg.setAttribute("role","status");b.appendChild(msg);
+  courtShare={s,c,blob:null,msg};
+  go.onclick=()=>{
+    go.hidden=true;bang();
+    const st=el("div","ct-stamp "+(c.stamp==="GUILTY"?"guilty":c.stamp==="HUNG JURY"?"hung":"innocent"),c.stamp);
+    vbox.append(st,el("p","v",c.verdict),el("p","sn","Sentence: "+c.sentence),el("p","jr",`“${c.remark}” — The Honourable ${c.judge.replace(/^The /,"")}`));
+    vbox.hidden=false;act.hidden=false;
+    say(wrapLine(c.stamp==="GUILTY"?"Guilty! Bang bang. I love this gavel.":c.stamp==="HUNG JURY"?"No verdict. Set a budget and we'll try again.":"Not guilty! The wallet lives!",26));
+    drawCourtCard(c).then(cv=>cv.toBlob(bl=>{if(courtShare&&courtShare.c===c)courtShare.blob=bl},"image/png")).catch(()=>{});
+  };
+  const name=()=>`bar-tab-court-${new Date(c.f.start).toISOString().slice(0,10)}.png`;
+  const text=()=>`BAR TAB COURT — The People v. Your Wallet (${new Date(c.f.start).toLocaleDateString()})\n${c.stamp}: ${c.verdict}\nSentence: ${c.sentence}\nCharges: ${c.charges.join(" ")||"None"}`;
+  saveB.onclick=()=>shareSave(courtShare.blob,name(),msg);
+  copyB.onclick=()=>{try{navigator.clipboard.writeText(text()).then(()=>{msg.textContent="Verdict copied."},()=>{msg.textContent="Copying was blocked on this device."})}catch(e){msg.textContent="Copying was blocked on this device."}};
+  shareB.onclick=async()=>{if(!courtShare.blob){msg.textContent="The image is still drawing. Try again in a second.";return}
+    const file=new File([courtShare.blob],name(),{type:"image/png"});
+    try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"Bar Tab Court",text:c.verdict});return}await navigator.share({title:"Bar Tab Court",text:text()})}catch(e){if(e&&e.name==="AbortError")return;shareSave(courtShare.blob,name(),msg)}};
+  achBump("court");
+}
+window.openCourt=openCourt;
+async function shareSave(blob,filename,msgEl){
+  if(!blob){msgEl.textContent="The image is still drawing. Try again in a second.";return}
+  try{const dl=window.claude&&typeof claude.use==="function"?await claude.use("downloads"):null;
+    if(dl){await dl.save({filename,data:blob});msgEl.textContent="Image saved.";return}}
+  catch(e){if(e&&e.code==="declined"){msgEl.textContent="Image not saved.";return}}
+  try{const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msgEl.textContent="Image saved to your downloads."}
+  catch(e){msgEl.textContent="This browser blocked the download."}
+}
+async function drawCourtCard(c){
+  const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const x=cv.getContext("2d");
+  try{if(document.fonts)await Promise.race([Promise.all([document.fonts.load('800 120px "Big Shoulders Display"'),document.fonts.load('700 40px "Manrope"')]),new Promise(r=>setTimeout(r,1500))])}catch(e){}
+  const D='"Big Shoulders Display", Impact, "Arial Narrow", sans-serif',B='Manrope, system-ui, -apple-system, "Segoe UI", sans-serif';
+  const fit=(t,w,s,fam,maxW,min)=>{let z=s;x.font=`${w} ${z}px ${fam}`;while(x.measureText(t).width>maxW&&z>min){z-=2;x.font=`${w} ${z}px ${fam}`}return z};
+  x.fillStyle="#3a2419";x.fillRect(0,0,W,H);
+  for(let i=0;i<W;i+=180){x.fillStyle="rgba(0,0,0,.12)";x.fillRect(i,0,6,H)}
+  x.fillStyle="#e3b55a";x.font=`800 32px ${B}`;x.fillText("BAR TAB COURT",80,104);
+  x.fillStyle="#f3e6d0";fit("THE PEOPLE v. YOUR WALLET",800,96,D,920,50);x.fillText("THE PEOPLE v. YOUR WALLET",76,200);
+  x.fillStyle="#d8c6a8";const dl=`Night of ${new Date(c.f.start).toLocaleDateString([],{weekday:"long",month:"long",day:"numeric"})}`;fit(dl,600,34,B,920,22);x.fillText(dl,80,256);
+  // stamp
+  x.save();x.translate(540,390);x.rotate(-.08);const col=c.stamp==="GUILTY"?"#ff6b5e":c.stamp==="HUNG JURY"?"#e3b55a":"#7bd88f";
+  x.strokeStyle=col;x.lineWidth=10;x.font=`800 130px ${D}`;const sw=x.measureText(c.stamp).width+80;x.strokeRect(-sw/2,-82,sw,150);x.fillStyle=col;x.textAlign="center";x.fillText(c.stamp,0,44);x.restore();x.textAlign="left";
+  // charges
+  let y=560;x.fillStyle="#e3b55a";x.font=`800 28px ${B}`;x.fillText(c.charges.length?"THE CHARGES":"COMMENDATIONS",80,y);y+=46;
+  x.fillStyle="#f3e6d0";x.font=`600 34px ${B}`;
+  (c.charges.length?c.charges:c.praise).slice(0,3).forEach(t=>{wrapCanvas(x,"• "+t,920).slice(0,2).forEach(l=>{x.fillText(l,80,y);y+=44});y+=8});
+  y=Math.max(y+20,880);
+  x.fillStyle="#e3b55a";x.font=`800 28px ${B}`;x.fillText("VERDICT",80,y);y+=50;
+  let vs=42;x.font=`700 ${vs}px ${B}`;let lines=wrapCanvas(x,c.verdict,920);while(lines.length>3&&vs>30){vs-=3;x.font=`700 ${vs}px ${B}`;lines=wrapCanvas(x,c.verdict,920)}
+  x.fillStyle="#f3e6d0";lines.slice(0,3).forEach(l=>{x.fillText(l,80,y);y+=vs*1.25});
+  y+=18;x.fillStyle="#d8c6a8";x.font=`600 32px ${B}`;wrapCanvas(x,"Sentence: "+c.sentence,920).slice(0,2).forEach(l=>{x.fillText(l,80,y);y+=42});
+  x.fillStyle="#d8c6a8";x.font=`600 28px ${B}`;x.fillText(`Presiding: The Honourable ${c.judge.replace(/^The /,"")}`,80,1286);
+  x.textAlign="right";x.fillStyle="#e3b55a";x.font=`800 34px ${D}`;x.fillText("BAR TAB",W-80,1286);x.textAlign="left";
+  return cv;
+}
+
+// =================== Stage 2C: Achievements ===================
+const ACH_KEY="bartab-achievements";
+const ACHS=[
+  {id:"first_case",name:"Case Opened",desc:"Save your first night to History.",icon:"folder",c:"#6b8cff"},
+  {id:"budget_boss",name:"Budget Boss",desc:"Set a nightly budget.",icon:"coins",c:"#e0a72e"},
+  {id:"wallet_survivor",name:"Wallet Survivor",desc:"Finish a night under your budget.",icon:"wallet",c:"#3fae6a"},
+  {id:"escape_artist",name:"Financial Escape Artist",desc:"Finish a night having spent less than half your budget.",icon:"key",c:"#2fa3b5"},
+  {id:"responsible_menace",name:"Responsible Menace",desc:"Finish under budget without ever logging more than 2 drinks in an hour.",icon:"shield",c:"#8b6bff"},
+  {id:"hydration_royalty",name:"Hydration Royalty",desc:"In a night with 2+ drinks, log at least one water for every two drinks.",icon:"crown",c:"#3f8fe0"},
+  {id:"water_first",name:"Pre-Hydrator",desc:"Log a water before your first drink of the night.",icon:"drop",c:"#35b6d8"},
+  {id:"dd_hero",name:"Designated Driver Hero",desc:"Save a night with water logged and no alcohol at all.",icon:"car",c:"#ff7a59"},
+  {id:"comeback_kid",name:"Comeback Kid",desc:"Finish under budget right after an over-budget night.",icon:"arrow",c:"#ef5b8c"},
+  {id:"hat_trick",name:"Hat Trick of Restraint",desc:"Finish three nights in a row under budget.",icon:"cal",c:"#c9a34a"},
+  {id:"cinderella",name:"Cinderella",desc:"End a night before midnight.",icon:"moon",c:"#7a6cff"},
+  {id:"detective",name:"Case Cracker",desc:"Open a Night-Out Detective case file.",icon:"glass",c:"#a0784a"},
+  {id:"court",name:"Frequent Defendant",desc:"Take three nights to Bar Tab Court.",icon:"gavel",c:"#b0563a"},
+  {id:"safe_keeper",name:"Safe Keeper",desc:"Back up your data.",icon:"floppy",c:"#5c6b7a"},
+  {id:"personality_crisis",name:"Personality Crisis",desc:"Try all four personalities.",icon:"masks",c:"#d94f8a"},
+  {id:"egg_hunter",name:"Easter Egg Hunter",desc:"Find three hidden easter eggs.",icon:"egg",c:"#8fc23d",secret:true}
+];
+const ICONS={folder:"M3 7.5h6l2 2h10V19H3z",coins:"M6 8a6 2.5 0 1 0 12 0a6 2.5 0 1 0 -12 0M6 8v4a6 2.5 0 0 0 12 0V8M6 12v4a6 2.5 0 0 0 12 0v-4",
+  wallet:"M4 7.5h14a2 2 0 0 1 2 2V17a2 2 0 0 1 -2 2H4zM4 7.5l11 -3v3M15.5 13.2h2.5",key:"M7.5 15.5a3.5 3.5 0 1 1 3.3 -4.7L20 10v3h-2v2h-2.5v-2h-4.7a3.5 3.5 0 0 1 -3.3 2.5z",
+  shield:"M12 3l7 3v5c0 5 -3 8 -7 10c-4 -2 -7 -5 -7 -10V6zM9 12l2.2 2.2L15.5 10",crown:"M4 17.5h16M4 17.5l-1 -9l5 4l4 -6.5l4 6.5l5 -4l-1 9",
+  drop:"M12 3.5c4 5 6 8.2 6 11a6 6 0 0 1 -12 0c0 -2.8 2 -6 6 -11z",car:"M4 15.5l2 -5.5h12l2 5.5V19H4zM7.5 19v1.5M16.5 19v1.5M7 15.5h1M16 15.5h1",
+  arrow:"M5 18.5c3 -8 7 -10.5 13 -10.5M14 4l4 4l-4 4",cal:"M5 6h14v13H5zM5 10h14M9 3.5v4M15 3.5v4M8 14.5h2M11 14.5h2M14 14.5h2",
+  moon:"M15 4a8 8 0 1 0 5 13a7 7 0 0 1 -5 -13z",glass:"M10 10m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0M14.5 14.5l5.5 5.5",
+  gavel:"M14 4l6 6l-3 3l-6 -6zM12.5 8.5l-7 7M9 12l3 3M4 20.5h9",floppy:"M5 4h11l3 3v13H5zM8 4v5h7V4M8 14h8v6H8z",
+  masks:"M3.5 6c3 -1 6 -1 8 0v5a4 4 0 0 1 -8 0zM12.5 9c3 -1 6 -1 8 0v5a4 4 0 0 1 -8 0zM5.5 9.5h1.5M8.5 9.5h1.5M14.5 12.5h1.5M17.5 12.5h1.5",
+  egg:"M12 3c4 0 7 6 7 10.5a7 7 0 0 1 -14 0C5 9 8 3 12 3zM5.6 13.5l2.6 -2l2.6 2l2.6 -2l2.6 2l2.6 -2",lock:"M8 11V8.5a4 4 0 0 1 8 0V11M6.5 11h11v9h-11z"};
+function badgeSVG(a,on){
+  const id="bg"+a.id+(on?1:0),col=on?a.c:"#9aa1ad";
+  return `<svg viewBox="0 0 48 52" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}"/><stop offset="1" stop-color="${col}" stop-opacity=".72"/></linearGradient></defs>
+  <path d="M24 2l19 10v22L24 50L5 34V12z" fill="url(#${id})" stroke="${on?"#1b1510":"#6f7682"}" stroke-opacity=".35" stroke-width="1.5"/>
+  <path d="M24 7l15 8v17L24 44L9 32V15z" fill="none" stroke="#fff" stroke-opacity="${on?.45:.25}" stroke-width="1.2"/>
+  ${on?`<path d="M12 12l3 1.2L12 14.4l-1.2 3l-1.2 -3l-3 -1.2l3 -1.2l1.2 -3z" fill="#fff" opacity=".8"/>`:""}
+  <g transform="translate(12 12)" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" opacity="${on?1:.55}"><path d="${(!on&&a.secret)?ICONS.lock:ICONS[a.icon]}"/></g>
+  ${!on&&!a.secret?`<g transform="translate(29 31) scale(.55)" fill="#2b2f38" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" fill="none"/></g>`:""}</svg>`;
+}
+let ACH={unlocked:{},meta:{personas:[],eggs:[],court:0,detective:0}};
+try{const a=JSON.parse(localStorage.getItem(ACH_KEY)||"null");if(a&&typeof a==="object"){ACH.unlocked=a.unlocked&&typeof a.unlocked==="object"?a.unlocked:{};ACH.meta=Object.assign(ACH.meta,a.meta||{})}}catch(e){}
+const saveAch=()=>{try{localStorage.setItem(ACH_KEY,JSON.stringify(ACH))}catch(e){}};
+const toastQ=[];let toastBusy=false;
+function achUnlock(id,opt){
+  opt=opt||{};if(ACH.unlocked[id])return false;const a=ACHS.find(x=>x.id===id);if(!a)return false;
+  ACH.unlocked[id]={t:Date.now(),night:opt.night||null};saveAch();renderAch();
+  if(!opt.silent){toastQ.push(a);nextToast()}
+  return true;
+}
+function nextToast(){
+  if(toastBusy||!toastQ.length)return;toastBusy=true;
+  const a=toastQ.shift(),t=$("achToast");t.innerHTML=badgeSVG(a,true)+`<div><small>Achievement unlocked</small><b></b></div>`;t.querySelector("b").textContent=a.name;
+  t.hidden=false;t.onclick=()=>{t.hidden=true;openHistory();showAch(a.id)};
+  setTimeout(()=>{t.hidden=true;toastBusy=false;setTimeout(nextToast,300)},4200);
+}
+function nightCheck(s,prevList){
+  const f=reportFacts(s),out=[];const under=f.budget&&f.cost<=f.budget;
+  out.push("first_case");
+  if(under&&f.drinks)out.push("wallet_survivor");
+  if(f.budget&&f.drinks&&f.cost<=f.budget*.5)out.push("escape_artist");
+  if(under&&f.drinks&&maxDrinksInHour(s.entries)<=2)out.push("responsible_menace");
+  if(f.drinks>=2&&f.water>=Math.ceil(f.drinks/2))out.push("hydration_royalty");
+  const ents=sortedEntries(s),fd=ents.findIndex(e=>DRINKS.some(x=>x.id===e.id)),fw=ents.findIndex(e=>e.id==="water");
+  if(fd>=0&&fw>=0&&fw<fd)out.push("water_first");
+  if(!f.drinks&&!f.joints&&f.water>=1)out.push("dd_hero");
+  const prev=prevList[prevList.length-1];
+  if(under&&prev){const pf=reportFacts(prev);if(pf.budget&&pf.cost>pf.budget)out.push("comeback_kid")}
+  const last3=[...prevList.slice(-2),s];
+  if(last3.length===3&&last3.every(x=>{const q=reportFacts(x);return q.budget&&q.cost<=q.budget}))out.push("hat_trick");
+  if(new Date(s.end).toDateString()===new Date(s.start).toDateString())out.push("cinderella");
+  return out;
+}
+function achEvaluateNight(s,announce){
+  const list=[...sessions].sort((a,b)=>a.start-b.start),i=list.findIndex(x=>x.id===s.id);
+  nightCheck(s,list.slice(0,Math.max(0,i))).forEach(id=>achUnlock(id,{night:s.id,silent:!announce}));
+}
+function achBump(kind){
+  if(kind==="detective"){ACH.meta.detective++;saveAch();achUnlock("detective")}
+  if(kind==="court"){ACH.meta.court++;saveAch();if(ACH.meta.court>=3)achUnlock("court")}
+}
+function achPersona(p){if(p==="classic")return;if(!ACH.meta.personas.includes(p)){ACH.meta.personas.push(p);saveAch()}if(["troll","uncle","butler","reaper"].every(x=>ACH.meta.personas.includes(x)))achUnlock("personality_crisis")}
+function foundEgg(name){if(!ACH.meta.eggs.includes(name)){ACH.meta.eggs.push(name);saveAch()}if(ACH.meta.eggs.length>=3)achUnlock("egg_hunter")}
+window.foundEgg=foundEgg;
+let achSel=null;
+function renderAch(){
+  const g=$("achGrid");if(!g)return;g.textContent="";
+  const n=ACHS.filter(a=>ACH.unlocked[a.id]).length;$("achCount").textContent=`${n} of ${ACHS.length} unlocked`;
+  ACHS.forEach(a=>{const on=!!ACH.unlocked[a.id];const b=document.createElement("button");b.type="button";b.className="ach-b"+(on?" on":"");
+    b.setAttribute("aria-pressed",String(achSel===a.id));b.setAttribute("aria-label",`${on||!a.secret?a.name:"Secret achievement"}, ${on?"unlocked":"locked"}`);
+    b.innerHTML=badgeSVG(a,on)+`<span></span>`;b.querySelector("span").textContent=on||!a.secret?a.name:"???";
+    b.onclick=()=>showAch(achSel===a.id?null:a.id);g.appendChild(b)});
+}
+function showAch(id){
+  achSel=id;renderAch();const d=$("achDetail");if(!id){d.hidden=true;return}
+  const a=ACHS.find(x=>x.id===id),u=ACH.unlocked[id];
+  d.innerHTML=badgeSVG(a,!!u)+`<div><b></b><p></p></div>`;
+  d.querySelector("b").textContent=u||!a.secret?a.name:"Secret achievement";
+  d.querySelector("p").textContent=u?`${a.desc} Unlocked ${new Date(u.t).toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"})}.`:(a.secret?"A secret. Keep poking around the app.":`Locked. ${a.desc}`);
+  d.hidden=false;
+}
+function initStage2(){
+  $("shClose").onclick=closeSheet;
+  $("sheetWrap").addEventListener("click",e=>{if(e.target===$("sheetWrap"))closeSheet()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("sheetWrap").hidden)closeSheet()});
+  $("rpCase").onclick=()=>{const s=reportCtx&&reportCtx.s;closeReport();if(s)openCase(s)};
+  $("rpCourt").onclick=()=>{const s=reportCtx&&reportCtx.s;closeReport();if(s)openCourt(s)};
+  // earn what past nights and settings already deserve, quietly, with one summary toast
+  let fresh=0;const before=new Set(Object.keys(ACH.unlocked));
+  [...sessions].sort((a,b)=>a.start-b.start).forEach(s=>achEvaluateNight(s,false));
+  if(SET.budget>0)achUnlock("budget_boss",{silent:true});
+  fresh=Object.keys(ACH.unlocked).filter(k=>!before.has(k)).length;
+  renderAch();
+  if(fresh===1){const id=Object.keys(ACH.unlocked).find(k=>!before.has(k));toastQ.push(ACHS.find(a=>a.id===id));setTimeout(nextToast,900)}
+  else if(fresh>1){toastQ.push({id:"retro",name:`${fresh} achievements from your past nights`,c:"#e08a3c",icon:"crown"});setTimeout(nextToast,900)}
 }
 
 function showNotice(text,withView,sess){const n=document.getElementById("notice");if(!n)return;document.getElementById("noticeText").textContent=text;document.getElementById("noticeView").hidden=!withView;const rb=document.getElementById("noticeReport");if(rb){rb.hidden=!sess;rb.dataset.id=sess?sess.id:""}n.hidden=false}
@@ -2080,6 +2558,7 @@ function syncMoneyUI(){
 curSel.onchange=()=>{SET.currency.code=curSel.value;saveSet();syncMoneyUI();render();renderHistory()};
 curCustom.oninput=()=>{SET.currency.custom=curCustom.value.slice(0,4);saveSet();$("budgetSym").textContent=curSym();$("priceSym").textContent=curSym();render()};
 $("budget").oninput=ev=>{const v=parseFloat(ev.target.value);SET.budget=v>0?Math.round(v*100)/100:null;saveSet();render()};
+$("budget").onchange=()=>{if(SET.budget>0)achUnlock("budget_boss")};
 (function(){
   const box=$("thresholds");
   SET.thresholds.forEach((v,i)=>{
@@ -2129,9 +2608,11 @@ function render(){
   else if(rate>2){p.textContent="Fast pace — maybe grab a water";p.className="pace high"}
   else if(rate>1.2){p.textContent="Picking up — pace yourself";p.className="pace"}
   else{p.textContent="Steady pace";p.className="pace"}
-  const elapsed=drinks.length?(Date.now()-drinks[0].t)/36e5:0;
-  const inBody=Math.max(0,s-elapsed);
-  const eff=inBody*(170/SET.weight)*(SET.food?0.8:1);
+  const AM=alcoholModel(Date.now());
+  const inBody=AM.inBody;
+  const foodNow=total?SET.food:!!(latestSession()||{}).food;
+  const eff=inBody*(170/SET.weight)*(foodNow?0.8:1);
+  {const cn=$("carryNote");if(AM.carry>0.05){cn.hidden=false;cn.textContent=`Includes about ${AM.carry.toFixed(1)} standard ${AM.carry>=1.05?"drinks":"drink"} from your last saved night that may still be in your system.`}else cn.hidden=true}
   const L=LEVELS.find(l=>eff<=l.max);
   const idx=LEVELS.indexOf(L);
   $("lvl").textContent=L.name;
@@ -2144,15 +2625,12 @@ function render(){
   $("barwrap").setAttribute("aria-valuenow",inBody.toFixed(1));
   document.querySelector(".meter").classList.toggle("danger",idx>=4);
   const guy=$("guy");
-  let hsrc=null;
-  if(total)hsrc=nightPeak(log,SET.weight,SET.food);
-  else{const ls=latestSession();if(ls)hsrc=nightPeak(ls.entries,ls.weight,ls.food)}
-  isHang=!!hsrc&&idx===0&&hsrc.peak>4.5&&Date.now()-hsrc.lastT<HANG_MS;
+  isHang=idx===0&&AM.peak18>4.5;
   if(isHang){$("lvl").textContent="Hungover";$("msg").textContent="Big night. Water, food and a nap."}
   const needWater=since>=3&&idx<6&&!isHang;needW=needWater;
   $("wb").hidden=!needWater;
   $("wbText").textContent=`${since} drinks since your last water.`;
-  const HMS=90*60000,nowMs=Date.now(),joints=log.filter(e=>e.id==="joint");
+  const HMS=90*60000,nowMs=Date.now(),joints=recentEntries(nowMs).map(x=>x.e).filter(e=>e.id==="joint"&&nowMs-e.t<HMS);
   window.HIGH=joints.reduce((a,e)=>a+Math.max(0,1-(nowMs-e.t)/HMS),0);
   const hl=$("highline");
   if(window.HIGH>0){
@@ -2231,7 +2709,11 @@ function nightCard(s){
   s.entries.forEach(e=>{const li=document.createElement("li");const a=document.createElement("span"),b=document.createElement("span");
     const dd=DRINKS.find(q=>q.id===e.id);a.textContent=dd?`${dd.name}${e.p?` · ${fmtMoney(e.p,sym)}`:""}`:e.id==="joint"?"Joint":"Water";b.textContent=fmtTime(e.t);li.append(a,b);ol.appendChild(li)});
   body.appendChild(ol);
-  const rpb=document.createElement("button");rpb.type="button";rpb.className="btn primary n-rep";rpb.textContent="Morning After report";rpb.onclick=()=>openReport(s);body.appendChild(rpb);
+  const row=document.createElement("div");row.className="n-tools";
+  const rpb=document.createElement("button");rpb.type="button";rpb.className="btn primary n-rep";rpb.textContent="Morning After report";rpb.onclick=()=>openReport(s);
+  const csb=document.createElement("button");csb.type="button";csb.className="btn n-case";csb.textContent="Case file";csb.onclick=()=>openCase(s);
+  const ctb=document.createElement("button");ctb.type="button";ctb.className="btn n-court";ctb.textContent="Court";ctb.onclick=()=>openCourt(s);
+  row.append(rpb,csb,ctb);body.appendChild(row);
   const del=document.createElement("button");del.type="button";del.className="btn danger n-del";del.textContent="Delete this night";
   const cf=document.createElement("div");cf.className="confirm";cf.hidden=true;
   const cfT=document.createElement("span");cfT.textContent="Delete this night for good? Make a backup first if you might want it later.";
@@ -2245,8 +2727,10 @@ function nightCard(s){
 }
 renderHistory();
 initStage1();
+initStage2();
+window.BARTAB_READY=true;
 // ---- Backup & restore ----
-const BK_KEYS=["bartab","bartab-set","bartab-abv","bartab-best","bartab-sessions"];
+const BK_KEYS=["bartab","bartab-set","bartab-abv","bartab-best","bartab-sessions","bartab-achievements"];
 function backupObject(){
   const data={};
   BK_KEYS.forEach(k=>{try{const v=localStorage.getItem(k);if(v!=null)data[k]=JSON.parse(v)}catch(e){}});
@@ -2255,7 +2739,7 @@ function backupObject(){
 }
 const bkMsg=t=>{$("bkMsg").textContent=t};
 const bkName=()=>`bar-tab-backup-${new Date().toISOString().slice(0,10)}.json`;
-$("bkSave").onclick=async()=>{
+$("bkSave").onclick=async()=>{achUnlock("safe_keeper");
   const text=JSON.stringify(backupObject(),null,1);
   try{
     const dl=window.claude&&typeof claude.use==="function"?await claude.use("downloads"):null;
@@ -2268,7 +2752,7 @@ $("bkSave").onclick=async()=>{
     bkMsg("Backup file created. If nothing downloaded, use Copy backup text instead and paste it into Notes.");
   }catch(e){bkMsg("This browser blocked the file. Use Copy backup text instead.")}
 };
-$("bkCopy").onclick=()=>{
+$("bkCopy").onclick=()=>{achUnlock("safe_keeper");
   const text=JSON.stringify(backupObject());
   const fallback=()=>{const t=$("bkText");t.value=text;t.closest("details").open=true;t.focus();t.select();bkMsg("Copying was blocked, so the backup text is in the box below. Select it all and copy it.")};
   try{navigator.clipboard.writeText(text).then(()=>bkMsg("Backup text copied. Paste it into Notes or send it to yourself."),fallback)}catch(e){fallback()}
