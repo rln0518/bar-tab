@@ -13,7 +13,7 @@ Last updated: 2026-11-02
 |---|---|
 | `main` on GitHub | Stage 1 complete (`9f51285`). Approved by the owner. |
 | Backup before Stage 2 | Branch `backup-stage1-before-stage2` (`9f51285`) exists. |
-| Stage 2 code | Written and tested, **but not committed or pushed**. It exists only in Claude's cloud working copy of the repo (`index.html`, about 506 lines added). See the risk below. |
+| Stage 2 code | Written and tested, saved on branch **`stage2-wip`** (not merged into `main`, not live on the website). |
 | Claude artifact | Shows Stage 1. Not yet rebuilt with Stage 2. |
 | Stage 2 summary to owner | Not yet delivered. |
 | Stage 3 | Not started. Must not start without the owner's approval. |
@@ -63,9 +63,8 @@ The test scripts live in Claude's temporary workspace, not in the repo (see Unre
 - Test harness: `file://` pages lost storage on reload; all suites moved to `http://127.0.0.1:8765`.
 
 ## Unresolved issues
-1. **Risk: Stage 2 could be lost.** It is uncommitted in an ephemeral cloud workspace. If that
-   workspace is reclaimed, Stage 2 must be rebuilt. Safest fix: push it to a work-in-progress
-   branch (for example `stage2-wip`) as soon as the owner agrees, without touching `main`.
+1. **Stage 2 is on `stage2-wip`, not `main`.** It still needs the final re-test, the owner's review,
+   and a merge into `main` before it goes live.
 2. **Needs real-iPhone testing:** share sheet, canvas fonts, iOS keyboard toolbar, tilt permission,
    backup downloads.
 3. **GitHub Pages status unverified** from Claude's side.
@@ -75,9 +74,9 @@ The test scripts live in Claude's temporary workspace, not in the repo (see Unre
 
 ## Next step
 
-1. Get the owner's OK to save Stage 2 (push to `stage2-wip`, or commit to `main` after the checks below).
+1. Check out `stage2-wip` (Stage 2 lives there).
 2. Re-run all suites (Stage 0, 1, 2, games) over HTTP to cover the two late fixes.
 3. Check the case file, court and achievements once more at the four phone sizes and desktop.
-4. Commit Stage 2 to `main`, rebuild the artifact from `index.html`, publish it.
+4. Merge `stage2-wip` into `main` once the owner approves, rebuild the artifact from `index.html`, publish it.
 5. Send the owner the Stage 2 summary (changes, tests, bugs fixed, limitations), then **stop** and wait
    for approval before Stage 3 (Group Tabs).
